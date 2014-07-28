@@ -1,3 +1,5 @@
+""" Get list of tags from Wikipedia
+"""
 import pickle
 import time
 
@@ -44,6 +46,7 @@ class WikiTechsParser(HTMLParser):
         self.pages = []
         self.cats = []
         self.depth = 0
+
 
 def main():
 

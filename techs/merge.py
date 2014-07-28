@@ -1,3 +1,5 @@
+""" Merge tag lists
+"""
 import pickle
 
 __author__ = 'user'

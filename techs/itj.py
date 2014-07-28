@@ -1,3 +1,5 @@
+""" Get list of tags from ItJobsWatch
+"""
 import pickle
 import time
 
@@ -12,7 +14,6 @@ class ItjTechsParser(HTMLParser):
     tech_name = False
     names_list = []
     next = None
-
 
     def handle_starttag(self, tag, attrs):
         if ('class', 'c2') in attrs:

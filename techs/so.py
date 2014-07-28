@@ -1,3 +1,5 @@
+""" Get list of tags from StackOverflow
+"""
 import pickle
 import time
 
