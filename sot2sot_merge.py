@@ -1,4 +1,4 @@
-"""merges data from sot and sot2 parsers"""
+""" merges data from sot and sot2 parsers """
 import os
 import pickle
 import matplotlib.pyplot as plt
@@ -30,7 +30,7 @@ def main():
     uniq_names.extend(uniq_names2)
 
     names = filter(lambda n: n in sot_names,sot2_names)
-
+    # plotting data to see mistakes
     for name in names:
         d1 = pickle.load(open(os.path.join(sot_dir, name, "raw_data"), 'rb'))
         d2 = pickle.load(open(os.path.join(sot2_dir, name, "raw_data"), 'rb'))
@@ -40,6 +40,9 @@ def main():
         plt.plot(d2[0], d2[1])
         plt.xlabel(name)
         plt.show(block=True)
+
+    #todo Actualy merge data
+
 
 if __name__ == "__main__":
     main()

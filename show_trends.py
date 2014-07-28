@@ -1,4 +1,4 @@
-"""Show trend plots
+""" Show trend plots
 
 scan parsed data and show plots
 """
@@ -12,8 +12,7 @@ __author__ = 'user'
 def main():
     names = pickle.load(open('top_names.pkl', 'rb'))
     prsrs = ['google', 'itjobs', 'sot', 'wiki']
-
-    colors = {'google':'r', 'itjobs':'g', 'sot':'b', 'wiki':'y'}
+    colors = {'google': 'r', 'itjobs': 'g', 'sot': 'b', 'wiki': 'y'}
     plot_num = 0
     for name in names:
         datas = []
@@ -27,7 +26,7 @@ def main():
 
         # fig = plt.figure()
         # fig.text(.1,.1,name)
-        if len(datas) > 1  and 'wiki' in srcs:
+        if len(datas) > 1 and 'wiki' in srcs:
             splot = plt.subplot(5, 4, plot_num)
             splot.set_xticklabels([])
             splot.set_xticks([])
@@ -47,8 +46,6 @@ def main():
             break
 
     plt.show()
-
-
 
 if __name__ == '__main__':
     main()

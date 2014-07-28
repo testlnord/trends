@@ -1,0 +1,60 @@
+*.py[cod]
+*.py~
+#idea dirs
+.idea/
+
+#data files
+*.db
+*.sqlite3
+*.pkl
+data/*
+img_data_bckp/*
+*.txt
+
+# common R files
+*.RData
+*.Rhistory
+
+# C extensions
+*.so
+*.out
+*.cpp~
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# spec files
+test.py
+
+# images
+*.png
+!parsers/digit_glyphs/*.png

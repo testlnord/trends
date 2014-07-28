@@ -1,3 +1,6 @@
+""" Get trend info by parsers
+"""
+
 import pickle
 import random
 import time

@@ -1,5 +1,3 @@
-__author__ = 'arkady'
-
 """ getting and parsing trends from plot on http://hewgill.com/~greg/stackoverflow/stack_overflow/tags/"""
 
 import urllib.request as ur

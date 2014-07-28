@@ -1,5 +1,5 @@
-__author__ = 'user'
-
+import random
+import time
 import pickle
 import os
 import shutil
@@ -68,8 +68,6 @@ class Parser:
         else:
             self.parse_fresh(query)
 
-
-
     def parse_fresh(self, query):
         dir_name = os.path.join(self.init_dir, query)
         if os.path.exists(dir_name):
@@ -92,14 +90,28 @@ class Parser:
         data_file.close()
 
     def get_response(self, query):
+        """ Get data from web
+        :param query: name or tag to search
+        :return: raw responses from web server
+        """
         raise NotImplementedError()
 
     def get_raw_data(self, response):
+        """ Get data from response
+        :param response: web data (json, html page, etc)
+        :return: raw data, list of pairs (date, value)
+        """
         raise NotImplementedError()
 
     def get_data(self, raw_data):
-        data = [ (x,y) for x, y in sorted(raw_data, key=(lambda v: v[0]))]
+        """ Normalize raw data
+        :param raw_data: raw data, list of (date, value) tuples
+        :return: normalized data, list of (date, normalized value) tuples
+        """
+        data = [(x, y) for x, y in sorted(raw_data, key=(lambda v: v[0]))]
         min_val = min(data, key=(lambda v: v[1]))[1]
         max_val = max(data, key=(lambda v: v[1]))[1]
-        return [ (x, float(y - min_val)/(max_val - min_val)) for x, y in data]
+        return [(x, float(y - min_val)/(max_val - min_val)) for x, y in data]
 
+    def sleep(self, min_time, max_time):
+        time.sleep(random.randint(5, 10))

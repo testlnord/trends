@@ -1,7 +1,9 @@
-from functools import reduce
-import operator
+""" My Tesseract.
+
+Couple of functions to parse image fragments to text
+"""
+
 import os
-import math
 
 __author__ = 'user'
 

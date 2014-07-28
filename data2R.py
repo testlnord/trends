@@ -3,13 +3,11 @@
 string example:
 23 Feb 2005|43.72
 
-reading command:
+R reading command:
 data <- read.zoo("demo1.txt", sep = "|", format="%d %b %Y")
 """
+
 import os
-
-__author__ = 'user'
-
 import pickle
 
 data_dirs = ['wiki', 'sot', 'google', 'itjobs']

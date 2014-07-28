@@ -3,8 +3,7 @@ library("lattice")
 library("xts")
 library("mvtsplot")
 library("forecast")
-# working with ajax data
-# its plots looks the best
+
 
 tsnorm <- function(tser){
   a <- min(tser)

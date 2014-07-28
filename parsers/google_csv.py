@@ -29,8 +29,6 @@ class GoogleCsvParser(Parser):
     init_dir = "data/gcsv"
     browser = None
 
-
-
     def get_response(self, query):
 
         if self.browser is None:
@@ -42,8 +40,6 @@ class GoogleCsvParser(Parser):
         if loggin_link:
             self.login(loggin_link)
         return response
-
-
 
     def get_raw_data(self, response):
         #print(response)
@@ -67,7 +63,7 @@ if __name__ == '__main__':
     # gcp = GoogleCsvParser()
     # gcp.parse_fresh("asp.net")
     os.environ["SELENIUM_SERVER_JAR"] = "/home/user/selenium-server-standalone-2.42.1.jar"
-    os.environ["PATH"] = os.environ["PATH"] + ":/usr/java/jre1.7.0_65/bin"
+    os.environ["PATH"] += ":/usr/java/jre1.7.0_65/bin"
     d_capabilities= DesiredCapabilities.OPERA
     d_capabilities["opera.binary"] = "/usr/bin/opera"
     d_capabilities["opera.profile"] = "/home/user/.opera"

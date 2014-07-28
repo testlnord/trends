@@ -1,10 +1,7 @@
+""" get and parse data about article changes on wikipedia """
+
 
 from parsers.parser import Parser
-
-__author__ = 'arkady'
-
-"""get and parse data about article changes on wikipedia"""
-
 import urllib.request as ur
 import html.parser
 import datetime
@@ -55,6 +52,7 @@ class WikiParser(Parser):
 
         return result
 
-
-wp = WikiParser()
-wp.parse("Microsoft_SharePoint")
+if __name__ == '__main__':
+    WikiParser.init_dir = '../' + WikiParser.init_dir
+    wp = WikiParser()
+    wp.parse("Microsoft_SharePoint")

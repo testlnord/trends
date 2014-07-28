@@ -124,7 +124,6 @@ class ItjobsParser(Parser):
                     raise RuntimeError((x, d, years))
                 return d
 
-
     def get_raw_data(self, response):
         im = Image.open(io.BytesIO(response), 'r')
         tr = tesserwrap.Tesseract(datadir="/usr/share/tesseract-ocr")

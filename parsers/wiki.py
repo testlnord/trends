@@ -1,18 +1,12 @@
+""" get and parse data about article page visits from wikipedia """
+
 import json
 import pickle
-import random
 import re
 from parsers.parser import Parser
-
-__author__ = 'arkady'
-
-"""get and parse data about article changes on wikipedia"""
-
 import urllib.request as ur
 import urllib.error
-import html.parser
 import datetime
-import time
 
 
 class WikiParser(Parser):
@@ -30,17 +24,16 @@ class WikiParser(Parser):
         month = datetime.date(2007, 12, 1)
         result = []
         while month <= datetime.datetime.now().date():
-            #print(month.strftime("%Y%m"))
             url = "http://stats.grok.se/json/en/" + month.strftime("%Y%m") + "/" + query
             req = ur.Request(url, headers=headers)
             try:
                 response = ur.urlopen(req)
-                month = datetime.date(month.year + int(month.month / 12), month.month % 12 + 1, 1)
+                month = datetime.date(month.year + int(month.month / 12), month.month % 12 + 1, 1)  # add a month
             except urllib.error.HTTPError:
-                time.sleep(random.randint(5, 10))
+                self.sleep(5, 10)
             data = response.read().decode("utf-8")
             result.append(data)
-            time.sleep(random.randint(5, 10))
+            self.sleep(5, 10)
         return result
 
     def get_raw_data(self, response):
