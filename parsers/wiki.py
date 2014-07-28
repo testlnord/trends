@@ -3,10 +3,12 @@
 import json
 import pickle
 import re
+from numpy import median
 from parsers.parser import Parser
 import urllib.request as ur
 import urllib.error
 import datetime
+import pandas
 
 
 class WikiParser(Parser):
@@ -50,6 +52,22 @@ class WikiParser(Parser):
                     date += datetime.timedelta(days=(int(date_parsed.group(3))-1))
                     result.append((date, data[k]))
         return result
+
+    def get_data(self, raw_data):
+        vals = [x for d, x in raw_data]
+        med = median(vals)
+        mad = median([abs(x - med) for x in vals])
+        vals = [x if med - 3*mad < x < med + 3*mad else None for x in vals]
+        try:
+            df = pandas.DataFrame([0]+vals)
+            df = df.interpolate()
+            vals = list(df[0])[1:]
+            data = [(d, vals[idx]) for idx, (d, _) in enumerate(raw_data)]
+        except TypeError:
+            data = raw_data
+        print(data)
+        return super().get_data(data)
+
 
 if __name__ == '__main__':
     wp = WikiParser()

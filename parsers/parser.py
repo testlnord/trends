@@ -111,6 +111,8 @@ class Parser:
         data = [(x, y) for x, y in sorted(raw_data, key=(lambda v: v[0]))]
         min_val = min(data, key=(lambda v: v[1]))[1]
         max_val = max(data, key=(lambda v: v[1]))[1]
+        if max_val == min_val:
+            return [(x, 0.5) for x, _ in data]
         return [(x, float(y - min_val)/(max_val - min_val)) for x, y in data]
 
     def sleep(self, min_time, max_time):
