@@ -11,23 +11,21 @@ __author__ = 'arkady'
 
 import urllib.request as ur
 import urllib.error
-import re
 import datetime
 from parsers.parser import Parser
 from urllib.parse import quote
-import selenium.webdriver
 
 
 class SOTParser(Parser):
-    init_dir = "data/sot_old"
+    init_dir = "data/sot_my"
     start_week = datetime.datetime(2008, 7, 28)
-    end_week = datetime.datetime(2012, 7, 16)
-    #start_week = datetime.datetime(2012, 7, 16)
-    #end_week = datetime.datetime.now()
+    # end_week = datetime.datetime(2012, 7, 16)
+    # start_week = datetime.datetime(2012, 7, 16)
+    end_week = datetime.datetime.now()
 
     def __init__(self):
         super(SOTParser).__init__()
-        self.total = pickle.load(open(os.path.join(self.init_dir, "t/response"), 'rb'))
+        self.total = dict(pickle.load(open(os.path.join(self.init_dir, "t/response"), 'rb')))
 
     def get_response(self, query):
         tag = query.replace(" ", "-")
@@ -39,12 +37,12 @@ class SOTParser(Parser):
             url = "http://api.stackexchange.com/2.2/questions?" \
                   "fromdate={0}&" \
                   "todate={1}&" \
-                  "key={3}&" \
+                  "key={2}&" \
                   "order=desc&sort=activity&site=stackoverflow&filter=!)V)MSZJYs)y".format(
-                  int(week.timestamp()), int(next_week.timestamp()), quote(self.token), quote("gytnic74fozY)jD39pQSzg((")
+                  int(week.timestamp()), int(next_week.timestamp()), quote("gytnic74fozY)jD39pQSzg((")
                   )
             if not tag == "t":
-                url += "&tagged={0}".format(quote(tag))
+                url += "&tagged={0}".format(tag)
             print(' ', url)
             req = ur.Request(url)
             while True:
@@ -73,11 +71,14 @@ class SOTParser(Parser):
         result = []
         total_idx = 0
         for date, v in response:
-            while date < self.total[total_idx][0]:
-                total_idx += 1
+            # while date < self.total[date]:
+            #     total_idx += 1
             v = v["total"]
-            v_t = self.total[total_idx][1]["total"]
-            result.append((date.date(), v/v_t))
+            try:
+                v_t = self.total[date]["total"]
+                result.append((date.date(), v/v_t))
+            except KeyError:
+                pass # ignore missing data, will interpolate later
         return result
 
 

@@ -9,15 +9,15 @@ import urllib
 __author__ = 'user'
 
 
-import parsers.itjobs
-import parsers.google
-import parsers.sotrends
+#import parsers.itjobs
+#import parsers.google
+#import parsers.sotrends
 import parsers.sotrends2
-import parsers.wiki
+#import parsers.wiki
 
 def main():
     hot = pickle.load(open('top_names.pkl', 'rb'))
-    # gp = parsers.google.GoogleParser()
+    #gp = parsers.google.GoogleParser()
     # ip = parsers.itjobs.ItjobsParser()
     # sp = parsers.sotrends.SOTParser()
     wp = parsers.sotrends2.SOTParser()
@@ -33,7 +33,8 @@ def main():
             pass
         # try:
         #     gp.parse(name)
-        # except:
+        # except Exception as e:
+        #     print(e)
         #     pass
         # try:
         #     sp.parse(name)
