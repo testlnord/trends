@@ -18,7 +18,10 @@ class WikiParser(Parser):
     def get_response(self, query):
         if self.wiki_links is None:
             self.wiki_links = pickle.load(open('parsers/wiki_names.pkl', 'rb'))
-        query = self.wiki_links[query.replace(' ', '-')]
+        try:
+            query = self.wiki_links[query.replace(' ', '-')]
+        except KeyError:
+            query = "http://en.wikipedia.org/wiki/" + query.replace(' ', '_')
         query = query[query.rindex('/'):]
         user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36'
         headers = {'User-Agent': user_agent}
