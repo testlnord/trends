@@ -41,7 +41,29 @@ def main():
         plt.xlabel(name)
         plt.show(block=True)
 
-    #todo Actualy merge data
+
+def merge_old_and_new():
+    pref1 = "data/sot2/"
+    pref2 = "data/sot_old"
+    pref_out = "data/sot_my"
+    from parsers.sotrends2 import SOTParser
+    SOTParser.init_dir = pref_out
+    sp = SOTParser()
+
+    for name in os.listdir(pref1):
+        d1 = os.path.join(pref1, name, "response")
+        d2 = os.path.join(pref2, name, "response")
+        if os.path.exists(d1) and os.path.exists(d2):
+            d1 = pickle.load(open(d1, 'rb'))
+            d2 = pickle.load(open(d2, 'rb'))
+            try:
+                os.mkdir(os.path.join(pref_out, name))
+            except FileExistsError:
+                pass  # just ignore
+            total_data = d2 + d1
+            pickle.dump(total_data, open(os.path.join(pref_out, name, "response"), 'wb'))
+            print(name)
+            sp.parse(name)
 
 
 if __name__ == "__main__":
