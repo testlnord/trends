@@ -1,0 +1,4179 @@
+<html>
+<head>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<script type='text/javascript'>
+google.load('visualization', '1', {'packages': ['geochart']});
+google.setOnLoadCallback(createMap);
+
+
+var options, chart, chartCutted, m1;
+/*var java_data, csharp_data, js_data, php_data, android_data, jquery_data, python_data, cpp_data, dotnet_data, html_data,
+ iphone_data, css_data,
+ mysql_data, c_data, objc_data,
+ ios_data, ror_data, aspnet_data, ruby_data, sql_data, django_data, linux_data, git_data,
+ eclipse_data, sqlserver_data, xcode_data, windows_data, perl_data, r_data, osx_data, database_data,
+ nodejs_data, scala_data, html5_data, performance_data, haskell_data, vbnet_data, vim_data, oracle_data,
+ postgresql_data, aspnetmvc_data, wpf_data, ror3_data, xml_datam, swing_data, spring_data, multithreading_data;*/
+
+function drawChart() {
+    var data = document.getElementById('select-view').value;
+    chart.draw(eval(data), options);
+    chartCutted.draw(eval(data + "_cutted"), options2);
+    document.getElementById('med').innerHTML = median(eval(data.replace('data', '')));
+    //alert(median(eval(data.replace('data',''))));
+}
+
+function createMap() {
+	opengl_ = [
+		['', 2100],
+		['Poland', 400],
+		['France', 300],
+		['Germany', 3300],
+		['Denmark', 100],
+		['Brazil', 100],
+		['Switzerland', 100],
+		['Canada', 200],
+		['United Kingdom', 300],
+		['Australia', 100],
+		['Israel', 100],
+		['Sweden', 300],
+		['United States', 4900],
+		['Italy', 100]
+	];
+	opengl_data = f1(opengl_);
+
+	opengl_data_cutted = f1(opengl_);
+
+	spring_ = [
+		['', 5000],
+		['Hong Kong', 100],
+		['Romania', 100],
+		['Germany', 3700],
+		['Ireland', 100],
+		['Switzerland', 200],
+		['Canada', 200],
+		['United Kingdom', 1000],
+		['Austria', 200],
+		['Malaysia', 100],
+		['Israel', 200],
+		['Bulgaria', 1500],
+		['Brazil', 100],
+		['Netherlands', 1100],
+		['Norway', 1700],
+		['France', 1800],
+		['South Africa', 200],
+		['Russia', 1600],
+		['Poland', 400],
+		['Antarctica', 100],
+		['United States', 5800],
+		['Finland', 100],
+		['India', 800],
+		['Australia', 1700],
+		['Greece', 100],
+		['Ukraine', 300],
+		['Sweden', 200],
+		['Spain', 300]
+	];
+	spring_data = f1(spring_);
+
+	spring_data_cutted = f1(spring_);
+
+	maven_ = [
+		['', 2600],
+		['Hong Kong', 100],
+		['Romania', 100],
+		['Sweden', 100],
+		['France', 600],
+		['Germany', 2600],
+		['Russia', 300],
+		['Poland', 200],
+		['Ireland', 100],
+		['United States', 800],
+		['Canada', 200],
+		['Thailand', 100],
+		['Austria', 100],
+		['Norway', 100],
+		['India', 1800],
+		['Switzerland', 200],
+		['United Kingdom', 400],
+		['Netherlands', 100],
+		['Bulgaria', 100],
+		['Australia', 300]
+	];
+	maven_data = f1(maven_);
+
+	maven_data_cutted = f1(maven_);
+
+	jsp_ = [
+		['', 600],
+		['Italy', 100],
+		['France', 1500],
+		['Germany', 100],
+		['Ukraine', 100],
+		['Netherlands', 1500],
+		['United States', 1000],
+		['United Kingdom', 400],
+		['Peru', 100],
+		['India', 500],
+		['Estonia', 200],
+		['Russia', 500],
+		['Malaysia', 100],
+		['Norway', 200],
+		['Denmark', 100],
+		['Bulgaria', 1500],
+		['Australia', 600]
+	];
+	jsp_data = f1(jsp_);
+
+	jsp_data_cutted = f1(jsp_);
+
+	ajax_ = [
+		['Netherlands', 1600],
+		['', 3800],
+		['Pakistan', 300],
+		['Germany', 1000],
+		['Bangladesh', 200],
+		['Trinidad and Tobago', 500],
+		['China', 100],
+		['New Zealand', 100],
+		['Canada', 500],
+		['United Kingdom', 5100],
+		['Peru', 100],
+		['Hungary', 100],
+		['Bolivia', 100],
+		['Israel', 200],
+		['Bulgaria', 1600],
+		['Argentina', 100],
+		['Singapore', 100],
+		['Norway', 500],
+		['Slovenia', 100],
+		['Nepal', 200],
+		['France', 400],
+		['Austria', 100],
+		['Denmark', 100],
+		['Czech Republic', 100],
+		['Philippines', 200],
+		['United States', 8700],
+		['Finland', 200],
+		['India', 600],
+		['Australia', 300],
+		['Greece', 300],
+		['Sweden', 200],
+		['Guatemala', 100],
+		['Italy', 200]
+	];
+	ajax_data = f1(ajax_);
+
+	ajax_data_cutted = f1(ajax_);
+
+	mysql_ = [
+		['', 40000],
+		['Egypt', 1500],
+		['Romania', 1100],
+		['Pakistan', 2000],
+		['Finland', 400],
+		['Mexico', 200],
+		['Albania', 100],
+		['United Kingdom', 16700],
+		['Austria', 1900],
+		['Slovakia', 300],
+		['Norway', 1100],
+		['Argentina', 2100],
+		['Nicaragua', 100],
+		['Ireland', 200],
+		['Slovenia', 200],
+		['Malta', 500],
+		['Portugal', 400],
+		['Armenia', 100],
+		['Turkey', 100],
+		['Chile', 200],
+		['Lithuania', 100],
+		['India', 8200],
+		['Kyrgyzstan', 100],
+		['Australia', 4400],
+		['Poland', 500],
+		['Italy', 4700],
+		['San Marino', 100],
+		['Germany', 7400],
+		['Bangladesh', 200],
+		['New Zealand', 2500],
+		['Trinidad and Tobago', 100],
+		['China', 600],
+		['Switzerland', 1200],
+		['Canada', 8400],
+		['Peru', 600],
+		['Japan', 700],
+		['Hungary', 400],
+		['Latvia', 100],
+		['Israel', 700],
+		['Bulgaria', 900],
+		['Brazil', 200],
+		['Singapore', 600],
+		['Indonesia', 100],
+		['Netherlands', 6200],
+		['Iceland', 100],
+		['Russia', 2400],
+		['Nepal', 200],
+		['France', 3100],
+		['South Africa', 2300],
+		['Denmark', 2000],
+		['Paraguay', 500],
+		['Sri Lanka', 100],
+		['Philippines', 1600],
+		['United States', 49400],
+		['Belarus', 400],
+		['Belgium', 800],
+		['Kuwait', 100],
+		['Estonia', 200],
+		['Greece', 2200],
+		['Ukraine', 800],
+		['Czech Republic', 100],
+		['Sweden', 2000],
+		['Spain', 600]
+	];
+	mysql_data = f1(mysql_);
+
+	mysql_data_cutted = f1(mysql_);
+
+	osx_ = [
+		['', 5000],
+		['Hong Kong', 100],
+		['Romania', 100],
+		['France', 200],
+		['Germany', 900],
+		['Switzerland', 100],
+		['Russia', 100],
+		['Poland', 100],
+		['New Zealand', 100],
+		['Ireland', 100],
+		['United States', 11000],
+		['Canada', 200],
+		['United Kingdom', 1000],
+		['Austria', 200],
+		['India', 200],
+		['Australia', 600],
+		['Denmark', 100],
+		['Sweden', 200],
+		['Paraguay', 100]
+	];
+	osx_data = f1(osx_);
+
+	osx_data_cutted = f1(osx_);
+
+	sharepoint_ = [
+		['Poland', 100],
+		['', 300],
+		['France', 100],
+		['Germany', 200],
+		['Denmark', 200],
+		['New Zealand', 500],
+		['United States', 900],
+		['Canada', 300],
+		['Belgium', 100],
+		['India', 100],
+		['Switzerland', 100],
+		['Latvia', 100],
+		['United Kingdom', 500],
+		['Netherlands', 100],
+		['Brazil', 100],
+		['Australia', 800]
+	];
+	sharepoint_data = f1(sharepoint_);
+
+	sharepoint_data_cutted = f1(sharepoint_);
+
+	r_ = [
+		['', 36300],
+		['Poland', 2600],
+		['Hong Kong', 1500],
+		['Switzerland', 300],
+		['Canada', 6200],
+		['United Kingdom', 10700],
+		['Peru', 100],
+		['Germany', 5200],
+		['Japan', 1500],
+		['Hungary', 500],
+		['Latvia', 1500],
+		['Israel', 500],
+		['Denmark', 700],
+		['Brazil', 200],
+		['Singapore', 500],
+		['Netherlands', 100],
+		['Ireland', 100],
+		['Slovenia', 1500],
+		['France', 2100],
+		['Austria', 1500],
+		['Russia', 100],
+		['Czech Republic', 100],
+		['Senegal', 500],
+		['United States', 36900],
+		['Belarus', 100],
+		['Finland', 200],
+		['Argentina', 1600],
+		['Lithuania', 500],
+		['India', 1800],
+		['Belgium', 2600],
+		['Greece', 200],
+		['Portugal', 100],
+		['Sweden', 500],
+		['Spain', 100],
+		['Bermuda', 500],
+		['Italy', 200],
+		['Australia', 6800]
+	];
+	r_data = f1(r_);
+
+	r_data_cutted = f1(r_);
+
+	mod_20rewrite_ = [
+		['', 1900],
+		['Netherlands', 100],
+		['India', 1500],
+		['France', 200],
+		['Peru', 100],
+		['United Kingdom', 100],
+		['Germany', 1500],
+		['United States', 800]
+	];
+	mod_20rewrite_data = f1(mod_20rewrite_);
+
+	mod_20rewrite_data_cutted = f1(mod_20rewrite_);
+
+	jpa_ = [
+		['', 2200],
+		['Hong Kong', 100],
+		['Colombia', 100],
+		['France', 1500],
+		['Germany', 900],
+		['Russia', 1500],
+		['Poland', 100],
+		['United States', 300],
+		['Canada', 1700],
+		['United Kingdom', 100],
+		['Costa Rica', 100],
+		['India', 200],
+		['Switzerland', 300],
+		['Norway', 100],
+		['Bulgaria', 1500],
+		['Netherlands', 200],
+		['Brazil', 100],
+		['Australia', 200]
+	];
+	jpa_data = f1(jpa_);
+
+	jpa_data_cutted = f1(jpa_);
+
+	python_ = [
+		['', 167700],
+		['Poland', 9900],
+		['Romania', 600],
+		['Pakistan', 200],
+		['Finland', 3500],
+		['Mexico', 100],
+		['Bosnia and Herzegovina', 100],
+		['New Zealand', 5200],
+		['Macedonia', 200],
+		['United Kingdom', 52700],
+		['Austria', 1900],
+		['Iran', 200],
+		['Nigeria', 100],
+		['Colombia', 1700],
+		['Croatia', 300],
+		['Argentina', 900],
+		['Nicaragua', 100],
+		['Tunisia', 100],
+		['Norway', 2600],
+		['Slovenia', 200],
+		['Malta', 100],
+		['Russia', 9300],
+		['Germany', 27200],
+		['Turkey', 800],
+		['Chile', 1100],
+		['Lithuania', 100],
+		['India', 8800],
+		['Guatemala', 500],
+		['Lebanon', 100],
+		['Korea, South', 100],
+		['Luxembourg', 100],
+		['Estonia', 1200],
+		['Malaysia', 500],
+		['Hong Kong', 1600],
+		['United Arab Emirates', 100],
+		['Denmark', 2600],
+		['Czech Republic', 1800],
+		['Bangladesh', 1400],
+		['China', 1300],
+		['Bahrain', 100],
+		['Switzerland', 5100],
+		['Canada', 16400],
+		['Peru', 1200],
+		['Venezuela', 100],
+		['Saudi Arabia', 100],
+		['Hungary', 300],
+		['Israel', 1900],
+		['Bulgaria', 200],
+		['Brazil', 5400],
+		['Singapore', 1000],
+		['Ireland', 3300],
+		['Mauritius', 100],
+		['Netherlands', 6400],
+		['Vietnam', 100],
+		['Indonesia', 600],
+		['Taiwan', 100],
+		['South Africa', 400],
+		['Ukraine', 3000],
+		['Paraguay', 100],
+		['Slovakia', 600],
+		['United States', 169700],
+		['Belarus', 600],
+		['Belgium', 3400],
+		['Kuwait', 1500],
+		['Australia', 14500],
+		['Greece', 2100],
+		['Portugal', 200],
+		['France', 9300],
+		['Japan', 2000],
+		['Sweden', 5000],
+		['Spain', 4800],
+		['Italy', 2500]
+	];
+	python_data = f1(python_);
+
+	python_data_cutted = f1(python_);
+
+	c_2B_2B_ = [
+		['', 203800],
+		['Egypt', 100],
+		['Romania', 3700],
+		['Pakistan', 200],
+		['Hong Kong', 2200],
+		['Chile', 100],
+		['New Zealand', 5400],
+		['United Kingdom', 61600],
+		['Austria', 1800],
+		['Iran', 300],
+		['Slovakia', 1700],
+		['Norway', 5600],
+		['Croatia', 100],
+		['Argentina', 3300],
+		['Ireland', 1800],
+		['Slovenia', 100],
+		['Kuwait', 100],
+		['Portugal', 600],
+		['Czech Republic', 5400],
+		['Turkey', 300],
+		['Latvia', 100],
+		['Lithuania', 100],
+		['Finland', 800],
+		['Belgium', 7300],
+		['Lebanon', 100],
+		['India', 12400],
+		['Denmark', 2800],
+		['Syria', 100],
+		['Poland', 9200],
+		['Italy', 7700],
+		['Armenia', 1900],
+		['Bangladesh', 200],
+		['China', 900],
+		['Switzerland', 7400],
+		['Canada', 19000],
+		['Peru', 600],
+		['Japan', 3300],
+		['France', 22300],
+		['Hungary', 2500],
+		['Israel', 7700],
+		['Bulgaria', 3400],
+		['Brazil', 2600],
+		['Singapore', 2000],
+		['Netherlands', 7400],
+		['Germany', 40300],
+		['Indonesia', 100],
+		['Taiwan', 100],
+		['South Africa', 700],
+		['Ukraine', 900],
+		['Paraguay', 500],
+		['Philippines', 700],
+		['United States', 162400],
+		['Belarus', 200],
+		['Thailand', 100],
+		['Cuba', 100],
+		['Australia', 13400],
+		['Greece', 2300],
+		['Russia', 10300],
+		['Sweden', 14700],
+		['Spain', 4700]
+	];
+	c_2B_2B_data = f1(c_2B_2B_);
+
+	c_2B_2B_data_cutted = f1(c_2B_2B_);
+
+	actionscript_203_ = [
+		['', 3100],
+		['Netherlands', 200],
+		['Germany', 900],
+		['Bangladesh', 100],
+		['China', 100],
+		['New Zealand', 100],
+		['Canada', 1200],
+		['United Kingdom', 1200],
+		['Japan', 100],
+		['Argentina', 500],
+		['Korea, South', 100],
+		['Finland', 100],
+		['France', 300],
+		['Russia', 500],
+		['Poland', 100],
+		['United States', 3900],
+		['Belarus', 100],
+		['Belgium', 200],
+		['India', 600],
+		['Australia', 800],
+		['Sweden', 1000],
+		['Spain', 200]
+	];
+	actionscript_203_data = f1(actionscript_203_);
+
+	actionscript_203_data_cutted = f1(actionscript_203_);
+
+	ms_20access_ = [
+		['Netherlands', 100],
+		['Ireland', 1500],
+		['San Marino', 100],
+		['', 300],
+		['Hong Kong', 100],
+		['South Africa', 100],
+		['Germany', 100],
+		['Philippines', 100],
+		['Switzerland', 100],
+		['Canada', 2600],
+		['United Kingdom', 400],
+		['Austria', 100],
+		['United States', 4300],
+		['Lebanon', 100],
+		['Luxembourg', 100]
+	];
+	ms_20access_data = f1(ms_20access_);
+
+	ms_20access_data_cutted = f1(ms_20access_);
+
+	swing_ = [
+		['', 9300],
+		['Italy', 200],
+		['Romania', 500],
+		['Germany', 2200],
+		['Bangladesh', 100],
+		['Trinidad and Tobago', 100],
+		['Switzerland', 400],
+		['Canada', 100],
+		['United Kingdom', 2300],
+		['Austria', 200],
+		['Japan', 200],
+		['Slovakia', 1500],
+		['Israel', 200],
+		['Bulgaria', 100],
+		['Croatia', 100],
+		['Argentina', 600],
+		['Singapore', 100],
+		['Saudi Arabia', 500],
+		['Norway', 100],
+		['France', 1800],
+		['South Africa', 1500],
+		['Russia', 600],
+		['Poland', 100],
+		['Czech Republic', 100],
+		['United States', 5800],
+		['Belarus', 1500],
+		['Belgium', 1600],
+		['Mexico', 100],
+		['Finland', 200],
+		['India', 2600],
+		['Australia', 3200],
+		['Greece', 100],
+		['Sweden', 600],
+		['Spain', 100],
+		['Cambodia', 1500],
+		['Kazakhstan', 100]
+	];
+	swing_data = f1(swing_);
+
+	swing_data_cutted = f1(swing_);
+
+	mongodb_ = [
+		['', 4100],
+		['Netherlands', 600],
+		['Romania', 100],
+		['France', 100],
+		['Germany', 500],
+		['Switzerland', 100],
+		['Russia', 1600],
+		['China', 500],
+		['New Zealand', 100],
+		['Ireland', 600],
+		['United States', 8400],
+		['Belarus', 1600],
+		['United Kingdom', 600],
+		['India', 500],
+		['Australia', 2100],
+		['Ukraine', 100],
+		['Norway', 100],
+		['Canada', 100],
+		['Sweden', 100],
+		['Spain', 200]
+	];
+	mongodb_data = f1(mongodb_);
+
+	mongodb_data_cutted = f1(mongodb_);
+
+	gcc_ = [
+		['', 5800],
+		['Hong Kong', 100],
+		['Romania', 100],
+		['Germany', 600],
+		['China', 100],
+		['New Zealand', 100],
+		['Switzerland', 600],
+		['Canada', 100],
+		['United Kingdom', 2000],
+		['Austria', 100],
+		['Israel', 100],
+		['Bulgaria', 100],
+		['Netherlands', 300],
+		['Norway', 600],
+		['France', 800],
+		['Russia', 100],
+		['United States', 3700],
+		['Belgium', 100],
+		['India', 100],
+		['Australia', 700],
+		['Portugal', 100],
+		['Sweden', 400]
+	];
+	gcc_data = f1(gcc_);
+
+	gcc_data_cutted = f1(gcc_);
+
+	spring_20mvc_ = [
+		['', 1000],
+		['Netherlands', 600],
+		['France', 500],
+		['Norway', 500],
+		['Russia', 1700],
+		['Germany', 1100],
+		['United States', 1600],
+		['Canada', 100],
+		['United Kingdom', 100],
+		['India', 200],
+		['Australia', 1600],
+		['Greece', 100],
+		['Israel', 100],
+		['Bulgaria', 1500],
+		['Brazil', 100],
+		['Sweden', 100]
+	];
+	spring_20mvc_data = f1(spring_20mvc_);
+
+	spring_20mvc_data_cutted = f1(spring_20mvc_);
+
+	zend_20framework_ = [
+		['', 1200],
+		['Thailand', 500],
+		['France', 200],
+		['Germany', 2500],
+		['Ukraine', 100],
+		['Poland', 700],
+		['Czech Republic', 500],
+		['Netherlands', 100],
+		['United States', 2400],
+		['Belarus', 100],
+		['United Kingdom', 1300],
+		['Finland', 100],
+		['India', 200],
+		['Australia', 500],
+		['Russia', 100],
+		['Canada', 200],
+		['Belgium', 100],
+		['Sweden', 100],
+		['Estonia', 100]
+	];
+	zend_20framework_data = f1(zend_20framework_);
+
+	zend_20framework_data_cutted = f1(zend_20framework_);
+
+	wcf_ = [
+		['', 1200],
+		['Netherlands', 400],
+		['France', 200],
+		['Norway', 500],
+		['South Africa', 100],
+		['Denmark', 200],
+		['Germany', 200],
+		['Switzerland', 1500],
+		['Canada', 300],
+		['United Kingdom', 3800],
+		['United States', 6700],
+		['Israel', 100],
+		['Sweden', 100],
+		['Bulgaria', 1500],
+		['Australia', 300]
+	];
+	wcf_data = f1(wcf_);
+
+	wcf_data_cutted = f1(wcf_);
+
+	winforms_ = [
+		['', 2800],
+		['Netherlands', 600],
+		['San Marino', 500],
+		['United Arab Emirates', 100],
+		['Germany', 800],
+		['New Zealand', 100],
+		['Switzerland', 400],
+		['Canada', 1000],
+		['United Kingdom', 4800],
+		['Iran', 100],
+		['United States', 13800],
+		['Israel', 100],
+		['Bulgaria', 500],
+		['Croatia', 100],
+		['Singapore', 100],
+		['Pakistan', 100],
+		['Norway', 100],
+		['Vietnam', 500],
+		['Russia', 200],
+		['Sweden', 800],
+		['France', 900],
+		['South Africa', 200],
+		['Ukraine', 100],
+		['Sri Lanka', 100],
+		['Turkey', 100],
+		['Belarus', 500],
+		['Belgium', 200],
+		['Syria', 100],
+		['Lithuania', 100],
+		['India', 500],
+		['Australia', 500],
+		['Greece', 100],
+		['Denmark', 200],
+		['Japan', 100],
+		['Italy', 300],
+		['Jordan', 100],
+		['Spain', 100]
+	];
+	winforms_data = f1(winforms_);
+
+	winforms_data_cutted = f1(winforms_);
+
+	matlab_ = [
+		['', 13300],
+		['Hong Kong', 100],
+		['Germany', 2200],
+		['New Zealand', 200],
+		['Switzerland', 1500],
+		['Canada', 300],
+		['United Kingdom', 3100],
+		['United States', 8000],
+		['Israel', 2000],
+		['Brazil', 100],
+		['Netherlands', 600],
+		['Belgium', 700],
+		['France', 600],
+		['South Africa', 1500],
+		['Argentina', 100],
+		['Poland', 100],
+		['Turkey', 100],
+		['Finland', 100],
+		['India', 600],
+		['Australia', 200],
+		['Sweden', 500],
+		['Italy', 100]
+	];
+	matlab_data = f1(matlab_);
+
+	matlab_data_cutted = f1(matlab_);
+
+	xslt_ = [
+		['', 3500],
+		['United Kingdom', 3400],
+		['France', 100],
+		['Germany', 3000],
+		['South Africa', 100],
+		['Russia', 100],
+		['New Zealand', 100],
+		['Philippines', 100],
+		['Switzerland', 200],
+		['Canada', 100],
+		['Finland', 100],
+		['Brazil', 200],
+		['Japan', 500],
+		['Australia', 300],
+		['United States', 3700]
+	];
+	xslt_data = f1(xslt_);
+
+	xslt_data_cutted = f1(xslt_);
+
+	xcode_ = [
+		['', 8600],
+		['Italy', 100],
+		['Czech Republic', 200],
+		['Bangladesh', 100],
+		['Hong Kong', 600],
+		['China', 200],
+		['New Zealand', 100],
+		['Switzerland', 200],
+		['Canada', 700],
+		['United Kingdom', 4100],
+		['Austria', 100],
+		['Japan', 200],
+		['Norway', 100],
+		['Croatia', 100],
+		['Gibraltar', 500],
+		['Bulgaria', 100],
+		['Netherlands', 200],
+		['Ireland', 100],
+		['France', 800],
+		['Ukraine', 100],
+		['Paraguay', 100],
+		['Germany', 3000],
+		['United States', 18000],
+		['Singapore', 100],
+		['Belarus', 500],
+		['India', 1400],
+		['Australia', 200],
+		['Greece', 200],
+		['Sweden', 300],
+		['Jordan', 100],
+		['Spain', 700]
+	];
+	xcode_data = f1(xcode_);
+
+	xcode_data_cutted = f1(xcode_);
+
+	symfony2_ = [
+		['Poland', 100],
+		['', 1900],
+		['Germany', 2000],
+		['Bangladesh', 500],
+		['China', 100],
+		['Switzerland', 100],
+		['Canada', 100],
+		['United Kingdom', 800],
+		['Austria', 300],
+		['Slovakia', 100],
+		['Hungary', 100],
+		['Netherlands', 500],
+		['Norway', 100],
+		['France', 1400],
+		['South Africa', 100],
+		['Russia', 1700],
+		['United States', 400],
+		['Morocco', 100],
+		['Estonia', 200],
+		['Ukraine', 500],
+		['Italy', 200],
+		['Spain', 200]
+	];
+	symfony2_data = f1(symfony2_);
+
+	symfony2_data_cutted = f1(symfony2_);
+
+	cakephp_ = [
+		['', 1900],
+		['Venezuela', 100],
+		['Sri Lanka', 100],
+		['Nepal', 100],
+		['France', 100],
+		['Germany', 2000],
+		['Australia', 100],
+		['Denmark', 100],
+		['Chile', 100],
+		['Netherlands', 200],
+		['United States', 1200],
+		['Canada', 100],
+		['United Kingdom', 1300],
+		['India', 100],
+		['Switzerland', 600],
+		['Croatia', 100],
+		['Spain', 500]
+	];
+	cakephp_data = f1(cakephp_);
+
+	cakephp_data_cutted = f1(cakephp_);
+
+	delphi_ = [
+		['', 12400],
+		['Netherlands', 7600],
+		['Romania', 1700],
+		['Germany', 7100],
+		['Albania', 100],
+		['New Zealand', 1100],
+		['Switzerland', 1500],
+		['Canada', 2600],
+		['United Kingdom', 3500],
+		['Austria', 100],
+		['Iran', 600],
+		['United States', 12700],
+		['Israel', 100],
+		['Norway', 500],
+		['Brazil', 200],
+		['Madagascar', 100],
+		['Ireland', 100],
+		['Slovenia', 1600],
+		['France', 1900],
+		['South Africa', 500],
+		['Russia', 500],
+		['Belgium', 1100],
+		['Czech Republic', 1500],
+		['Thailand', 100],
+		['Turkey', 200],
+		['Chile', 1600],
+		['India', 100],
+		['Estonia', 600],
+		['Guatemala', 500],
+		['Ukraine', 100],
+		['Sweden', 3200],
+		['Spain', 300],
+		['Australia', 700]
+	];
+	delphi_data = f1(delphi_);
+
+	delphi_data_cutted = f1(delphi_);
+
+	java_20ee_ = [
+		['', 2000],
+		['Netherlands', 2000],
+		['France', 500],
+		['Germany', 200],
+		['Switzerland', 100],
+		['Denmark', 100],
+		['Poland', 100],
+		['United States', 600],
+		['Canada', 100],
+		['United Kingdom', 500],
+		['Norway', 100],
+		['India', 200],
+		['Australia', 600],
+		['Greece', 100],
+		['Russia', 100],
+		['Malaysia', 100],
+		['Israel', 100],
+		['Bulgaria', 500]
+	];
+	java_20ee_data = f1(java_20ee_);
+
+	java_20ee_data_cutted = f1(java_20ee_);
+
+	eclipse_ = [
+		['', 7400],
+		['Hong Kong', 100],
+		['Romania', 300],
+		['Germany', 3900],
+		['China', 300],
+		['Switzerland', 600],
+		['Canada', 1700],
+		['United Kingdom', 3800],
+		['Austria', 200],
+		['Hungary', 600],
+		['Israel', 600],
+		['Bulgaria', 500],
+		['Croatia', 100],
+		['Netherlands', 1600],
+		['Norway', 200],
+		['France', 2300],
+		['Denmark', 700],
+		['United States', 4700],
+		['Finland', 100],
+		['India', 700],
+		['Australia', 900],
+		['Russia', 100],
+		['Sweden', 400],
+		['Italy', 100]
+	];
+	eclipse_data = f1(eclipse_);
+
+	eclipse_data_cutted = f1(eclipse_);
+
+	vbdotnet_ = [
+		['', 3600],
+		['Netherlands', 100],
+		['Ghana', 100],
+		['San Marino', 1500],
+		['Pakistan', 100],
+		['Germany', 2000],
+		['Ireland', 400],
+		['Switzerland', 300],
+		['Canada', 1400],
+		['United Kingdom', 8300],
+		['Austria', 500],
+		['Israel', 100],
+		['Bulgaria', 500],
+		['Argentina', 100],
+		['Norway', 200],
+		['France', 200],
+		['South Africa', 100],
+		['Denmark', 200],
+		['Philippines', 100],
+		['United States', 17000],
+		['India', 100],
+		['Australia', 400],
+		['Russia', 100],
+		['Sweden', 1300],
+		['Spain', 200]
+	];
+	vbdotnet_data = f1(vbdotnet_);
+
+	vbdotnet_data_cutted = f1(vbdotnet_);
+
+	ruby_20on_20rails_ = [
+		['', 33700],
+		['Netherlands', 1700],
+		['Colombia', 200],
+		['Pakistan', 200],
+		['Italy', 2200],
+		['Mexico', 200],
+		['New Zealand', 800],
+		['United Kingdom', 14400],
+		['Austria', 800],
+		['Slovakia', 600],
+		['Romania', 900],
+		['Norway', 800],
+		['Tanzania', 100],
+		['Gibraltar', 100],
+		['Ireland', 500],
+		['Croatia', 200],
+		['Taiwan', 100],
+		['Venezuela', 100],
+		['Czech Republic', 300],
+		['Turkey', 500],
+		['Finland', 300],
+		['Uruguay', 100],
+		['Argentina', 400],
+		['India', 6900],
+		['Cayman Islands', 100],
+		['Kyrgyzstan', 100],
+		['Azerbaijan', 100],
+		['Australia', 7000],
+		['Poland', 3200],
+		['Hong Kong', 1000],
+		['Germany', 6600],
+		['Bangladesh', 100],
+		['China', 500],
+		['Thailand', 700],
+		['Vietnam', 100],
+		['Switzerland', 1200],
+		['Canada', 11500],
+		['Peru', 200],
+		['Japan', 1700],
+		['Hungary', 200],
+		['Israel', 300],
+		['Bulgaria', 200],
+		['Brazil', 1300],
+		['Singapore', 300],
+		['Iceland', 100],
+		['Ukraine', 1100],
+		['Russia', 2600],
+		['Indonesia', 100],
+		['France', 4500],
+		['South Africa', 100],
+		['Denmark', 200],
+		['Philippines', 1100],
+		['United States', 54200],
+		['Belarus', 1000],
+		['Belgium', 1700],
+		['Zambia', 100],
+		['Syria', 500],
+		['Greece', 100],
+		['Portugal', 800],
+		['Sweden', 1000],
+		['Jordan', 100],
+		['Spain', 1900]
+	];
+	ruby_20on_20rails_data = f1(ruby_20on_20rails_);
+
+	ruby_20on_20rails_data_cutted = f1(ruby_20on_20rails_);
+
+	jquery_20mobile_ = [
+		['', 1900],
+		['Poland', 500],
+		['Sri Lanka', 100],
+		['India', 100],
+		['France', 200],
+		['Greece', 100],
+		['Austria', 100],
+		['Croatia', 1500],
+		['United States', 3600],
+		['Canada', 100]
+	];
+	jquery_20mobile_data = f1(jquery_20mobile_);
+
+	jquery_20mobile_data_cutted = f1(jquery_20mobile_);
+
+	silverlight_ = [
+		['', 1200],
+		['Norway', 100],
+		['France', 100],
+		['Germany', 200],
+		['Ukraine', 100],
+		['New Zealand', 100],
+		['United States', 2800],
+		['United Kingdom', 3400],
+		['Switzerland', 100],
+		['Denmark', 100],
+		['Sweden', 300],
+		['Netherlands', 200],
+		['Australia', 500]
+	];
+	silverlight_data = f1(silverlight_);
+
+	silverlight_data_cutted = f1(silverlight_);
+
+	cordova_ = [
+		['', 200],
+		['United Kingdom', 200],
+		['Croatia', 100],
+		['United States', 100],
+		['Canada', 500]
+	];
+	cordova_data = f1(cordova_);
+
+	cordova_data_cutted = f1(cordova_);
+
+	magento_ = [
+		['', 1100],
+		['Netherlands', 200],
+		['Romania', 500],
+		['Nepal', 500],
+		['France', 200],
+		['Germany', 700],
+		['Australia', 600],
+		['Ukraine', 800],
+		['Poland', 100],
+		['United States', 5700],
+		['Turkey', 100],
+		['United Kingdom', 1600],
+		['India', 400],
+		['Estonia', 500],
+		['Israel', 100],
+		['Spain', 100],
+		['Indonesia', 100]
+	];
+	magento_data = f1(magento_);
+
+	magento_data_cutted = f1(magento_);
+
+	django_ = [
+		['', 15500],
+		['Netherlands', 1400],
+		['Colombia', 200],
+		['Pakistan', 700],
+		['Finland', 200],
+		['Bosnia and Herzegovina', 100],
+		['New Zealand', 500],
+		['United Kingdom', 10200],
+		['Austria', 1700],
+		['Nigeria', 100],
+		['Norway', 100],
+		['Croatia', 500],
+		['Nicaragua', 100],
+		['Ireland', 1700],
+		['Slovenia', 100],
+		['Malta', 100],
+		['Russia', 1300],
+		['Germany', 2300],
+		['Turkey', 200],
+		['Chile', 100],
+		['India', 1300],
+		['Poland', 1800],
+		['Venezuela', 100],
+		['China', 100],
+		['Switzerland', 600],
+		['Canada', 1600],
+		['Peru', 400],
+		['Japan', 200],
+		['Israel', 800],
+		['Bulgaria', 100],
+		['Brazil', 300],
+		['Singapore', 200],
+		['Ecuador', 100],
+		['Vietnam', 100],
+		['Indonesia', 100],
+		['France', 1200],
+		['South Africa', 100],
+		['Ukraine', 100],
+		['United States', 21600],
+		['Belarus', 100],
+		['Belgium', 100],
+		['Kuwait', 1500],
+		['Australia', 1700],
+		['Greece', 200],
+		['Denmark', 200],
+		['Sweden', 200],
+		['Spain', 1800]
+	];
+	django_data = f1(django_);
+
+	django_data_cutted = f1(django_);
+
+	unix_ = [
+		['', 7700],
+		['Netherlands', 600],
+		['Israel', 100],
+		['China', 100],
+		['Greece', 100],
+		['France', 600],
+		['Norway', 200],
+		['Russia', 100],
+		['Germany', 700],
+		['New Zealand', 100],
+		['United States', 6600],
+		['Canada', 800],
+		['United Kingdom', 1700],
+		['India', 1200],
+		['Switzerland', 200],
+		['Hungary', 100],
+		['Denmark', 200],
+		['Czech Republic', 100],
+		['Sweden', 600],
+		['Bulgaria', 100],
+		['Australia', 200]
+	];
+	unix_data = f1(unix_);
+
+	unix_data_cutted = f1(unix_);
+
+	exception_ = [
+		['', 700],
+		['Norway', 100],
+		['Croatia', 100],
+		['Hungary', 100],
+		['France', 200],
+		['Germany', 200],
+		['Mexico', 100],
+		['Denmark', 200],
+		['United States', 2600],
+		['United Kingdom', 3200],
+		['Austria', 100],
+		['India', 100],
+		['Australia', 800],
+		['Greece', 100],
+		['Sweden', 100],
+		['Netherlands', 200],
+		['Bulgaria', 200]
+	];
+	exception_data = f1(exception_);
+
+	exception_data_cutted = f1(exception_);
+
+	sql_20server_ = [
+		['', 19900],
+		['Egypt', 500],
+		['Romania', 2200],
+		['New Zealand', 2300],
+		['Macedonia', 100],
+		['United Kingdom', 21600],
+		['Austria', 200],
+		['Iran', 100],
+		['Russia', 2600],
+		['Norway', 700],
+		['Croatia', 200],
+		['Argentina', 500],
+		['Ireland', 1100],
+		['Slovenia', 500],
+		['Malta', 1500],
+		['Portugal', 100],
+		['Germany', 2800],
+		['Turkey', 100],
+		['Chile', 1600],
+		['India', 2000],
+		['Lebanon', 100],
+		['Netherlands', 1600],
+		['Italy', 100],
+		['San Marino', 500],
+		['Armenia', 100],
+		['Czech Republic', 100],
+		['Switzerland', 2100],
+		['Canada', 4300],
+		['Japan', 100],
+		['Hungary', 100],
+		['Israel', 500],
+		['Bulgaria', 200],
+		['Brazil', 100],
+		['Singapore', 200],
+		['South Africa', 2300],
+		['Ukraine', 900],
+		['Poland', 500],
+		['Sri Lanka', 100],
+		['Philippines', 1500],
+		['United States', 38800],
+		['Belgium', 800],
+		['Australia', 2300],
+		['Greece', 700],
+		['Denmark', 1500],
+		['Sweden', 3300],
+		['Paraguay', 100]
+	];
+	sql_20server_data = f1(sql_20server_);
+
+	sql_20server_data_cutted = f1(sql_20server_);
+
+	linq_ = [
+		['', 9700],
+		['Poland', 100],
+		['Romania', 100],
+		['Greece', 600],
+		['Czech Republic', 100],
+		['Egypt', 100],
+		['China', 100],
+		['New Zealand', 100],
+		['Ireland', 100],
+		['Switzerland', 1000],
+		['Canada', 1000],
+		['United Kingdom', 7700],
+		['Austria', 100],
+		['Germany', 4300],
+		['Japan', 100],
+		['Russia', 300],
+		['Armenia', 100],
+		['Italy', 300],
+		['Israel', 100],
+		['Bulgaria', 500],
+		['Belarus', 1500],
+		['Argentina', 100],
+		['Singapore', 1500],
+		['Netherlands', 800],
+		['Norway', 100],
+		['Vietnam', 600],
+		['Ukraine', 200],
+		['France', 1700],
+		['Malta', 100],
+		['South Africa', 500],
+		['Portugal', 100],
+		['Sri Lanka', 200],
+		['United States', 21100],
+		['Turkey', 700],
+		['Thailand', 100],
+		['India', 300],
+		['Belgium', 100],
+		['Guatemala', 100],
+		['Denmark', 2200],
+		['Sweden', 1100],
+		['Australia', 1200]
+	];
+	linq_data = f1(linq_);
+
+	linq_data_cutted = f1(linq_);
+
+	ipad_ = [
+		['', 1200],
+		['Hong Kong', 500],
+		['Germany', 1300],
+		['France', 200],
+		['Ireland', 100],
+		['Czech Republic', 100],
+		['Netherlands', 100],
+		['United States', 3300],
+		['Belarus', 100],
+		['United Kingdom', 600],
+		['India', 900],
+		['Japan', 100],
+		['Sweden', 100],
+		['Canada', 100],
+		['Singapore', 100],
+		['Jordan', 100],
+		['Spain', 200]
+	];
+	ipad_data = f1(ipad_);
+
+	ipad_data_cutted = f1(ipad_);
+
+	extjs_ = [
+		['', 3300],
+		['Netherlands', 100],
+		['Indonesia', 100],
+		['France', 100],
+		['Germany', 200],
+		['Denmark', 100],
+		['Poland', 100],
+		['Czech Republic', 100],
+		['United States', 1200],
+		['Canada', 100],
+		['Belgium', 200],
+		['India', 100],
+		['Australia', 500],
+		['Israel', 100],
+		['United Kingdom', 200],
+		['Singapore', 100],
+		['Estonia', 100],
+		['Slovakia', 100]
+	];
+	extjs_data = f1(extjs_);
+
+	extjs_data_cutted = f1(extjs_);
+
+	aspdotnet_ = [
+		['', 20200],
+		['Netherlands', 2100],
+		['Romania', 800],
+		['Pakistan', 2100],
+		['Mexico', 500],
+		['New Zealand', 800],
+		['Macedonia', 100],
+		['United Kingdom', 25100],
+		['Austria', 900],
+		['Iran', 600],
+		['Nigeria', 100],
+		['Croatia', 100],
+		['Argentina', 1300],
+		['Ireland', 400],
+		['Slovenia', 200],
+		['Malta', 200],
+		['Portugal', 100],
+		['Germany', 2700],
+		['Turkey', 2000],
+		['Finland', 100],
+		['Denmark', 2700],
+		['India', 6900],
+		['Belgium', 400],
+		['Guatemala', 500],
+		['Luxembourg', 100],
+		['Syria', 100],
+		['Poland', 1000],
+		['Italy', 1000],
+		['San Marino', 500],
+		['Norway', 600],
+		['China', 100],
+		['Switzerland', 4000],
+		['Canada', 6700],
+		['Peru', 100],
+		['Somalia', 100],
+		['Japan', 100],
+		['Hungary', 100],
+		['Latvia', 100],
+		['Israel', 700],
+		['Bulgaria', 1900],
+		['Brazil', 300],
+		['Singapore', 200],
+		['Vietnam', 200],
+		['Indonesia', 100],
+		['France', 1200],
+		['South Africa', 700],
+		['Ukraine', 1300],
+		['Sri Lanka', 700],
+		['Philippines', 100],
+		['United States', 63100],
+		['Belarus', 100],
+		['Thailand', 100],
+		['Australia', 2700],
+		['Greece', 1700],
+		['Russia', 200],
+		['Sweden', 3300],
+		['Spain', 200],
+		['Slovakia', 100]
+	];
+	aspdotnet_data = f1(aspdotnet_);
+
+	aspdotnet_data_cutted = f1(aspdotnet_);
+
+	csv_ = [
+		['United Kingdom', 800],
+		['', 500],
+		['India', 100],
+		['United States', 300],
+		['Germany', 100]
+	];
+	csv_data = f1(csv_);
+
+	csv_data_cutted = f1(csv_);
+
+	java_ = [
+		['', 211300],
+		['Romania', 6000],
+		['Mexico', 3100],
+		['Austria', 7000],
+		['Iran', 200],
+		['Russia', 9100],
+		['Bolivia', 100],
+		['Colombia', 1600],
+		['Czech Republic', 2800],
+		['Ireland', 4000],
+		['Uzbekistan', 100],
+		['Portugal', 2500],
+		['Finland', 4500],
+		['Belgium', 7500],
+		['Kyrgyzstan', 100],
+		['Moldova', 200],
+		['Malaysia', 1700],
+		['Germany', 59200],
+		['Bangladesh', 1900],
+		['Trinidad and Tobago', 1500],
+		['China', 2200],
+		['Canada', 23800],
+		['Peru', 2200],
+		['Costa Rica', 1500],
+		['Japan', 3100],
+		['Hungary', 5100],
+		['Sudan', 100],
+		['Nepal', 100],
+		['Indonesia', 100],
+		['France', 17100],
+		['Paraguay', 1500],
+		['Sri Lanka', 1600],
+		['Philippines', 400],
+		['United States', 228000],
+		['Morocco', 100],
+		['Australia', 22500],
+		['Greece', 3700],
+		['Denmark', 5100],
+		['Sweden', 13800],
+		['Cambodia', 1500],
+		['Egypt', 600],
+		['Pakistan', 600],
+		['Hong Kong', 1600],
+		['New Zealand', 4700],
+		['Macedonia', 100],
+		['United Kingdom', 88400],
+		['Slovakia', 2300],
+		['Honduras', 500],
+		['Croatia', 2300],
+		['Argentina', 3000],
+		['Norway', 8200],
+		['Slovenia', 1600],
+		['Dominican Republic', 100],
+		['Armenia', 200],
+		['Antarctica', 500],
+		['Turkey', 900],
+		['Chile', 300],
+		['Lithuania', 700],
+		['India', 45500],
+		['Lebanon', 100],
+		['Saudi Arabia', 1500],
+		['Poland', 9100],
+		['Italy', 5400],
+		['United Arab Emirates', 200],
+		['Venezuela', 100],
+		['Bahrain', 100],
+		['Switzerland', 17800],
+		['Kazakhstan', 500],
+		['Israel', 12200],
+		['Bulgaria', 7500],
+		['Brazil', 4900],
+		['Singapore', 1900],
+		['Mauritius', 100],
+		['Netherlands', 11200],
+		['Iceland', 500],
+		['Cyprus', 100],
+		['Taiwan', 200],
+		['South Africa', 5200],
+		['Ukraine', 3500],
+		['Belarus', 2400],
+		['Thailand', 200],
+		['Zambia', 100],
+		['Estonia', 1000],
+		['Bosnia and Herzegovina', 100],
+		['Uruguay', 100],
+		['Spain', 6700]
+	];
+	java_data = f1(java_);
+
+	java_data_cutted = f1(java_);
+
+	c_ = [
+		['', 105200],
+		['Norway', 3500],
+		['Romania', 2000],
+		['Hong Kong', 1700],
+		['New Zealand', 3100],
+		['United Kingdom', 28900],
+		['Austria', 300],
+		['Slovakia', 600],
+		['Czech Republic', 900],
+		['Denmark', 1300],
+		['Argentina', 800],
+		['Ireland', 400],
+		['Slovenia', 100],
+		['Russia', 1500],
+		['Germany', 13100],
+		['Turkey', 100],
+		['Chile', 100],
+		['Finland', 800],
+		['India', 6800],
+		['Belgium', 1000],
+		['Lebanon', 100],
+		['Luxembourg', 500],
+		['Netherlands', 3400],
+		['Italy', 4000],
+		['Armenia', 500],
+		['Bangladesh', 200],
+		['China', 1600],
+		['Switzerland', 3000],
+		['Canada', 7400],
+		['Peru', 600],
+		['Costa Rica', 100],
+		['Japan', 700],
+		['Saudi Arabia', 100],
+		['Hungary', 500],
+		['Israel', 5000],
+		['Bulgaria', 2300],
+		['Brazil', 2100],
+		['Singapore', 500],
+		['France', 9800],
+		['Taiwan', 100],
+		['South Africa', 800],
+		['Ukraine', 200],
+		['Poland', 1000],
+		['Philippines', 500],
+		['United States', 91500],
+		['Belarus', 200],
+		['Thailand', 100],
+		['Australia', 6400],
+		['Greece', 1800],
+		['Portugal', 1500],
+		['Sweden', 7100],
+		['Spain', 900],
+		['Paraguay', 500],
+		['Tunisia', 500]
+	];
+	c_data = f1(c_);
+
+	c_data_cutted = f1(c_);
+
+	entity_20framework_ = [
+		['', 3900],
+		['Hong Kong', 100],
+		['Germany', 300],
+		['New Zealand', 100],
+		['Switzerland', 700],
+		['Canada', 600],
+		['United Kingdom', 3800],
+		['Iran', 100],
+		['Hungary', 100],
+		['Israel', 100],
+		['Bulgaria', 500],
+		['Argentina', 100],
+		['Netherlands', 700],
+		['Norway', 200],
+		['France', 200],
+		['Denmark', 200],
+		['Poland', 200],
+		['Sri Lanka', 600],
+		['United States', 5200],
+		['Belarus', 500],
+		['Thailand', 100],
+		['India', 100],
+		['Australia', 500],
+		['Sweden', 600]
+	];
+	entity_20framework_data = f1(entity_20framework_);
+
+	entity_20framework_data_cutted = f1(entity_20framework_);
+
+	flash_ = [
+		['', 2000],
+		['Belgium', 200],
+		['France', 100],
+		['Germany', 500],
+		['Russia', 100],
+		['China', 100],
+		['New Zealand', 100],
+		['United States', 1200],
+		['Canada', 500],
+		['United Kingdom', 1000],
+		['Japan', 500],
+		['Australia', 700],
+		['India', 100],
+		['Sweden', 200],
+		['Argentina', 100],
+		['Spain', 200]
+	];
+	flash_data = f1(flash_);
+
+	flash_data_cutted = f1(flash_);
+
+	html5_ = [
+		['', 3600],
+		['Hong Kong', 100],
+		['Germany', 900],
+		['Mexico', 100],
+		['Trinidad and Tobago', 100],
+		['Canada', 200],
+		['United Kingdom', 6100],
+		['Israel', 100],
+		['Bulgaria', 500],
+		['Croatia', 600],
+		['Singapore', 200],
+		['Netherlands', 300],
+		['Norway', 200],
+		['France', 300],
+		['Belgium', 100],
+		['Philippines', 100],
+		['United States', 4500],
+		['Finland', 800],
+		['Bangladesh', 100],
+		['India', 300],
+		['Australia', 100],
+		['Greece', 100],
+		['Sweden', 100],
+		['Italy', 200]
+	];
+	html5_data = f1(html5_);
+
+	html5_data_cutted = f1(html5_);
+
+	sqlite_ = [
+		['', 1500],
+		['Netherlands', 100],
+		['Romania', 100],
+		['France', 100],
+		['Germany', 1700],
+		['Portugal', 100],
+		['Bulgaria', 100],
+		['Philippines', 100],
+		['United States', 2100],
+		['Canada', 600],
+		['Finland', 500],
+		['India', 100],
+		['Switzerland', 100],
+		['Greece', 100],
+		['Denmark', 100],
+		['United Kingdom', 400],
+		['Sweden', 200],
+		['Slovakia', 100]
+	];
+	sqlite_data = f1(sqlite_);
+
+	sqlite_data_cutted = f1(sqlite_);
+
+	twitter_20bootstrap_ = [
+		['', 4400],
+		['Ireland', 100],
+		['France', 1100],
+		['Germany', 100],
+		['Mexico', 500],
+		['Ukraine', 100],
+		['United States', 1300],
+		['Canada', 600],
+		['United Kingdom', 200],
+		['India', 100],
+		['Denmark', 100],
+		['Netherlands', 100],
+		['Spain', 100]
+	];
+	twitter_20bootstrap_data = f1(twitter_20bootstrap_);
+
+	twitter_20bootstrap_data_cutted = f1(twitter_20bootstrap_);
+
+	perl_ = [
+		['', 21300],
+		['Netherlands', 1900],
+		['Romania', 200],
+		['Germany', 4000],
+		['Mexico', 100],
+		['China', 100],
+		['New Zealand', 1300],
+		['Switzerland', 100],
+		['Canada', 2700],
+		['United Kingdom', 8400],
+		['Russia', 500],
+		['Hungary', 100],
+		['Malaysia', 100],
+		['Israel', 200],
+		['Bulgaria', 100],
+		['Croatia', 1500],
+		['Sweden', 3300],
+		['Chile', 100],
+		['Vietnam', 1500],
+		['Ukraine', 600],
+		['France', 800],
+		['Portugal', 100],
+		['Czech Republic', 2700],
+		['Qatar', 1500],
+		['United States', 37100],
+		['Belarus', 1500],
+		['Finland', 500],
+		['India', 1400],
+		['Belgium', 200],
+		['Lebanon', 100],
+		['Italy', 500],
+		['Moldova', 500],
+		['Denmark', 100],
+		['Spain', 800],
+		['Australia', 300]
+	];
+	perl_data = f1(perl_);
+
+	perl_data_cutted = f1(perl_);
+
+	flex_ = [
+		['', 1700],
+		['Finland', 100],
+		['Romania', 100],
+		['Germany', 300],
+		['Poland', 100],
+		['New Zealand', 100],
+		['United States', 3600],
+		['Belarus', 100],
+		['Belgium', 1100],
+		['India', 500],
+		['Australia', 700],
+		['Japan', 100],
+		['United Kingdom', 300],
+		['Argentina', 100],
+		['Sweden', 200]
+	];
+	flex_data = f1(flex_);
+
+	flex_data_cutted = f1(flex_);
+
+	css3_ = [
+		['', 3000],
+		['Norway', 200],
+		['Slovenia', 100],
+		['France', 100],
+		['Germany', 200],
+		['Mexico', 1600],
+		['Russia', 100],
+		['United States', 1700],
+		['Canada', 400],
+		['United Kingdom', 2700],
+		['Finland', 100],
+		['India', 1200],
+		['Australia', 200],
+		['Greece', 200],
+		['Israel', 100],
+		['Iran', 100],
+		['Sweden', 200],
+		['Croatia', 200],
+		['Singapore', 1500],
+		['Italy', 300]
+	];
+	css3_data = f1(css3_);
+
+	css3_data_cutted = f1(css3_);
+
+	wpf_ = [
+		['', 15500],
+		['Malaysia', 100],
+		['Romania', 200],
+		['Germany', 4100],
+		['New Zealand', 1200],
+		['Switzerland', 700],
+		['Canada', 1000],
+		['United Kingdom', 12200],
+		['Austria', 800],
+		['Russia', 1000],
+		['Hungary', 100],
+		['Italy', 300],
+		['Israel', 900],
+		['Bulgaria', 100],
+		['Sudan', 100],
+		['Argentina', 100],
+		['Singapore', 100],
+		['Netherlands', 2300],
+		['Ireland', 100],
+		['Croatia', 100],
+		['Indonesia', 100],
+		['France', 2800],
+		['Malta', 100],
+		['South Africa', 700],
+		['Denmark', 500],
+		['Poland', 100],
+		['Czech Republic', 300],
+		['Philippines', 500],
+		['United States', 27100],
+		['Cuba', 100],
+		['India', 5000],
+		['Australia', 3400],
+		['Greece', 500],
+		['Ukraine', 900],
+		['Sweden', 2000],
+		['Spain', 100]
+	];
+	wpf_data = f1(wpf_);
+
+	wpf_data_cutted = f1(wpf_);
+
+	http_ = [
+		['Netherlands', 1600],
+		['', 900],
+		['India', 100],
+		['United Kingdom', 700],
+		['France', 100],
+		['Germany', 600],
+		['Bulgaria', 600],
+		['Canada', 300],
+		['Sweden', 100],
+		['United States', 1000],
+		['Australia', 100]
+	];
+	http_data = f1(http_);
+
+	http_data_cutted = f1(http_);
+
+	apache_ = [
+		['', 2700],
+		['Netherlands', 200],
+		['Pakistan', 100],
+		['France', 600],
+		['Germany', 1500],
+		['United States', 800],
+		['Canada', 100],
+		['United Kingdom', 700],
+		['Peru', 100],
+		['India', 1500],
+		['Australia', 500],
+		['Greece', 100],
+		['Spain', 100]
+	];
+	apache_data = f1(apache_);
+
+	apache_data_cutted = f1(apache_);
+
+	gwt_ = [
+		['', 1200],
+		['Netherlands', 600],
+		['Slovenia', 500],
+		['Romania', 100],
+		['France', 1500],
+		['Germany', 700],
+		['Switzerland', 100],
+		['Poland', 500],
+		['Czech Republic', 100],
+		['United States', 1700],
+		['Canada', 300],
+		['Belgium', 100],
+		['Austria', 200],
+		['India', 300],
+		['Australia', 100],
+		['Italy', 100],
+		['Spain', 200]
+	];
+	gwt_data = f1(gwt_);
+
+	gwt_data_cutted = f1(gwt_);
+
+	postgresql_ = [
+		['', 8500],
+		['Poland', 900],
+		['Germany', 1600],
+		['China', 100],
+		['New Zealand', 200],
+		['Italy', 100],
+		['Canada', 1500],
+		['United Kingdom', 1700],
+		['Austria', 1500],
+		['Brazil', 1500],
+		['Denmark', 100],
+		['Argentina', 500],
+		['Netherlands', 300],
+		['Indonesia', 500],
+		['France', 500],
+		['Russia', 1000],
+		['Paraguay', 100],
+		['Czech Republic', 600],
+		['Philippines', 100],
+		['United States', 2800],
+		['Latvia', 100],
+		['India', 100],
+		['Australia', 1600],
+		['Greece', 100],
+		['Ukraine', 500],
+		['Sweden', 600],
+		['Estonia', 100]
+	];
+	postgresql_data = f1(postgresql_);
+
+	postgresql_data_cutted = f1(postgresql_);
+
+	codeigniter_ = [
+		['', 1200],
+		['Italy', 500],
+		['Nepal', 200],
+		['Bangladesh', 100],
+		['Denmark', 100],
+		['New Zealand', 100],
+		['United States', 2200],
+		['Canada', 200],
+		['United Kingdom', 1800],
+		['Mexico', 100],
+		['India', 100],
+		['Japan', 100],
+		['Australia', 100],
+		['Hungary', 100],
+		['Latvia', 100],
+		['Iran', 100],
+		['Sweden', 100],
+		['Netherlands', 100],
+		['Azerbaijan', 100],
+		['Pakistan', 400]
+	];
+	codeigniter_data = f1(codeigniter_);
+
+	codeigniter_data_cutted = f1(codeigniter_);
+
+	tomcat_ = [
+		['Netherlands', 1500],
+		['', 800],
+		['France', 100],
+		['Norway', 100],
+		['Russia', 100],
+		['Germany', 100],
+		['United States', 400],
+		['United Kingdom', 200],
+		['Lithuania', 100],
+		['India', 100],
+		['Switzerland', 100],
+		['Greece', 200],
+		['Denmark', 100],
+		['Bulgaria', 500],
+		['Australia', 300]
+	];
+	tomcat_data = f1(tomcat_);
+
+	tomcat_data_cutted = f1(tomcat_);
+
+	nhibernate_ = [
+		['', 700],
+		['Italy', 100],
+		['Romania', 100],
+		['Czech Republic', 500],
+		['Switzerland', 500],
+		['Canada', 300],
+		['United Kingdom', 600],
+		['Bulgaria', 500],
+		['Denmark', 100],
+		['Argentina', 2000],
+		['Portugal', 100],
+		['Netherlands', 100],
+		['France', 100],
+		['South Africa', 100],
+		['Ukraine', 500],
+		['Poland', 100],
+		['Germany', 600],
+		['United States', 1600],
+		['Belgium', 500],
+		['Dominican Republic', 100],
+		['Australia', 400],
+		['Greece', 100],
+		['Bosnia and Herzegovina', 100],
+		['Sweden', 100]
+	];
+	nhibernate_data = f1(nhibernate_);
+
+	nhibernate_data_cutted = f1(nhibernate_);
+
+	sql_ = [
+		['', 44000],
+		['Egypt', 1500],
+		['Romania', 2500],
+		['Pakistan', 700],
+		['Finland', 100],
+		['Mexico', 100],
+		['Chile', 1700],
+		['New Zealand', 2900],
+		['Macedonia', 100],
+		['United Kingdom', 36300],
+		['Austria', 2500],
+		['Portugal', 1200],
+		['Iran', 200],
+		['Slovakia', 100],
+		['Colombia', 100],
+		['Czech Republic', 200],
+		['Croatia', 600],
+		['Argentina', 2200],
+		['Norway', 1200],
+		['Slovenia', 100],
+		['Malta', 1500],
+		['Russia', 4500],
+		['Armenia', 600],
+		['Turkey', 100],
+		['Latvia', 200],
+		['Lithuania', 100],
+		['India', 7500],
+		['Belgium', 1800],
+		['Guatemala', 100],
+		['Lebanon', 100],
+		['Australia', 6600],
+		['Poland', 500],
+		['Italy', 1600],
+		['San Marino', 500],
+		['Germany', 7500],
+		['Trinidad and Tobago', 100],
+		['China', 600],
+		['Ireland', 1600],
+		['Switzerland', 4300],
+		['Canada', 9500],
+		['Japan', 500],
+		['Hungary', 500],
+		['Israel', 1400],
+		['Bulgaria', 300],
+		['Brazil', 700],
+		['Singapore', 300],
+		['Nepal', 100],
+		['Netherlands', 3600],
+		['Indonesia', 100],
+		['France', 2800],
+		['South Africa', 2600],
+		['Denmark', 2500],
+		['Paraguay', 500],
+		['Sri Lanka', 100],
+		['Philippines', 1500],
+		['United States', 75800],
+		['Belarus', 200],
+		['Thailand', 100],
+		['Estonia', 200],
+		['Greece', 1800],
+		['Ukraine', 2900],
+		['Sweden', 4600],
+		['Spain', 300]
+	];
+	sql_data = f1(sql_);
+
+	sql_data_cutted = f1(sql_);
+
+	jsf_ = [
+		['', 1200],
+		['Poland', 100],
+		['France', 500],
+		['Germany', 600],
+		['Russia', 100],
+		['United States', 600],
+		['Canada', 200],
+		['United Kingdom', 500],
+		['Peru', 100],
+		['India', 100],
+		['Australia', 100],
+		['Bulgaria', 1500],
+		['Netherlands', 2000],
+		['Brazil', 100],
+		['Singapore', 100]
+	];
+	jsf_data = f1(jsf_);
+
+	jsf_data_cutted = f1(jsf_);
+
+	visual_20studio_ = [
+		['', 900],
+		['Netherlands', 400],
+		['Romania', 100],
+		['Pakistan', 100],
+		['Germany', 200],
+		['China', 100],
+		['New Zealand', 400],
+		['Switzerland', 200],
+		['Canada', 500],
+		['United Kingdom', 4300],
+		['Austria', 100],
+		['Israel', 200],
+		['San Marino', 100],
+		['Bulgaria', 500],
+		['Norway', 100],
+		['France', 200],
+		['South Africa', 200],
+		['Denmark', 400],
+		['Philippines', 100],
+		['United States', 8900],
+		['Belgium', 100],
+		['Australia', 100],
+		['Russia', 200],
+		['Sweden', 300]
+	];
+	visual_20studio_data = f1(visual_20studio_);
+
+	visual_20studio_data_cutted = f1(visual_20studio_);
+
+	javascript_ = [
+		['', 155200],
+		['Norway', 4300],
+		['Romania', 3200],
+		['Pakistan', 4100],
+		['Egypt', 200],
+		['Mexico', 1000],
+		['Chile', 100],
+		['Albania', 600],
+		['Jordan', 100],
+		['United Kingdom', 69500],
+		['Austria', 1800],
+		['Iran', 200],
+		['Slovakia', 400],
+		['Bolivia', 500],
+		['Colombia', 100],
+		['Czech Republic', 1000],
+		['Croatia', 3600],
+		['Argentina', 2000],
+		['Nicaragua', 500],
+		['Ireland', 1300],
+		['Slovenia', 1200],
+		['Malta', 700],
+		['Russia', 3600],
+		['Armenia', 600],
+		['Turkey', 1000],
+		['Singapore', 5500],
+		['Finland', 5600],
+		['Lithuania', 400],
+		['India', 23400],
+		['Belgium', 5600],
+		['Guatemala', 1500],
+		['Lebanon', 200],
+		['Italy', 5500],
+		['Syria', 100],
+		['Moldova', 100],
+		['Malaysia', 700],
+		['Hong Kong', 3400],
+		['Germany', 28200],
+		['Bangladesh', 2500],
+		['New Zealand', 2800],
+		['Trinidad and Tobago', 1600],
+		['China', 2600],
+		['Iceland', 800],
+		['Switzerland', 1900],
+		['Canada', 23700],
+		['Peru', 300],
+		['Costa Rica', 200],
+		['Venezuela', 100],
+		['Tunisia', 100],
+		['Hungary', 2800],
+		['Latvia', 200],
+		['Israel', 10400],
+		['Bulgaria', 3500],
+		['Brazil', 7600],
+		['Portugal', 1100],
+		['Australia', 12100],
+		['Mauritius', 100],
+		['Netherlands', 15600],
+		['Ecuador', 100],
+		['Vietnam', 100],
+		['Ukraine', 3600],
+		['Cyprus', 200],
+		['Nepal', 2600],
+		['France', 13400],
+		['South Africa', 400],
+		['Denmark', 3300],
+		['Poland', 4700],
+		['Sri Lanka', 900],
+		['Philippines', 3200],
+		['United States', 214700],
+		['Belarus', 1700],
+		['Thailand', 300],
+		['Morocco', 200],
+		['Estonia', 400],
+		['Greece', 4500],
+		['Bosnia and Herzegovina', 700],
+		['Japan', 1400],
+		['Sweden', 9900],
+		['Paraguay', 200],
+		['Uruguay', 100],
+		['Spain', 2100]
+	];
+	javascript_data = f1(javascript_);
+
+	javascript_data_cutted = f1(javascript_);
+
+	haskell_ = [
+		['', 23600],
+		['Egypt', 100],
+		['Romania', 100],
+		['Czech Republic', 1500],
+		['Hong Kong', 500],
+		['New Zealand', 200],
+		['Canada', 100],
+		['United Kingdom', 10200],
+		['Austria', 100],
+		['Japan', 100],
+		['Nigeria', 500],
+		['Israel', 600],
+		['Norway', 1600],
+		['Brazil', 100],
+		['Netherlands', 1100],
+		['Ireland', 100],
+		['Ukraine', 600],
+		['Poland', 100],
+		['Germany', 8000],
+		['United States', 18300],
+		['Belarus', 100],
+		['India', 1100],
+		['Australia', 800],
+		['Russia', 1100],
+		['Sweden', 2200],
+		['Spain', 200],
+		['Italy', 100]
+	];
+	haskell_data = f1(haskell_);
+
+	haskell_data_cutted = f1(haskell_);
+
+	jquery_ = [
+		['', 98100],
+		['Norway', 3300],
+		['Romania', 1700],
+		['Pakistan', 4300],
+		['Egypt', 200],
+		['Mexico', 400],
+		['Bosnia and Herzegovina', 200],
+		['New Zealand', 2300],
+		['United Kingdom', 50600],
+		['Austria', 2500],
+		['Iran', 300],
+		['Slovakia', 300],
+		['Bolivia', 500],
+		['Colombia', 100],
+		['Czech Republic', 500],
+		['Croatia', 4500],
+		['Argentina', 2000],
+		['Nicaragua', 100],
+		['Ireland', 1000],
+		['Slovenia', 800],
+		['Malta', 100],
+		['Portugal', 800],
+		['Armenia', 600],
+		['Turkey', 500],
+		['Chile', 100],
+		['Finland', 4400],
+		['India', 22700],
+		['Guatemala', 1500],
+		['Lebanon', 200],
+		['Italy', 4900],
+		['Australia', 8600],
+		['Netherlands', 6200],
+		['Hong Kong', 400],
+		['Germany', 18000],
+		['Bangladesh', 2900],
+		['Albania', 600],
+		['Trinidad and Tobago', 2000],
+		['China', 1500],
+		['Vietnam', 300],
+		['Switzerland', 1000],
+		['Canada', 17000],
+		['Peru', 300],
+		['Venezuela', 100],
+		['Hungary', 2000],
+		['Latvia', 100],
+		['Israel', 6100],
+		['Bulgaria', 2600],
+		['Brazil', 3900],
+		['Singapore', 4900],
+		['Ecuador', 100],
+		['Iceland', 200],
+		['Ukraine', 1600],
+		['Cyprus', 200],
+		['Nepal', 3800],
+		['France', 6700],
+		['South Africa', 200],
+		['Denmark', 3000],
+		['Poland', 3200],
+		['Sri Lanka', 1000],
+		['Philippines', 3600],
+		['United States', 133400],
+		['Belarus', 1500],
+		['Belgium', 2600],
+		['Kuwait', 100],
+		['Morocco', 600],
+		['Estonia', 100],
+		['Greece', 3900],
+		['Russia', 800],
+		['Japan', 500],
+		['Sweden', 9100],
+		['Spain', 1100],
+		['Uruguay', 200],
+		['Nigeria', 100]
+	];
+	jquery_data = f1(jquery_);
+
+	jquery_data_cutted = f1(jquery_);
+
+	git_ = [
+		['', 11500],
+		['Hong Kong', 200],
+		['Germany', 4000],
+		['China', 200],
+		['New Zealand', 1600],
+		['Switzerland', 300],
+		['Canada', 2300],
+		['United Kingdom', 5200],
+		['Austria', 1500],
+		['Italy', 200],
+		['Malaysia', 100],
+		['Brazil', 100],
+		['Singapore', 100],
+		['Netherlands', 2100],
+		['Norway', 100],
+		['Vietnam', 100],
+		['France', 3900],
+		['Ukraine', 100],
+		['Poland', 1700],
+		['Czech Republic', 400],
+		['United States', 20200],
+		['Belarus', 100],
+		['Finland', 400],
+		['India', 2100],
+		['Belgium', 100],
+		['Russia', 800],
+		['Sweden', 1900],
+		['Spain', 500],
+		['Australia', 600]
+	];
+	git_data = f1(git_);
+
+	git_data_cutted = f1(git_);
+
+	svn_ = [
+		['', 3800],
+		['Poland', 100],
+		['France', 1800],
+		['Germany', 1100],
+		['Switzerland', 1800],
+		['Russia', 1600],
+		['Czech Republic', 100],
+		['New Zealand', 1600],
+		['United States', 2300],
+		['Canada', 200],
+		['Belgium', 500],
+		['Austria', 200],
+		['Norway', 100],
+		['India', 500],
+		['Australia', 100],
+		['Guatemala', 100],
+		['Israel', 100],
+		['United Kingdom', 1300],
+		['Netherlands', 1000],
+		['Sweden', 400],
+		['Spain', 100]
+	];
+	svn_data = f1(svn_);
+
+	svn_data_cutted = f1(svn_);
+
+	xaml_ = [
+		['', 2800],
+		['Netherlands', 300],
+		['Indonesia', 100],
+		['France', 600],
+		['Germany', 700],
+		['Russia', 100],
+		['New Zealand', 100],
+		['Switzerland', 100],
+		['United Kingdom', 2400],
+		['India', 800],
+		['United States', 3200],
+		['Hungary', 100],
+		['Denmark', 100],
+		['Israel', 200],
+		['Sweden', 1500],
+		['Australia', 200]
+	];
+	xaml_data = f1(xaml_);
+
+	xaml_data_cutted = f1(xaml_);
+
+	tsql_ = [
+		['', 9600],
+		['Egypt', 100],
+		['Romania', 1600],
+		['Pakistan', 100],
+		['Armenia', 100],
+		['Chile', 500],
+		['New Zealand', 600],
+		['Switzerland', 1600],
+		['Canada', 1100],
+		['United Kingdom', 8000],
+		['Japan', 100],
+		['Russia', 1700],
+		['Israel', 100],
+		['Norway', 100],
+		['Croatia', 100],
+		['Argentina', 100],
+		['Netherlands', 1500],
+		['Ireland', 100],
+		['Malta', 1500],
+		['South Africa', 700],
+		['Portugal', 100],
+		['Germany', 700],
+		['Philippines', 500],
+		['United States', 13300],
+		['Belgium', 100],
+		['India', 400],
+		['Australia', 300],
+		['Greece', 100],
+		['Ukraine', 700],
+		['Sweden', 2200],
+		['Denmark', 1000]
+	];
+	tsql_data = f1(tsql_);
+
+	tsql_data_cutted = f1(tsql_);
+
+	opencv_ = [
+		['', 4200],
+		['Hong Kong', 100],
+		['Indonesia', 100],
+		['France', 300],
+		['Germany', 200],
+		['Russia', 100],
+		['Switzerland', 200],
+		['Canada', 500],
+		['United Kingdom', 100],
+		['India', 1600],
+		['United States', 400],
+		['Greece', 100],
+		['Portugal', 100],
+		['Japan', 100],
+		['Brazil', 1500],
+		['Pakistan', 100]
+	];
+	opencv_data = f1(opencv_);
+
+	opencv_data_cutted = f1(opencv_);
+
+	vba_ = [
+		['', 4600],
+		['Ireland', 1500],
+		['France', 100],
+		['Germany', 200],
+		['Denmark', 500],
+		['Poland', 500],
+		['New Zealand', 600],
+		['Philippines', 200],
+		['United States', 3800],
+		['Canada', 600],
+		['United Kingdom', 1800],
+		['Argentina', 100],
+		['India', 1600],
+		['Australia', 1600],
+		['Lebanon', 100],
+		['Japan', 100],
+		['Sweden', 100],
+		['Belgium', 100],
+		['Luxembourg', 100]
+	];
+	vba_data = f1(vba_);
+
+	vba_data_cutted = f1(vba_);
+
+	ios_ = [
+		['', 52500],
+		['Poland', 800],
+		['Romania', 400],
+		['Pakistan', 600],
+		['Hong Kong', 300],
+		['Mexico', 200],
+		['Chile', 100],
+		['New Zealand', 500],
+		['United Kingdom', 18200],
+		['Austria', 700],
+		['Slovakia', 300],
+		['Colombia', 100],
+		['Croatia', 600],
+		['Argentina', 300],
+		['Norway', 600],
+		['Slovenia', 500],
+		['Gibraltar', 100],
+		['Czech Republic', 1100],
+		['Turkey', 200],
+		['Estonia', 200],
+		['Latvia', 100],
+		['India', 20000],
+		['Belgium', 400],
+		['Lebanon', 100],
+		['Korea, South', 100],
+		['Denmark', 500],
+		['Australia', 2700],
+		['Netherlands', 2100],
+		['Italy', 3000],
+		['United Arab Emirates', 100],
+		['Germany', 18000],
+		['Bangladesh', 200],
+		['Albania', 100],
+		['China', 1100],
+		['Ireland', 1600],
+		['Switzerland', 1100],
+		['Canada', 4500],
+		['Costa Rica', 100],
+		['Japan', 2200],
+		['Hungary', 200],
+		['Israel', 2400],
+		['Bulgaria', 600],
+		['Brazil', 700],
+		['Singapore', 800],
+		['Iceland', 100],
+		['Russia', 700],
+		['France', 2300],
+		['Ukraine', 800],
+		['Paraguay', 100],
+		['Sri Lanka', 100],
+		['Philippines', 200],
+		['United States', 73100],
+		['Belarus', 1500],
+		['Thailand', 200],
+		['Jordan', 700],
+		['Greece', 800],
+		['Portugal', 300],
+		['Sweden', 3200],
+		['Uruguay', 100],
+		['Spain', 4400]
+	];
+	ios_data = f1(ios_);
+
+	ios_data_cutted = f1(ios_);
+
+	hibernate_ = [
+		['Netherlands', 300],
+		['', 2700],
+		['France', 1500],
+		['Germany', 2000],
+		['South Africa', 100],
+		['Russia', 1500],
+		['Hong Kong', 500],
+		['Switzerland', 200],
+		['Canada', 200],
+		['United Kingdom', 600],
+		['India', 200],
+		['Australia', 600],
+		['Hungary', 100],
+		['Malaysia', 100],
+		['Israel', 100],
+		['Norway', 500],
+		['Brazil', 500],
+		['United States', 3500],
+		['Bulgaria', 1500],
+		['Spain', 100]
+	];
+	hibernate_data = f1(hibernate_);
+
+	hibernate_data_cutted = f1(hibernate_);
+
+	html_ = [
+		['', 54700],
+		['Poland', 700],
+		['Romania', 600],
+		['Pakistan', 2500],
+		['Hong Kong', 700],
+		['Mexico', 700],
+		['Vietnam', 200],
+		['Albania', 100],
+		['United Kingdom', 39100],
+		['Austria', 300],
+		['Iran', 600],
+		['Russia', 700],
+		['Bolivia', 100],
+		['Colombia', 100],
+		['Czech Republic', 100],
+		['Croatia', 2200],
+		['Argentina', 300],
+		['Nicaragua', 100],
+		['Norway', 3800],
+		['Slovenia', 700],
+		['Portugal', 400],
+		['Armenia', 200],
+		['Turkey', 100],
+		['Latvia', 200],
+		['Lithuania', 100],
+		['Finland', 3000],
+		['Guatemala', 500],
+		['Lebanon', 100],
+		['India', 11700],
+		['Netherlands', 5200],
+		['Italy', 2400],
+		['Germany', 11900],
+		['Bangladesh', 1100],
+		['New Zealand', 1300],
+		['Trinidad and Tobago', 600],
+		['China', 500],
+		['Ireland', 600],
+		['Switzerland', 1200],
+		['Canada', 9500],
+		['Peru', 500],
+		['Japan', 100],
+		['Hungary', 1800],
+		['Israel', 2900],
+		['Bulgaria', 1800],
+		['Brazil', 800],
+		['Singapore', 3000],
+		['Iceland', 100],
+		['Nepal', 800],
+		['France', 4900],
+		['South Africa', 100],
+		['Denmark', 900],
+		['Paraguay', 100],
+		['Sri Lanka', 700],
+		['Philippines', 700],
+		['United States', 63300],
+		['Belarus', 500],
+		['Belgium', 1200],
+		['Cuba', 100],
+		['Morocco', 100],
+		['Australia', 4100],
+		['Greece', 4100],
+		['Ukraine', 600],
+		['Malaysia', 100],
+		['Sweden', 3300],
+		['Spain', 600]
+	];
+	html_data = f1(html_);
+
+	html_data_cutted = f1(html_);
+
+	firefox_ = [
+		['', 2300],
+		['United Kingdom', 1100],
+		['Germany', 100],
+		['Russia', 100],
+		['Singapore', 100],
+		['United States', 500]
+	];
+	firefox_data = f1(firefox_);
+
+	firefox_data_cutted = f1(firefox_);
+
+	scala_ = [
+		['Poland', 400],
+		['', 14500],
+		['Romania', 200],
+		['Germany', 10800],
+		['China', 500],
+		['New Zealand', 100],
+		['Switzerland', 7600],
+		['Canada', 100],
+		['United Kingdom', 7200],
+		['Austria', 100],
+		['Japan', 100],
+		['Kazakhstan', 100],
+		['Hungary', 400],
+		['Argentina', 100],
+		['Singapore', 100],
+		['Netherlands', 1400],
+		['Norway', 600],
+		['Russia', 4300],
+		['Taiwan', 500],
+		['France', 4700],
+		['South Africa', 100],
+		['Brazil', 2000],
+		['Czech Republic', 200],
+		['United States', 12700],
+		['Belarus', 500],
+		['Belgium', 200],
+		['India', 1600],
+		['Australia', 900],
+		['Ukraine', 100],
+		['Sweden', 400],
+		['Italy', 200]
+	];
+	scala_data = f1(scala_);
+
+	scala_data_cutted = f1(scala_);
+
+	uitableview_ = [
+		['United Kingdom', 600],
+		['', 1300],
+		['Israel', 100],
+		['India', 300],
+		['Germany', 500],
+		['Canada', 100],
+		['Romania', 100],
+		['Hong Kong', 100],
+		['Netherlands', 100],
+		['United States', 2000],
+		['Belarus', 500]
+	];
+	uitableview_data = f1(uitableview_);
+
+	uitableview_data_cutted = f1(uitableview_);
+
+	objective_20c_ = [
+		['', 57700],
+		['Malaysia', 100],
+		['Romania', 400],
+		['Pakistan', 300],
+		['Hong Kong', 1800],
+		['Mexico', 100],
+		['New Zealand', 2200],
+		['United Kingdom', 22400],
+		['Austria', 900],
+		['Slovakia', 100],
+		['Norway', 700],
+		['Croatia', 100],
+		['Gibraltar', 500],
+		['Ireland', 1500],
+		['Slovenia', 200],
+		['Portugal', 100],
+		['Czech Republic', 2200],
+		['Turkey', 100],
+		['Chile', 100],
+		['Argentina', 600],
+		['Finland', 100],
+		['India', 15600],
+		['Belgium', 200],
+		['Lebanon', 100],
+		['Korea, South', 100],
+		['Denmark', 400],
+		['Netherlands', 2900],
+		['Italy', 3400],
+		['United Arab Emirates', 100],
+		['Germany', 20300],
+		['Bangladesh', 600],
+		['China', 700],
+		['Switzerland', 2700],
+		['Canada', 5900],
+		['Costa Rica', 100],
+		['Japan', 1400],
+		['Israel', 1700],
+		['Bulgaria', 200],
+		['Brazil', 400],
+		['Singapore', 700],
+		['Taiwan', 100],
+		['France', 4100],
+		['South Africa', 100],
+		['Ukraine', 1100],
+		['Poland', 800],
+		['Sri Lanka', 100],
+		['Philippines', 300],
+		['United States', 98100],
+		['Belarus', 1700],
+		['Thailand', 200],
+		['Kuwait', 100],
+		['Australia', 6100],
+		['Greece', 600],
+		['Russia', 600],
+		['Sweden', 4700],
+		['Paraguay', 500],
+		['Jordan', 600],
+		['Spain', 3700]
+	];
+	objective_20c_data = f1(objective_20c_);
+
+	objective_20c_data_cutted = f1(objective_20c_);
+
+	jquery_20ui_ = [
+		['', 600],
+		['Italy', 300],
+		['Pakistan', 100],
+		['France', 100],
+		['Germany', 200],
+		['Bangladesh', 100],
+		['Denmark', 100],
+		['Sri Lanka', 100],
+		['United States', 4200],
+		['Canada', 100],
+		['Belgium', 100],
+		['Singapore', 100],
+		['India', 100],
+		['United Kingdom', 400],
+		['Greece', 100],
+		['Norway', 200],
+		['Bulgaria', 100],
+		['Australia', 100]
+	];
+	jquery_20ui_data = f1(jquery_20ui_);
+
+	jquery_20ui_data_cutted = f1(jquery_20ui_);
+
+	linux_ = [
+		['', 29000],
+		['Egypt', 100],
+		['Romania', 100],
+		['Hong Kong', 100],
+		['Bangladesh', 100],
+		['China', 600],
+		['New Zealand', 600],
+		['Ireland', 200],
+		['Switzerland', 900],
+		['Canada', 1100],
+		['United Kingdom', 6600],
+		['Austria', 400],
+		['Russia', 800],
+		['Hungary', 100],
+		['Israel', 1000],
+		['Bulgaria', 200],
+		['Brazil', 400],
+		['Singapore', 100],
+		['Netherlands', 1500],
+		['Norway', 1700],
+		['France', 3300],
+		['Peru', 600],
+		['Portugal', 100],
+		['Poland', 100],
+		['Germany', 2800],
+		['Philippines', 500],
+		['United States', 20700],
+		['Belgium', 400],
+		['Kuwait', 100],
+		['Finland', 100],
+		['India', 2500],
+		['Australia', 2300],
+		['Greece', 600],
+		['Denmark', 200],
+		['Czech Republic', 600],
+		['Sweden', 2200],
+		['Spain', 600],
+		['Italy', 400]
+	];
+	linux_data = f1(linux_);
+
+	linux_data_cutted = f1(linux_);
+
+	json_ = [
+		['', 4700],
+		['Netherlands', 600],
+		['Pakistan', 200],
+		['Germany', 1600],
+		['Bangladesh', 100],
+		['Trinidad and Tobago', 100],
+		['China', 100],
+		['New Zealand', 200],
+		['Canada', 700],
+		['United Kingdom', 5200],
+		['Hungary', 100],
+		['Israel', 100],
+		['Bulgaria', 1500],
+		['Singapore', 100],
+		['Norway', 100],
+		['France', 800],
+		['South Africa', 100],
+		['Russia', 100],
+		['Poland', 100],
+		['Czech Republic', 100],
+		['Philippines', 100],
+		['United States', 8000],
+		['Finland', 100],
+		['India', 500],
+		['Australia', 500],
+		['Greece', 200],
+		['Sweden', 200],
+		['Guatemala', 100],
+		['Italy', 100]
+	];
+	json_data = f1(json_);
+
+	json_data_cutted = f1(json_);
+
+	pdf_ = [
+		['', 700],
+		['Belgium', 200],
+		['Romania', 100],
+		['Germany', 1500],
+		['Russia', 100],
+		['United Kingdom', 100],
+		['Bulgaria', 100],
+		['United States', 400],
+		['Canada', 100]
+	];
+	pdf_data = f1(pdf_);
+
+	pdf_data_cutted = f1(pdf_);
+
+	grails_ = [
+		['', 1400],
+		['Ireland', 1500],
+		['Vietnam', 100],
+		['France', 100],
+		['Germany', 500],
+		['Ukraine', 100],
+		['New Zealand', 100],
+		['United States', 5300],
+		['Canada', 500],
+		['United Kingdom', 800],
+		['Austria', 100],
+		['Russia', 500],
+		['Belarus', 100],
+		['Brazil', 500]
+	];
+	grails_data = f1(grails_);
+
+	grails_data_cutted = f1(grails_);
+
+	backbonedotjs_ = [
+		['', 2300],
+		['United Kingdom', 100],
+		['Iceland', 100],
+		['France', 600],
+		['Germany', 200],
+		['Ukraine', 100],
+		['Poland', 100],
+		['Switzerland', 100],
+		['Canada', 1600],
+		['Finland', 600],
+		['Austria', 100],
+		['Japan', 100],
+		['United States', 3700],
+		['Norway', 100],
+		['Belgium', 100],
+		['Sweden', 100]
+	];
+	backbonedotjs_data = f1(backbonedotjs_);
+
+	backbonedotjs_data_cutted = f1(backbonedotjs_);
+
+	android_ = [
+		['', 122000],
+		['Egypt', 400],
+		['Romania', 8400],
+		['Pakistan', 4000],
+		['Italy', 2900],
+		['Mexico', 500],
+		['New Zealand', 1900],
+		['Macedonia', 600],
+		['Jordan', 500],
+		['United Kingdom', 25300],
+		['Austria', 3900],
+		['Portugal', 900],
+		['Iran', 300],
+		['Slovakia', 1200],
+		['Czech Republic', 1400],
+		['Croatia', 600],
+		['Argentina', 1500],
+		['Cambodia', 100],
+		['Nicaragua', 100],
+		['Norway', 1400],
+		['Uzbekistan', 200],
+		['Russia', 6200],
+		['Armenia', 100],
+		['Turkey', 1100],
+		['Finland', 1900],
+		['Lithuania', 100],
+		['India', 57300],
+		['Lebanon', 2000],
+		['Syria', 100],
+		['Moldova', 600],
+		['Malaysia', 500],
+		['Hong Kong', 500],
+		['Germany', 24600],
+		['Bangladesh', 1600],
+		['China', 1000],
+		['Thailand', 100],
+		['Bahrain', 200],
+		['Switzerland', 1000],
+		['Canada', 7400],
+		['Peru', 100],
+		['Japan', 3300],
+		['Saudi Arabia', 500],
+		['Hungary', 1400],
+		['Latvia', 500],
+		['Israel', 4000],
+		['Bulgaria', 1800],
+		['Brazil', 1000],
+		['Singapore', 600],
+		['Ireland', 300],
+		['Nepal', 100],
+		['Netherlands', 4900],
+		['Vietnam', 700],
+		['Ukraine', 3700],
+		['Indonesia', 200],
+		['Taiwan', 300],
+		['South Africa', 500],
+		['Denmark', 1700],
+		['Poland', 2600],
+		['Sri Lanka', 100],
+		['Philippines', 300],
+		['United States', 93300],
+		['Belarus', 1000],
+		['Belgium', 2300],
+		['Australia', 4200],
+		['Morocco', 500],
+		['Estonia', 500],
+		['Greece', 900],
+		['Slovenia', 1500],
+		['France', 9200],
+		['Sweden', 7500],
+		['Spain', 2700],
+		['Paraguay', 100],
+		['Uruguay', 500],
+		['Tunisia', 200]
+	];
+	android_data = f1(android_);
+
+	android_data_cutted = f1(android_);
+
+	qt_ = [
+		['Poland', 700],
+		['Italy', 100],
+		['Romania', 200],
+		['', 3500],
+		['Germany', 1500],
+		['New Zealand', 100],
+		['Switzerland', 800],
+		['Canada', 1200],
+		['United Kingdom', 3100],
+		['Austria', 100],
+		['Iran', 100],
+		['Turkey', 100],
+		['Hungary', 100],
+		['Israel', 100],
+		['Brazil', 200],
+		['Netherlands', 200],
+		['Belgium', 400],
+		['France', 1600],
+		['Armenia', 100],
+		['Russia', 900],
+		['Czech Republic', 100],
+		['United States', 4000],
+		['Finland', 600],
+		['Australia', 100],
+		['Japan', 100],
+		['Sweden', 300],
+		['Slovakia', 100]
+	];
+	qt_data = f1(qt_);
+
+	qt_data_cutted = f1(qt_);
+
+	internet_20explorer_ = [
+		['United Kingdom', 3600],
+		['', 900],
+		['Sweden', 100],
+		['Pakistan', 100],
+		['Greece', 100],
+		['Finland', 100],
+		['Bulgaria', 100],
+		['Netherlands', 100],
+		['Singapore', 100],
+		['United States', 1100],
+		['Canada', 300]
+	];
+	internet_20explorer_data = f1(internet_20explorer_);
+
+	internet_20explorer_data_cutted = f1(internet_20explorer_);
+
+	visual_20c_2B_2B_ = [
+		['', 1400],
+		['Norway', 100],
+		['Romania', 100],
+		['France', 100],
+		['Germany', 200],
+		['Russia', 100],
+		['Czech Republic', 100],
+		['New Zealand', 200],
+		['Switzerland', 100],
+		['Canada', 100],
+		['United Kingdom', 1700],
+		['India', 300],
+		['United States', 6000],
+		['Ukraine', 100],
+		['Sweden', 200],
+		['Netherlands', 100],
+		['Denmark', 100],
+		['Italy', 100],
+		['Slovakia', 100]
+	];
+	visual_20c_2B_2B_data = f1(visual_20c_2B_2B_);
+
+	visual_20c_2B_2B_data_cutted = f1(visual_20c_2B_2B_);
+
+	dotnet_ = [
+		['', 40200],
+		['Egypt', 100],
+		['Romania', 2100],
+		['Pakistan', 800],
+		['Finland', 200],
+		['Mexico', 100],
+		['New Zealand', 3800],
+		['Macedonia', 100],
+		['United Kingdom', 47300],
+		['Austria', 1100],
+		['Iran', 200],
+		['Norway', 3500],
+		['Croatia', 400],
+		['Argentina', 800],
+		['Ireland', 1800],
+		['Slovenia', 200],
+		['Malta', 700],
+		['Portugal', 700],
+		['Czech Republic', 2200],
+		['Turkey', 1400],
+		['Chile', 200],
+		['Lithuania', 100],
+		['India', 4000],
+		['Belgium', 1300],
+		['Guatemala', 500],
+		['Luxembourg', 100],
+		['Syria', 100],
+		['Estonia', 100],
+		['Netherlands', 5500],
+		['Italy', 2500],
+		['Ghana', 100],
+		['San Marino', 500],
+		['United Arab Emirates', 200],
+		['Germany', 15200],
+		['China', 200],
+		['Vietnam', 200],
+		['Switzerland', 4800],
+		['Canada', 11000],
+		['Japan', 100],
+		['Hungary', 400],
+		['Latvia', 100],
+		['Israel', 3200],
+		['Bulgaria', 1600],
+		['Brazil', 900],
+		['Singapore', 2200],
+		['Iceland', 100],
+		['Ukraine', 1700],
+		['France', 4800],
+		['South Africa', 3000],
+		['Denmark', 7400],
+		['Poland', 700],
+		['Sri Lanka', 600],
+		['Philippines', 1200],
+		['United States', 117000],
+		['Belarus', 1700],
+		['Thailand', 200],
+		['Australia', 7600],
+		['Greece', 2000],
+		['Russia', 2700],
+		['Sweden', 7700],
+		['Moldova', 100],
+		['Jordan', 100],
+		['Spain', 600]
+	];
+	dotnet_data = f1(dotnet_);
+
+	dotnet_data_cutted = f1(dotnet_);
+
+	google_20chrome_ = [
+		['', 4100],
+		['Finland', 200],
+		['Germany', 100],
+		['Russia', 100],
+		['Poland', 100],
+		['United States', 600],
+		['United Kingdom', 1000],
+		['India', 100],
+		['Switzerland', 100],
+		['Greece', 100],
+		['Norway', 100],
+		['Singapore', 100],
+		['Australia', 100]
+	];
+	google_20chrome_data = f1(google_20chrome_);
+
+	google_20chrome_data_cutted = f1(google_20chrome_);
+
+	winapi_ = [
+		['', 3100],
+		['Italy', 100],
+		['Czech Republic', 100],
+		['Chile', 500],
+		['New Zealand', 300],
+		['Switzerland', 100],
+		['Canada', 600],
+		['United Kingdom', 2300],
+		['Israel', 100],
+		['Denmark', 100],
+		['Netherlands', 100],
+		['Norway', 700],
+		['France', 400],
+		['South Africa', 100],
+		['Russia', 100],
+		['Germany', 200],
+		['United States', 7700],
+		['Belgium', 200],
+		['Australia', 500],
+		['Greece', 100],
+		['Ukraine', 500],
+		['Sweden', 200]
+	];
+	winapi_data = f1(winapi_);
+
+	winapi_data_cutted = f1(winapi_);
+
+	php_ = [
+		['', 123800],
+		['Romania', 4800],
+		['Syria', 100],
+		['Mexico', 100],
+		['Austria', 3700],
+		['Portugal', 2600],
+		['Iran', 400],
+		['Nigeria', 100],
+		['Bolivia', 100],
+		['Ireland', 2000],
+		['Bosnia and Herzegovina', 300],
+		['Finland', 4000],
+		['Belgium', 2600],
+		['Guatemala', 500],
+		['Kyrgyzstan', 500],
+		['Moldova', 100],
+		['Poland', 5600],
+		['Germany', 39100],
+		['Bangladesh', 3600],
+		['New Zealand', 4700],
+		['Trinidad and Tobago', 600],
+		['China', 1800],
+		['Iceland', 1700],
+		['Canada', 23800],
+		['Peru', 1600],
+		['Costa Rica', 100],
+		['Japan', 1800],
+		['Hungary', 3500],
+		['Latvia', 2300],
+		['Nepal', 2500],
+		['Algeria', 100],
+		['Indonesia', 1300],
+		['France', 7300],
+		['Brunei', 100],
+		['Paraguay', 100],
+		['Sri Lanka', 800],
+		['Philippines', 1900],
+		['United States', 132000],
+		['Morocco', 400],
+		['Australia', 11700],
+		['Greece', 2900],
+		['Denmark', 6100],
+		['Sweden', 6200],
+		['Cambodia', 200],
+		['Egypt', 1000],
+		['Pakistan', 5100],
+		['Italy', 5500],
+		['Albania', 500],
+		['United Kingdom', 62500],
+		['Slovakia', 1300],
+		['Malaysia', 200],
+		['Croatia', 200],
+		['Argentina', 2000],
+		['Nicaragua', 100],
+		['Norway', 1700],
+		['Slovenia', 1400],
+		['Malta', 600],
+		['Czech Republic', 2400],
+		['Antarctica', 100],
+		['Turkey', 700],
+		['Chile', 100],
+		['Lithuania', 200],
+		['India', 20100],
+		['Azerbaijan', 100],
+		['Hong Kong', 800],
+		['United Arab Emirates', 100],
+		['Switzerland', 3100],
+		['Kazakhstan', 100],
+		['Israel', 2800],
+		['Bulgaria', 1700],
+		['Brazil', 2000],
+		['Singapore', 4300],
+		['Mauritius', 100],
+		['Netherlands', 19100],
+		['Ecuador', 100],
+		['Vietnam', 200],
+		['Cyprus', 200],
+		['South Africa', 700],
+		['Ukraine', 1500],
+		['Qatar', 100],
+		['Belarus', 700],
+		['Thailand', 700],
+		['Kuwait', 100],
+		['Estonia', 1600],
+		['Russia', 5500],
+		['Spain', 3100]
+	];
+	php_data = f1(php_);
+
+	php_data_cutted = f1(php_);
+
+	azure_ = [
+		['Belgium', 1500],
+		['', 1400],
+		['Brazil', 100],
+		['India', 1500],
+		['France', 100],
+		['Germany', 500],
+		['Russia', 100],
+		['United Kingdom', 300],
+		['China', 100],
+		['New Zealand', 100],
+		['United States', 3300]
+	];
+	azure_data = f1(azure_);
+
+	azure_data_cutted = f1(azure_);
+
+	nodedotjs_ = [
+		['', 7300],
+		['Netherlands', 3200],
+		['Romania', 1600],
+		['Hong Kong', 100],
+		['Switzerland', 100],
+		['Canada', 600],
+		['United Kingdom', 1400],
+		['Austria', 100],
+		['Japan', 100],
+		['Turkey', 100],
+		['Malaysia', 200],
+		['Israel', 500],
+		['Bulgaria', 100],
+		['Brazil', 800],
+		['Sweden', 700],
+		['Norway', 200],
+		['Vietnam', 100],
+		['France', 500],
+		['South Africa', 100],
+		['Russia', 800],
+		['Poland', 600],
+		['Germany', 1800],
+		['Philippines', 100],
+		['United States', 14300],
+		['Belgium', 200],
+		['Argentina', 100],
+		['Finland', 300],
+		['India', 500],
+		['Australia', 900],
+		['Italy', 100],
+		['Spain', 500],
+		['Slovakia', 500]
+	];
+	nodedotjs_data = f1(nodedotjs_);
+
+	nodedotjs_data_cutted = f1(nodedotjs_);
+
+	google_20app_20engine_ = [
+		['Poland', 100],
+		['', 4100],
+		['Slovenia', 1500],
+		['France', 200],
+		['Germany', 100],
+		['South Africa', 100],
+		['Denmark', 500],
+		['China', 100],
+		['United States', 5900],
+		['Canada', 100],
+		['United Kingdom', 2500],
+		['India', 300],
+		['Australia', 100],
+		['Greece', 100],
+		['Russia', 100],
+		['Israel', 500],
+		['Italy', 1500],
+		['Netherlands', 400],
+		['Brazil', 100]
+	];
+	google_20app_20engine_data = f1(google_20app_20engine_);
+
+	google_20app_20engine_data_cutted = f1(google_20app_20engine_);
+
+	css_ = [
+		['', 49800],
+		['Netherlands', 4400],
+		['Colombia', 100],
+		['Pakistan', 2300],
+		['Finland', 2300],
+		['Mexico', 2100],
+		['Vietnam', 200],
+		['Chile', 100],
+		['New Zealand', 1400],
+		['United Kingdom', 31100],
+		['Austria', 200],
+		['Iran', 700],
+		['Slovakia', 100],
+		['Romania', 400],
+		['Croatia', 2200],
+		['Argentina', 100],
+		['Nicaragua', 100],
+		['Norway', 2700],
+		['Slovenia', 1100],
+		['Russia', 1600],
+		['Armenia', 100],
+		['Denmark', 600],
+		['Singapore', 3500],
+		['Latvia', 100],
+		['India', 8600],
+		['Guatemala', 100],
+		['Lebanon', 100],
+		['Italy', 2500],
+		['Poland', 400],
+		['Hong Kong', 300],
+		['Germany', 6700],
+		['Bangladesh', 200],
+		['Trinidad and Tobago', 600],
+		['China', 100],
+		['Ireland', 100],
+		['Switzerland', 500],
+		['Canada', 7100],
+		['Peru', 500],
+		['Japan', 100],
+		['Hungary', 1700],
+		['Israel', 3000],
+		['Bulgaria', 700],
+		['Brazil', 200],
+		['Portugal', 200],
+		['Nepal', 1000],
+		['Iceland', 100],
+		['Indonesia', 100],
+		['France', 4600],
+		['South Africa', 100],
+		['Ukraine', 500],
+		['Sri Lanka', 200],
+		['Philippines', 300],
+		['United States', 50600],
+		['Belarus', 300],
+		['Belgium', 800],
+		['Cuba', 100],
+		['Australia', 3800],
+		['Greece', 3900],
+		['Bosnia and Herzegovina', 100],
+		['Sweden', 2900],
+		['Spain', 200]
+	];
+	css_data = f1(css_);
+
+	css_data_cutted = f1(css_);
+
+	cocoa_ = [
+		['', 10000],
+		['Hong Kong', 100],
+		['Romania', 100],
+		['Germany', 2000],
+		['New Zealand', 500],
+		['Switzerland', 300],
+		['Canada', 900],
+		['United Kingdom', 2300],
+		['Austria', 500],
+		['Gibraltar', 100],
+		['Singapore', 100],
+		['Netherlands', 100],
+		['Norway', 100],
+		['France', 400],
+		['Russia', 100],
+		['Czech Republic', 100],
+		['United States', 16300],
+		['Belarus', 100],
+		['India', 200],
+		['Australia', 1900],
+		['Denmark', 100],
+		['Sweden', 800],
+		['Spain', 200]
+	];
+	cocoa_data = f1(cocoa_);
+
+	cocoa_data_cutted = f1(cocoa_);
+
+	google_20maps_ = [
+		['', 3600],
+		['Poland', 100],
+		['Australia', 600],
+		['Greece', 100],
+		['Czech Republic', 100],
+		['Switzerland', 100],
+		['United Kingdom', 100],
+		['Armenia', 100],
+		['Brazil', 100],
+		['United States', 2900],
+		['Canada', 100]
+	];
+	google_20maps_data = f1(google_20maps_);
+
+	google_20maps_data_cutted = f1(google_20maps_);
+
+	ruby_ = [
+		['', 30500],
+		['Poland', 2700],
+		['Romania', 200],
+		['Pakistan', 100],
+		['Hong Kong', 200],
+		['Mexico', 800],
+		['Bosnia and Herzegovina', 100],
+		['Albania', 100],
+		['United Kingdom', 12800],
+		['Austria', 100],
+		['Slovakia', 100],
+		['Czech Republic', 500],
+		['Tanzania', 100],
+		['Gibraltar', 100],
+		['Ireland', 500],
+		['Croatia', 600],
+		['Kuwait', 100],
+		['Portugal', 500],
+		['Germany', 10300],
+		['Turkey', 100],
+		['Latvia', 100],
+		['Argentina', 300],
+		['Finland', 1600],
+		['India', 3500],
+		['Belgium', 700],
+		['Cayman Islands', 100],
+		['Kyrgyzstan', 100],
+		['Luxembourg', 100],
+		['Azerbaijan', 100],
+		['Estonia', 200],
+		['Netherlands', 1100],
+		['Italy', 2800],
+		['Denmark', 700],
+		['Norway', 1300],
+		['New Zealand', 600],
+		['China', 700],
+		['Switzerland', 400],
+		['Canada', 9300],
+		['Japan', 2200],
+		['Hungary', 300],
+		['Israel', 700],
+		['Bulgaria', 200],
+		['Brazil', 1900],
+		['Singapore', 200],
+		['Australia', 5400],
+		['Dominican Republic', 100],
+		['France', 1700],
+		['South Africa', 200],
+		['Ukraine', 300],
+		['Philippines', 1800],
+		['United States', 45700],
+		['Belarus', 1900],
+		['Thailand', 1500],
+		['Zambia', 500],
+		['Syria', 500],
+		['Greece', 100],
+		['Russia', 3300],
+		['Sweden', 1300],
+		['Uruguay', 100],
+		['Spain', 2200]
+	];
+	ruby_data = f1(ruby_);
+
+	ruby_data_cutted = f1(ruby_);
+
+	angularjs_ = [
+		['', 8300],
+		['Poland', 200],
+		['Romania', 100],
+		['Czech Republic', 100],
+		['New Zealand', 100],
+		['Switzerland', 100],
+		['Canada', 500],
+		['United Kingdom', 1700],
+		['Peru', 100],
+		['Costa Rica', 100],
+		['Japan', 500],
+		['United States', 8800],
+		['Israel', 1300],
+		['Brazil', 300],
+		['Netherlands', 100],
+		['Norway', 200],
+		['Russia', 100],
+		['France', 2000],
+		['South Africa', 100],
+		['Ukraine', 600],
+		['Germany', 400],
+		['Thailand', 100],
+		['Turkey', 500],
+		['Belarus', 100],
+		['Belgium', 700],
+		['India', 1800],
+		['Australia', 300],
+		['Greece', 1000],
+		['Bosnia and Herzegovina', 1500],
+		['Iran', 100],
+		['Sweden', 700],
+		['Spain', 100]
+	];
+	angularjs_data = f1(angularjs_);
+
+	angularjs_data_cutted = f1(angularjs_);
+
+	c_23_ = [
+		['', 173000],
+		['Romania', 6100],
+		['Syria', 1100],
+		['Mexico', 500],
+		['Austria', 4000],
+		['Portugal', 3300],
+		['Iran', 2200],
+		['Nigeria', 300],
+		['Colombia', 300],
+		['Ireland', 6900],
+		['Bosnia and Herzegovina', 100],
+		['Finland', 700],
+		['Belgium', 7600],
+		['Guatemala', 1500],
+		['Moldova', 200],
+		['Malaysia', 200],
+		['Ghana', 100],
+		['San Marino', 1500],
+		['Germany', 40600],
+		['Bangladesh', 300],
+		['New Zealand', 10800],
+		['Trinidad and Tobago', 100],
+		['China', 2900],
+		['Vietnam', 3100],
+		['Canada', 39600],
+		['Peru', 200],
+		['Japan', 1700],
+		['Tunisia', 100],
+		['Hungary', 2600],
+		['Latvia', 1000],
+		['Sudan', 100],
+		['Indonesia', 700],
+		['Algeria', 100],
+		['Nepal', 300],
+		['France', 15600],
+		['Paraguay', 100],
+		['Sri Lanka', 2800],
+		['Philippines', 2500],
+		['United States', 346200],
+		['Cuba', 100],
+		['Australia', 29700],
+		['Greece', 4100],
+		['Denmark', 14800],
+		['Sweden', 21800],
+		['Jordan', 500],
+		['Egypt', 400],
+		['Pakistan', 3900],
+		['Hong Kong', 500],
+		['Albania', 100],
+		['Macedonia', 500],
+		['United Kingdom', 143800],
+		['Slovakia', 600],
+		['Croatia', 3700],
+		['Argentina', 2600],
+		['Norway', 10100],
+		['Slovenia', 900],
+		['Malta', 2200],
+		['Czech Republic', 5700],
+		['Turkey', 6800],
+		['Chile', 700],
+		['Lithuania', 700],
+		['India', 24700],
+		['Lebanon', 100],
+		['Luxembourg', 1600],
+		['Azerbaijan', 100],
+		['Poland', 7600],
+		['Italy', 10700],
+		['United Arab Emirates', 1600],
+		['Armenia', 700],
+		['Kenya', 100],
+		['Switzerland', 18000],
+		['Afghanistan', 200],
+		['Israel', 11800],
+		['Bulgaria', 2200],
+		['Brazil', 4500],
+		['Singapore', 3500],
+		['Mauritius', 100],
+		['Netherlands', 21900],
+		['Iceland', 600],
+		['Cyprus', 100],
+		['South Africa', 6200],
+		['Ukraine', 7700],
+		['Belarus', 2400],
+		['Thailand', 900],
+		['Estonia', 200],
+		['Russia', 10200],
+		['Uruguay', 100],
+		['Spain', 3300]
+	];
+	c_23_data = f1(c_23_);
+
+	c_23_data_cutted = f1(c_23_);
+
+	windows_ = [
+		['', 7800],
+		['Netherlands', 800],
+		['San Marino', 100],
+		['Germany', 2700],
+		['Mexico', 100],
+		['New Zealand', 1200],
+		['Switzerland', 200],
+		['Canada', 1000],
+		['United Kingdom', 4400],
+		['Turkey', 100],
+		['Italy', 200],
+		['Israel', 300],
+		['Bulgaria', 200],
+		['Argentina', 100],
+		['Norway', 800],
+		['Romania', 100],
+		['France', 2000],
+		['South Africa', 100],
+		['Denmark', 100],
+		['Paraguay', 100],
+		['Czech Republic', 100],
+		['Poland', 200],
+		['United States', 12500],
+		['Chile', 500],
+		['India', 100],
+		['Belgium', 300],
+		['Greece', 500],
+		['Ukraine', 200],
+		['Russia', 100],
+		['Sweden', 300],
+		['Spain', 100],
+		['Australia', 500]
+	];
+	windows_data = f1(windows_);
+
+	windows_data_cutted = f1(windows_);
+
+	iis_ = [
+		['United Kingdom', 2000],
+		['', 200],
+		['Australia', 100],
+		['Greece', 100],
+		['Italy', 100],
+		['Bulgaria', 500],
+		['United States', 500],
+		['Switzerland', 100]
+	];
+	iis_data = f1(iis_);
+
+	iis_data_cutted = f1(iis_);
+
+	powershell_ = [
+		['', 5400],
+		['Finland', 100],
+		['France', 1600],
+		['Czech Republic', 1500],
+		['Poland', 100],
+		['Germany', 1600],
+		['United States', 8700],
+		['Canada', 2100],
+		['United Kingdom', 2300],
+		['India', 2000],
+		['Belgium', 100],
+		['Israel', 1500],
+		['Norway', 500],
+		['Netherlands', 100],
+		['Sweden', 100]
+	];
+	powershell_data = f1(powershell_);
+
+	powershell_data_cutted = f1(powershell_);
+
+	wordpress_ = [
+		['', 1200],
+		['Belgium', 100],
+		['Iceland', 100],
+		['Pakistan', 100],
+		['Mauritius', 100],
+		['Germany', 100],
+		['Bangladesh', 100],
+		['Switzerland', 100],
+		['United Kingdom', 1000],
+		['India', 100],
+		['United States', 1100],
+		['Netherlands', 100],
+		['Spain', 100]
+	];
+	wordpress_data = f1(wordpress_);
+
+	wordpress_data_cutted = f1(wordpress_);
+
+	ubuntu_ = [
+		['', 300],
+		['Russia', 100],
+		['United States', 400],
+		['France', 200]
+	];
+	ubuntu_data = f1(ubuntu_);
+
+	ubuntu_data_cutted = f1(ubuntu_);
+
+	xml_ = [
+		['', 6500],
+		['Netherlands', 500],
+		['Romania', 200],
+		['Germany', 4700],
+		['New Zealand', 500],
+		['Switzerland', 1800],
+		['Canada', 2400],
+		['United Kingdom', 9000],
+		['Austria', 200],
+		['Japan', 500],
+		['Turkey', 100],
+		['Bulgaria', 600],
+		['Brazil', 300],
+		['Singapore', 100],
+		['Ireland', 100],
+		['Russia', 100],
+		['Indonesia', 100],
+		['France', 500],
+		['South Africa', 100],
+		['Denmark', 100],
+		['Poland', 100],
+		['Czech Republic', 200],
+		['Philippines', 100],
+		['United States', 9000],
+		['Belarus', 500],
+		['Chile', 100],
+		['Finland', 100],
+		['India', 300],
+		['Australia', 700],
+		['Greece', 100],
+		['Ukraine', 100],
+		['Sweden', 600],
+		['Italy', 100]
+	];
+	xml_data = f1(xml_);
+
+	xml_data_cutted = f1(xml_);
+
+	iphone_ = [
+		['', 57600],
+		['Malaysia', 100],
+		['Romania', 1300],
+		['Pakistan', 600],
+		['Finland', 100],
+		['Mexico', 200],
+		['Chile', 100],
+		['New Zealand', 800],
+		['United Kingdom', 28600],
+		['Austria', 800],
+		['Norway', 600],
+		['Croatia', 500],
+		['Gibraltar', 500],
+		['Ireland', 1800],
+		['Slovenia', 100],
+		['Portugal', 100],
+		['Armenia', 100],
+		['Turkey', 200],
+		['Latvia', 200],
+		['Argentina', 700],
+		['India', 24700],
+		['Belgium', 500],
+		['Korea, South', 100],
+		['Estonia', 200],
+		['Netherlands', 3600],
+		['Hong Kong', 2300],
+		['United Arab Emirates', 100],
+		['Germany', 19300],
+		['Bangladesh', 500],
+		['China', 600],
+		['Vietnam', 100],
+		['Switzerland', 1700],
+		['Canada', 9300],
+		['Costa Rica', 500],
+		['Japan', 1000],
+		['France', 4300],
+		['Israel', 1600],
+		['Bulgaria', 200],
+		['Brazil', 300],
+		['Singapore', 2300],
+		['Iceland', 100],
+		['Ukraine', 800],
+		['Nepal', 100],
+		['Taiwan', 200],
+		['South Africa', 100],
+		['Denmark', 1200],
+		['Poland', 1500],
+		['Sri Lanka', 100],
+		['Philippines', 200],
+		['United States', 104400],
+		['Belarus', 1800],
+		['Thailand', 300],
+		['Australia', 5900],
+		['Greece', 700],
+		['Russia', 1200],
+		['Czech Republic', 1800],
+		['Sweden', 4500],
+		['Spain', 3800],
+		['Paraguay', 500],
+		['Jordan', 700],
+		['Italy', 2900]
+	];
+	iphone_data = f1(iphone_);
+
+	iphone_data_cutted = f1(iphone_);
+
+	windows_20phone_207_ = [
+		['', 3000],
+		['Netherlands', 200],
+		['France', 600],
+		['Czech Republic', 100],
+		['Switzerland', 200],
+		['Ukraine', 500],
+		['Germany', 100],
+		['New Zealand', 100],
+		['United States', 1000],
+		['United Kingdom', 3700],
+		['India', 200],
+		['Australia', 2200],
+		['Sweden', 600]
+	];
+	windows_20phone_207_data = f1(windows_20phone_207_);
+
+	windows_20phone_207_data_cutted = f1(windows_20phone_207_);
+
+    //var options2 = { colorAxis: {colors: ['green', '#D1FF7E']}};
+    options = { colorAxis: {colors: ['lightgray', 'green'] //,  maxValue: 100
+    }};
+
+    options2 = {colorAxis: {colors: ['lightgreen', 'green']}};
+
+
+    chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+    chartCutted = new google.visualization.GeoChart(document.getElementById('chart_cutted_div'));
+    drawChart();
+
+    document.getElementById('select-view').addEventListener('change', function (evt) {
+        drawChart();
+    });
+
+
+    function cut(dt) {
+        var b = median(dt);
+        m1 = b;
+        return dt.filter(function (i) {
+            return (i[1] < b);
+        });
+    }
+
+
+    function f1(dt) {
+        return google.visualization.arrayToDataTable([
+            ['Country', 'Rank']
+        ].concat(dt));
+    }
+
+    function f2(dt) {
+        //alert(f1(cut(dt)));
+        return f1(cut(dt));
+    }
+
+
+}
+function median(arr) {
+    if (arr.length == 0)
+        return null;
+    arr.sort(function (a, b) {
+        return a[1] - b[1]
+    });
+    var mid = Math.floor(arr.length / 2);
+    if ((arr.length % 2) == 1)  // length is odd
+        return Math.round(arr[mid][1]);
+    else
+        return Math.round((arr[mid - 1][1] + arr[mid][1]) / 2);
+}
+</script>
+
+
+</head>
+<body>
+<div>
+    <label for="select-view">Choose technology:</label><select id="select-view" onchange="drawChart()">
+	<option value="opengl_data">opengl</option>
+	<option value="spring_data">spring</option>
+	<option value="maven_data">maven</option>
+	<option value="jsp_data">jsp</option>
+	<option value="ajax_data">ajax</option>
+	<option value="mysql_data">mysql</option>
+	<option value="osx_data">osx</option>
+	<option value="sharepoint_data">sharepoint</option>
+	<option value="r_data">r</option>
+	<option value="mod_20rewrite_data">mod rewrite</option>
+	<option value="jpa_data">jpa</option>
+	<option value="python_data">python</option>
+	<option value="c_2B_2B_data">c++</option>
+	<option value="actionscript_203_data">actionscript 3</option>
+	<option value="ms_20access_data">ms access</option>
+	<option value="swing_data">swing</option>
+	<option value="mongodb_data">mongodb</option>
+	<option value="gcc_data">gcc</option>
+	<option value="spring_20mvc_data">spring mvc</option>
+	<option value="zend_20framework_data">zend framework</option>
+	<option value="wcf_data">wcf</option>
+	<option value="winforms_data">winforms</option>
+	<option value="matlab_data">matlab</option>
+	<option value="xslt_data">xslt</option>
+	<option value="xcode_data">xcode</option>
+	<option value="symfony2_data">symfony2</option>
+	<option value="cakephp_data">cakephp</option>
+	<option value="delphi_data">delphi</option>
+	<option value="java_20ee_data">java ee</option>
+	<option value="eclipse_data">eclipse</option>
+	<option value="vbdotnet_data">vb.net</option>
+	<option value="ruby_20on_20rails_data">ruby on rails</option>
+	<option value="jquery_20mobile_data">jquery mobile</option>
+	<option value="silverlight_data">silverlight</option>
+	<option value="cordova_data">cordova</option>
+	<option value="magento_data">magento</option>
+	<option value="django_data">django</option>
+	<option value="unix_data">unix</option>
+	<option value="exception_data">exception</option>
+	<option value="sql_20server_data">sql server</option>
+	<option value="linq_data">linq</option>
+	<option value="ipad_data">ipad</option>
+	<option value="extjs_data">extjs</option>
+	<option value="aspdotnet_data">asp.net</option>
+	<option value="csv_data">csv</option>
+	<option value="java_data">java</option>
+	<option value="c_data">c</option>
+	<option value="entity_20framework_data">entity framework</option>
+	<option value="flash_data">flash</option>
+	<option value="html5_data">html5</option>
+	<option value="sqlite_data">sqlite</option>
+	<option value="twitter_20bootstrap_data">twitter bootstrap</option>
+	<option value="perl_data">perl</option>
+	<option value="flex_data">flex</option>
+	<option value="css3_data">css3</option>
+	<option value="wpf_data">wpf</option>
+	<option value="http_data">http</option>
+	<option value="apache_data">apache</option>
+	<option value="gwt_data">gwt</option>
+	<option value="postgresql_data">postgresql</option>
+	<option value="codeigniter_data">codeigniter</option>
+	<option value="tomcat_data">tomcat</option>
+	<option value="nhibernate_data">nhibernate</option>
+	<option value="sql_data">sql</option>
+	<option value="jsf_data">jsf</option>
+	<option value="visual_20studio_data">visual studio</option>
+	<option value="javascript_data">javascript</option>
+	<option value="haskell_data">haskell</option>
+	<option value="jquery_data">jquery</option>
+	<option value="git_data">git</option>
+	<option value="svn_data">svn</option>
+	<option value="xaml_data">xaml</option>
+	<option value="tsql_data">tsql</option>
+	<option value="opencv_data">opencv</option>
+	<option value="vba_data">vba</option>
+	<option value="ios_data">ios</option>
+	<option value="hibernate_data">hibernate</option>
+	<option value="html_data">html</option>
+	<option value="firefox_data">firefox</option>
+	<option value="scala_data">scala</option>
+	<option value="uitableview_data">uitableview</option>
+	<option value="objective_20c_data">objective c</option>
+	<option value="jquery_20ui_data">jquery ui</option>
+	<option value="linux_data">linux</option>
+	<option value="json_data">json</option>
+	<option value="pdf_data">pdf</option>
+	<option value="grails_data">grails</option>
+	<option value="backbonedotjs_data">backbone.js</option>
+	<option value="android_data">android</option>
+	<option value="qt_data">qt</option>
+	<option value="internet_20explorer_data">internet explorer</option>
+	<option value="visual_20c_2B_2B_data">visual c++</option>
+	<option value="dotnet_data">.net</option>
+	<option value="google_20chrome_data">google chrome</option>
+	<option value="winapi_data">winapi</option>
+	<option value="php_data">php</option>
+	<option value="azure_data">azure</option>
+	<option value="nodedotjs_data">node.js</option>
+	<option value="google_20app_20engine_data">google app engine</option>
+	<option value="css_data">css</option>
+	<option value="cocoa_data">cocoa</option>
+	<option value="google_20maps_data">google maps</option>
+	<option value="ruby_data">ruby</option>
+	<option value="angularjs_data">angularjs</option>
+	<option value="c_23_data">c#</option>
+	<option value="windows_data">windows</option>
+	<option value="iis_data">iis</option>
+	<option value="powershell_data">powershell</option>
+	<option value="wordpress_data">wordpress</option>
+	<option value="ubuntu_data">ubuntu</option>
+	<option value="xml_data">xml</option>
+	<option value="iphone_data">iphone</option>
+	<option value="windows_20phone_207_data">windows phone 7</option>
+
+</select>
+</div>
+
+
+<div id="txt" style="font-size: 30pt; left: 50%"></div>
+<h2>Rank means technology position in the country (lower number - more popularity)</h2>
+
+<p><i>Note: Statistics is calculated using stackoverflow users information (for each user there is an information about
+    3 the most popular tags which user has used when answered the question, user country and city). Only users with
+    reputation more than 100 were chosen, only countries which has enough users for statistics gathering were
+    chosen.</i></p>
+
+<h4>Technologies popularity total ranking</h4>
+
+<div id="chart_div" style="width: 50%; height: 37%;"></div>
+
+<h4>
+    <div style="display: inline;">Countries where popularity is higher than in average. Median is</div>
+    <div id="med" style="display: inline;"></div>
+</h4>
+
+<div id="chart_cutted_div" style="width: 50%; height: 37%;"></div>
+</body>
+</html>
