@@ -19,8 +19,6 @@ from urllib.parse import quote
 class SOTParser(Parser):
     init_dir = "data/sot_my"
     start_week = datetime.datetime(2008, 7, 28)
-    # end_week = datetime.datetime(2012, 7, 16)
-    # start_week = datetime.datetime(2012, 7, 16)
     end_week = datetime.datetime.now()
 
     def __init__(self):
@@ -28,7 +26,7 @@ class SOTParser(Parser):
         self.total = dict(pickle.load(open(os.path.join(self.init_dir, "t/response"), 'rb')))
 
     def get_response(self, query):
-        tag = query.replace(" ", "-")
+        tag = quote(query.replace(" ", "-"))
         result = []
         week = self.start_week
         next_week = week + datetime.timedelta(days=7)
@@ -45,6 +43,7 @@ class SOTParser(Parser):
                 url += "&tagged={0}".format(tag)
             print(' ', url)
             req = ur.Request(url)
+            print(req.get_full_url())
             while True:
                 try:
                     resp = ur.urlopen(req)
@@ -60,7 +59,7 @@ class SOTParser(Parser):
 
             result.append((week, json.loads(data.decode())))
             print(' ', result[-1])
-            self.sleep(3, 10)
+            self.sleep(1, 3)
 
             week = next_week
             next_week = week + datetime.timedelta(weeks=1)
