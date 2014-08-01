@@ -5,13 +5,14 @@ import pickle
 import random
 import time
 import urllib
+import datetime
 import selenium.common
 
 import selenium.webdriver as webdriver
 
-import contextlib
-import os
-import lxml.html as LH
+#import contextlib
+#import os
+#import lxml.html as LH
 
 __author__ = 'user'
 
@@ -29,97 +30,29 @@ class GoogleCsvParser(Parser):
     init_dir = "data/gcsv"
     browser = None
 
-    def get_response(self, query):
-
-        if self.browser is None:
-            self.browser = self.Render()
-        #time.sleep(random.randint(110, 180))
-        response = self.browser.get_url("http://www.google.com/trends/explore#q=Madonna%2C%20Adele&cmpt=q")
-        #response = pickle.load(open(self.init_dir+'/response', 'rb'))
-        loggin_link = self.check_loggin(response)
-        if loggin_link:
-            self.login(loggin_link)
-        return response
-
     def get_raw_data(self, response):
-        #print(response)
-        pass
+        reader_file = StringIO(response.decode())
+        reader = csv.reader(reader_file, delimiter=',')
+        start = False
+        result = []
+        for row in reader:
+            if row and row[0] == 'Week':
+                start = True
+                continue
+            if start and not row:
+                break
+            if start:
+                d = datetime.datetime.strptime(row[0][:10], '%Y-%m-%d')
+                if datetime.datetime.now() - datetime.timedelta(weeks=1) < d:
+                    break
+                v = int(row[1])
+                result.append((d.date(), v))
+        return result
 
-    def check_loggin(self, response):
-        link = self.browser.frame.findFirstElement('#gb_70')
-        return link.toOuterXml()
-
-    def login(self, loggin_link):
-        time.sleep(random.randint(20, 40))
-        print('logging...')
-        response = self.browser.get_url(loggin_link)
-
-
-def sleep(min, max):
-    time.sleep(random.randint(min, max))
 
 
 if __name__ == '__main__':
-    # gcp = GoogleCsvParser()
-    # gcp.parse_fresh("asp.net")
-    os.environ["SELENIUM_SERVER_JAR"] = "/home/user/selenium-server-standalone-2.42.1.jar"
-    os.environ["PATH"] += ":/usr/java/jre1.7.0_65/bin"
-    d_capabilities= DesiredCapabilities.OPERA
-    d_capabilities["opera.binary"] = "/usr/bin/opera"
-    d_capabilities["opera.profile"] = "/home/user/.opera"
-    driver = webdriver.Opera(desired_capabilities=d_capabilities)
-    driver.get("google.com")
-
-    names = pickle.load(open("../top_names.pkl", 'rb'))
-    for idx, name in enumerate(names):
-        print(idx, ": ", name)
-        link = "http://www.google.com/trends/explore#q={0}&cmpt=q".format(name)
-        driver.get(link)
-        try:
-            loglink = driver.find_element_by_css_selector("#gb_70")
-        except selenium.common.exceptions.NoSuchElementException:
-            loglink = None
-        if loglink is not None:
-            print(loglink.text)
-            actions = webdriver.ActionChains(driver)
-            sleep(5, 15)
-            actions.click(loglink)
-            actions.perform()
-
-            email_field = driver.find_element_by_css_selector("#Email")
-            passw_field = driver.find_element_by_css_selector("#Passwd")
-            btn = driver.find_element_by_css_selector("#signIn")
-
-            email_field.send_keys('bspaskov')
-            sleep(1, 5)
-            passw_field.send_keys('asdfzxcv!')
-            sleep(3, 7)
-
-            btn.click()
-
-            try:
-                element = WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.ID, "settings-menu-button"))
-                )
-            except:
-                driver.get("http://www.google.com/trends/explore#cmpt=q")
-            sleep(3, 10)
-            driver.get(link)
-            print("logged")
-
-        btn_menu = driver.find_element_by_css_selector("#settings-menu-button")
-        btn_menu.click()
-        try:
-            element = WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.ID, "exportMI"))
-            )
-        finally:
-            print("  start download")
-            download_btn = driver.find_element_by_css_selector('#exportMI')
-            download_btn.click()
-        print("  find download, sleep")
-        sleep(111, 279)
-
+    pass
 
 
 
