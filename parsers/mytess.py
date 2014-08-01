@@ -38,7 +38,7 @@ def tess_number(image):
     image = image.resize(tuple(x*2 for x in image.size), Image.BICUBIC)
     file = io.BytesIO()
     image.save(file, 'PNG')
-    subp = subprocess.Popen(['tesseract', 'stdin', 'stdout','-psm=8', 'digits'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    subp = subprocess.Popen(['tesseract', 'stdin', 'stdout', '-psm=8', 'digits'], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     res = subp.communicate(input=file.getvalue())
     print(res[0])
     return res[0].decode()
