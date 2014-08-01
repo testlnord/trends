@@ -21,6 +21,7 @@ class GoogleParser(Parser):
         user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36'
         headers = {'User-Agent': user_agent}
         req = ur.Request(url, headers=headers)
+        self.sleep(120, 600)
         response = ur.urlopen(req)
         data = response.read().decode("utf-8")
         return data
