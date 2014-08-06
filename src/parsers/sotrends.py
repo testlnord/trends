@@ -3,7 +3,8 @@
 import urllib.request as ur
 import re
 import datetime
-from parsers.parser import Parser
+
+from src.parsers.parser import Parser
 
 
 class SOTParser(Parser):

@@ -1,14 +1,9 @@
 """Module uses ability to download csv files from google trends
 """
 from io import StringIO
-import pickle
-import random
-import time
 import urllib
+import urllib.request
 import datetime
-import selenium.common
-
-import selenium.webdriver as webdriver
 
 #import contextlib
 #import os
@@ -17,12 +12,8 @@ import selenium.webdriver as webdriver
 __author__ = 'user'
 
 
-from parsers.parser import Parser
+from src.parsers.parser import Parser
 import csv
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 class GoogleCsvParser(Parser):
@@ -52,6 +43,16 @@ class GoogleCsvParser(Parser):
 
 
 if __name__ == '__main__':
+
+    # This time, rather than install the OpenerDirector, we use it directly:
+
+    proxy = 'http://117.59.217.236:81'
+    proxy_dict = {'http': proxy}
+    proxy_handler = urllib.request.ProxyHandler(proxy_dict)
+    opener = urllib.request.build_opener(proxy_handler)
+    resp = opener.open('http://google.com/trends')
+    data = resp.read().decode()
+    print(data)
     pass
 
 

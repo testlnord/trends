@@ -4,14 +4,23 @@ import json
 import os
 import pickle
 import re
-from numpy import median
-from parsers.parser import Parser
 import urllib.request as ur
 import urllib.error
 import datetime
-import pandas
 import sqlite3
 import urllib.parse as urlp
+
+from numpy import median
+import rpy2.robjects
+
+from src.parsers.parser import Parser
+
+
+rpy2.robjects.r.library('pracma')
+def outlinerMAD(vals):
+    df = rpy2.robjects.IntVector(vals)
+    d = rpy2.robjects.r.hampel(df, 10)
+    return list(d[0])
 
 class WikiParser(Parser):
     init_dir = "data/wiki2"
@@ -153,11 +162,13 @@ class WikiParser(Parser):
         vals = vals[pred_z:]
         med = median(vals)
         mad = median([abs(x - med) for x in vals])
-        vals = [x if med - 4 * mad < x < med + 4 * mad else None for x in vals]
+        #vals = [x if med - 4 * mad < x < med + 4 * mad else None for x in vals]
         try:
-            df = pandas.DataFrame([0] + vals)
-            df = df.interpolate()
-            vals = list(df[0])[1:]
+            vals = outlinerMAD(vals)
+            #
+            # df = pandas.DataFrame([0] + vals)
+            # df = df.interpolate()
+            # vals = list(df[0])[1:]
             data = [(d, vals[idx - pred_z]) if idx > pred_z else (d, 0) for idx, (d, _) in enumerate(raw_data)]
         except TypeError:
             data = raw_data

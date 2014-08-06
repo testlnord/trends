@@ -12,7 +12,7 @@ import time
 import random
 import datetime
 
-from tag_experim import geo_data
+from experiments.tag_experim import geo_data
 
 
 def sleep(min_time, max_time):

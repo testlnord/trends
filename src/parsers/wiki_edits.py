@@ -1,10 +1,10 @@
 """ get and parse data about article changes on wikipedia """
 
-
-from parsers.parser import Parser
 import urllib.request as ur
 import html.parser
 import datetime
+
+from src.parsers.parser import Parser
 
 
 class WikiParser(Parser):

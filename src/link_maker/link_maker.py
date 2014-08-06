@@ -2,8 +2,6 @@
 import os
 import pickle
 from html.parser import HTMLParser
-import pprint
-import json
 import re
 import sys
 from urllib.parse import unquote, quote
@@ -12,16 +10,17 @@ import urllib.request as ur
 sys.path.append("/home/user/Dropbox/google-api-python-client")
 sys.path.append("/home/user/Dropbox/oauth2client")
 from googleapiclient.discovery import build
-from sotapi import get_tag_synonyms
+from src.sotapi import get_tag_synonyms
 
 
-def google_wiki(query, page=0):
+def google_wiki(query, page=0, related=None):
     service = build("customsearch", "v1",
                     developerKey="AIzaSyAU1Gd-n7w9wzcF082rZYIJm65-o_s2tV0")
     res = service.cse().list(
         q=query,
-        cx='004999571245303029695:vg9td7rxfom',  # wiki
-        start=page * 10 + 1
+        cx='004999571245303029695:vg9td7rxfom',  # wiki + keywords
+        start=page * 10 + 1,
+        relatedSite=related
     ).execute()
     return res
 
@@ -67,11 +66,12 @@ def search_itj(query):
                 self.read_link = False
 
     resp = ur.urlopen(
-        "http://www.itjobswatch.co.uk/default.aspx?page=1&sortby=0&orderby=0&q={0}&id=0&lid=2618".format(query))
+        "http://www.itjobswatch.co.uk/default.aspx?page=1&sortby=0&orderby=0&q={0}&id=0&lid=2618".format(
+            quote(query.replace(' ', '+'))))
     page = resp.read().decode()
     isp = ItjSearchParser()
     isp.feed(page)
-    return {'items':isp.result}
+    return {'items': isp.result}
 
 
 def get_itj_image_name(itj_link):
@@ -121,20 +121,18 @@ def get_page_title(link):
     return ptp.title
 
 
-def main():
-    query = 'c'
-
+def main(query):
     # getting ITJ image name
     print("===============itjobs=======================")
 
     itj_tag_link_pattern = re.compile('http://www.itjobswatch.co.uk/jobs/uk/(.*).do')
-    itj_magic_word_pattern = re.compile('(.*) Jobs, Average Salary for (.*) Skills')
+    itj_magic_word_pattern = re.compile('(.*) Jobs, Average Salary for (.*)')
 
     if os.path.exists(query + '_i.pkl'):
         itj_res = pickle.load(open(query + '_i.pkl', 'rb'))
     else:
         itj_res = search_itj(query)
-        if not itj_res:
+        if not itj_res['items']:
             itj_res = google_itj(query)
 
         if 'items' not in itj_res:
@@ -152,7 +150,11 @@ def main():
             itj_link = item['link']
             print(itj_link)
             try:
-                itj_m_word = itj_magic_word_pattern.search(get_page_title(item['link'])).group(2)
+                page_title = get_page_title(item['link'])
+                print(page_title)
+                itj_m_word = itj_magic_word_pattern.search(page_title).group(2)
+                if itj_m_word.endswith('Skills'):
+                    itj_m_word = itj_m_word[:-7]
             except AttributeError:
                 print(item)
                 raise
@@ -193,16 +195,16 @@ def main():
     # get wiki name
     print('===============wiki==============')
     wiki_name_pattern = re.compile('en\.wikipedia\.org/wiki/(.*)')
-    query_list = list(set([x.lower() for x in [query, sot_tag, itj_name, itj_m_word]]))
+    # query_list = list(set([x.lower() for x in [query, sot_tag, itj_name, itj_m_word]]))
     # if len(query_list) < 2:
-    #     query_list =
-    w_query = ' '.join([x.replace('-', ' ') for x in synonyms])
-    w_query = ' '.join(query_list)
-    print(w_query)
+    # query_list =
+    # w_query = ' '.join([x.replace('-', ' ') for x in synonyms])
+    # w_query = ' '.join(query_list)
+    # print(w_query)
     if os.path.exists(query + '_w.pkl'):
         wiki_res = pickle.load(open(query + '_w.pkl', 'rb'))
     else:
-        wiki_res = google_wiki(w_query)
+        wiki_res = google_wiki(query)
         if 'items' not in wiki_res:
             print(wiki_res)
             raise KeyError("Nothing found in wikipedia")
@@ -222,4 +224,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main('cassandra')

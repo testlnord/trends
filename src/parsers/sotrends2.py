@@ -3,8 +3,7 @@ import gzip
 import json
 import os
 import pickle
-import random
-import time
+
 __author__ = 'arkady'
 
 
@@ -12,7 +11,7 @@ __author__ = 'arkady'
 import urllib.request as ur
 import urllib.error
 import datetime
-from parsers.parser import Parser
+from src.parsers.parser import Parser
 from urllib.parse import quote
 
 

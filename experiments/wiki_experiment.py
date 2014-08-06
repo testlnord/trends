@@ -3,8 +3,11 @@
 I try to get data about all pages which redirects to "azure" page
 """
 import pickle
-from parsers.wiki import WikiParser
+
 import matplotlib.pyplot as plt
+
+from src.parsers.wiki import WikiParser
+
 
 ass = ["Windows Strata", "Windows Cloud", "Windows azure_", "Windows Azure Fabric Controller",
        "Microsoft Windows Azure", "Azure Services Platform", "Windows Azure", "Microsoft azure", "Microsoft_Azure"]

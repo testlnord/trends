@@ -3,13 +3,11 @@ import datetime
 __author__ = 'user'
 
 
-from parsers.parser import Parser
+from src.parsers.parser import Parser
 import urllib.request as ur
-from PIL import Image
 from PIL import ImageOps
-import io
 import tesserwrap
-from parsers.mytess import *
+from src.parsers.mytess import *
 import numpy
 
 
