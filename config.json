@@ -1,0 +1,15 @@
+/**
+ * Created by user on 8/7/14.
+ */
+{
+    /* Global settings */
+    "dbpath" : "/user/home/data/trends.db",
+    
+    /*Source specific settings*/
+    "sources": {
+        "wiki":{
+            "refresh_time":7 // in days
+        }
+    }
+
+}
