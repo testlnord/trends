@@ -3,12 +3,20 @@
  */
 {
     /* Global settings */
-    "dbpath" : "/user/home/data/trends.db",
-    
+    // path to database
+    "dbpath" : "/home/user/data/trends.db",
+    // default headers
+    "headers": {
+        "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36"
+    },
+    //todo remove my key
+    "google_api_key": "AIzaSyAU1Gd-n7w9wzcF082rZYIJm65-o_s2tV0",
+
     /*Source specific settings*/
     "sources": {
         "wiki":{
             "refresh_time":7 // in days
+
         }
     }
 

@@ -10,15 +10,15 @@ __author__ = 'user'
 #import parsers.itjobs
 #import parsers.google
 #import parsers.sotrends
-import src.parsers.wiki
+import core.parsers.wiki
 
 def main():
     hot = pickle.load(open('top_names.pkl', 'rb'))
     #hot = ['c++', 'c', 'c#']
     #gp = parsers.google.GoogleParser()
     # ip = parsers.itjobs.ItjobsParser()
-    sp = src.parsers.sotrends2.SOTParser()
-    wp = src.parsers.wiki.WikiParser()
+    sp = core.parsers.sotrends2.SOTParser()
+    wp = core.parsers.wiki.WikiParser()
     for i, name in enumerate(hot):
         if i > 50:
             break

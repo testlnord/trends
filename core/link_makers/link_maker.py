@@ -1,4 +1,7 @@
 """ """
+class LinkMaker:
+    pass
+
 import os
 import pickle
 from html.parser import HTMLParser
@@ -10,7 +13,8 @@ import urllib.request as ur
 sys.path.append("/home/user/Dropbox/google-api-python-client")
 sys.path.append("/home/user/Dropbox/oauth2client")
 from googleapiclient.discovery import build
-from src.sotapi import get_tag_synonyms
+from core.sotapi import get_tag_synonyms
+
 
 
 def google_wiki(query, page=0, related=None):

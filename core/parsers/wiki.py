@@ -13,7 +13,7 @@ import urllib.parse as urlp
 from numpy import median
 import rpy2.robjects
 
-from src.parsers.parser import Parser
+from core.parsers.parser import Parser
 
 
 rpy2.robjects.r.library('pracma')
@@ -21,6 +21,7 @@ def outlinerMAD(vals):
     df = rpy2.robjects.IntVector(vals)
     d = rpy2.robjects.r.hampel(df, 10)
     return list(d[0])
+
 
 class WikiParser(Parser):
     init_dir = "data/wiki2"

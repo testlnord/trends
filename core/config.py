@@ -6,4 +6,8 @@ https://plus.google.com/+DouglasCrockfordEsq/posts/RK8qyGVaGSr
 """
 import json
 from jsmin import jsmin
-settings = json.loads(jsmin(open('config.json').read()))
+from os import path
+config_path = path.join(path.dirname(path.abspath(__file__)), '..', 'config.json')
+config = json.loads(jsmin(open(config_path).read()))
+
+#todo try aadict

@@ -11,7 +11,7 @@ __author__ = 'arkady'
 import urllib.request as ur
 import urllib.error
 import datetime
-from src.parsers.parser import Parser
+from core.parsers.parser import Parser
 from urllib.parse import quote
 
 

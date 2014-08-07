@@ -5,7 +5,7 @@ import urllib.request as ur
 import re
 import datetime
 
-from src.parsers.parser import Parser
+from core.parsers.parser import Parser
 
 
 class GoogleParser(Parser):
