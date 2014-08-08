@@ -3,7 +3,10 @@ import datetime
 import json
 import logging
 import re
-from ..internet import internet
+
+from ..utils.internet import internet
+
+
 __author__ = 'user'
 
 

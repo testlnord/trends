@@ -15,8 +15,15 @@
     /*Source specific settings*/
     "sources": {
         "wiki":{
-            "refresh_time":7 // in days
+            "refresh_period":"week"
 
+        },
+        "so":{
+            "apikey": "gytnic74fozY)jD39pQSzg((", //todo remove my key
+            "refresh_period":"week"
+        },
+        "itj":{
+            "refresh_period":"month"
         }
     }
 

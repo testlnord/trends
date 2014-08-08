@@ -1,30 +1,79 @@
+"""crawler for ITjobs """
+import logging
 import datetime
+from PIL import ImageOps
+from PIL import Image
+from ..utils.internet import internet
+from ..utils.ocr.mytess import *
 
 __author__ = 'user'
 
+class ItjCrawler:
 
-from core.parsers.parser import Parser
-import urllib.request as ur
-from PIL import ImageOps
-import tesserwrap
-from core.utils.ocr.mytess import *
-import numpy
+    def get_data(self, name) -> list:
+        logging.info("Getting itjobs plot: %s", name)
+        image = self._get_image(name)
+        result = self._parse_image(image)
+        return result
 
-
-
-
-class ItjobsParser(Parser):
-    init_dir = "data/itjobs"
-
-    def get_response(self, query):
-        query = '+'.join(query.split(' '))
+    def _get_image(self, name):
+        query = '+'.join(name.split(' '))
         url = "http://www.itjobswatch.co.uk/charts/permanent-demand-trend.aspx?s="+query+"&l=uk"
-        user_agent = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36'
-        headers = {'User-Agent': user_agent}
-        req = ur.Request(url, headers=headers)
-        response = ur.urlopen(req)
-        data = response.read()
-        return data
+        data = internet.get_from_url(url, binary=True)
+        return Image.open(io.BytesIO(data), 'r')
+
+    def _parse_image(self, image):
+        #getting percents
+        percents = []
+        for y in self.get_percent_coord(image):
+            box = (620, y - 7, 670, y + 7)
+            region = image.crop(box)
+            val = tess_percents(region)[:-1]
+            percents.append((y, float(val)))
+
+        #getting years
+        years = []
+        for x1, x2, y in self.get_year_coord(image):
+            box = (x1+1, y - 7, x2, y + 7)
+            region = image.crop(box)
+            x = 0
+            while region.getpixel((x, 7)) == (0, 0, 0, 255):
+                region.putpixel((x, 7), (255, 255, 255, 255))
+                x += 1
+            x = region.size[0]-1
+            while region.getpixel((x, 7)) == (0, 0, 0, 255):
+                region.putpixel((x, 7), (255, 255, 255, 255))
+                x -= 1
+
+            text = region.crop(ImageOps.invert(region.convert('RGB')).getbbox())
+            word = ''
+            for x in range(0, text.size[0], 6):
+                glyph = Image.new('RGBA', (6, 8), (255, 255, 255, 255))
+                glyph.paste(text.crop((x, 0, x + 6, 8)))
+                #have some issues with last ones, they crops and
+                #starts to have (0,0,0,0)-colored stripe
+                #little hack to eliminate it
+                data = numpy.array(glyph)   # "data" is a height x width x 4 numpy array
+                red, green, blue, alpha = data.T  # Temporarily unpack the bands for readability
+                # Replace zeros with white...
+                zero_areas = (red == 0) & (blue == 0) & (green == 0) & (alpha == 0)
+                data[...][zero_areas.T] = (255, 255, 255, 255)
+                glyph = Image.fromarray(data)
+
+                word += tess_digit(glyph).splitlines()[0]
+
+            years.append((x1, x2, int(word)))
+
+        #getting data points
+        result = []
+        for x, y, d in self.get_data_point(image, years):
+            v = self.y2value(y, percents)
+            #d = self.x2date(x, years)
+
+            result.append((d, v))
+
+        logging.debug(result)
+        return result
 
     @staticmethod
     def get_percent_coord(image):
@@ -122,67 +171,8 @@ class ItjobsParser(Parser):
                     raise RuntimeError((x, d, years))
                 return d
 
-    def get_raw_data(self, response):
-        im = Image.open(io.BytesIO(response), 'r')
-        tr = tesserwrap.Tesseract(datadir="/usr/share/tesseract-ocr")
-        tr.set_page_seg_mode(mode=tesserwrap.PageSegMode().PSM_SINGLE_WORD)
 
-        tr.set_variable('tessedit_char_whitelist', '0123456789.%')
+if __name__ == "__main__":
+    pass
 
-        #getting percents
-        percents = []
-        for y in self.get_percent_coord(im):
-            box = (620, y - 7, 670, y + 7)
-            region = im.crop(box)
-            val = tess_percents(region)[:-1]
-            percents.append((y, float(val)))
-
-        #getting years
-        years = []
-        for x1, x2, y in self.get_year_coord(im):
-            box = (x1+1, y - 7, x2, y + 7)
-            region = im.crop(box)
-            x = 0
-            while region.getpixel((x, 7)) == (0, 0, 0, 255):
-                region.putpixel((x, 7), (255, 255, 255, 255))
-                x += 1
-            x = region.size[0]-1
-            while region.getpixel((x, 7)) == (0, 0, 0, 255):
-                region.putpixel((x, 7), (255, 255, 255, 255))
-                x -= 1
-
-            text = region.crop(ImageOps.invert(region.convert('RGB')).getbbox())
-            word = ''
-            for x in range(0, text.size[0], 6):
-                glyph = Image.new('RGBA', (6, 8), (255, 255, 255, 255))
-                glyph.paste(text.crop((x, 0, x + 6, 8)))
-                #have some issues with last ones, they crops and
-                #starts to have (0,0,0,0)-colored stripe
-                #little hack to eliminate it
-                data = numpy.array(glyph)   # "data" is a height x width x 4 numpy array
-                red, green, blue, alpha = data.T  # Temporarily unpack the bands for readability
-                # Replace zeros with white...
-                zero_areas = (red == 0) & (blue == 0) & (green == 0) & (alpha == 0)
-                data[...][zero_areas.T] = (255, 255, 255, 255)
-                glyph = Image.fromarray(data)
-
-                if x1 == 414:
-                    glyph.save(str(x)+'_' + str(x1)+'.png', 'PNG')
-
-                word += tess_digit(glyph).splitlines()[0]
-
-            years.append((x1, x2, int(word)))
-
-        #getting data points
-        result = []
-        for x, y, d in self.get_data_point(im, years):
-            v = self.y2value(y, percents)
-            #d = self.x2date(x, years)
-
-            result.append((d, v))
-        print(result)
-        return result
-
-
-
-
+#todo logging everywhere!!!!!

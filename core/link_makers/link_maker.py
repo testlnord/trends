@@ -53,29 +53,6 @@ def google_itj(query, page=0):
     return res
 
 
-def search_itj(query):
-    class ItjSearchParser(HTMLParser):
-        result = []
-        table_start = False
-        read_link = False
-
-        def handle_starttag(self, tag, attrs):
-            if tag == 'table' and ('class', 'results') in attrs:
-                self.table_start = True
-            elif self.table_start and tag == 'td' and ('class', 'c2') in attrs:
-                self.read_link = True
-            elif self.read_link and tag == 'a':
-                attrs = dict(attrs)
-                self.result.append({'link': 'http://www.itjobswatch.co.uk' + attrs['href'], 'title': attrs['title']})
-                self.read_link = False
-
-    resp = ur.urlopen(
-        "http://www.itjobswatch.co.uk/default.aspx?page=1&sortby=0&orderby=0&q={0}&id=0&lid=2618".format(
-            quote(query.replace(' ', '+'))))
-    page = resp.read().decode()
-    isp = ItjSearchParser()
-    isp.feed(page)
-    return {'items': isp.result}
 
 
 def get_itj_image_name(itj_link):

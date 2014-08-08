@@ -25,7 +25,7 @@ def get_data(prefix, page_number=1, from_date=datetime.datetime(2008, 7, 28), to
                                                  page_num=page_number,
                                                  fromdate=int(from_date.timestamp()),
                                                  todate=int(to_date.timestamp()))
-    logging.info('Fetching: ' + url)
+    logging.getLogger(__name__).info('Fetching: ' + url)
     while True:
         try:
             resp = ur.urlopen(url)

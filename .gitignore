@@ -10,6 +10,7 @@
 data/*
 img_data_bckp/*
 *.txt
+*.log
 
 # common R files
 *.RData

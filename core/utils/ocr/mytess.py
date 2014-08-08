@@ -19,7 +19,10 @@ def eqdist(vec1, vec2):
 
 
 def tess_percents(image):
-    """image -- PIL or Pillow image"""
+    """image -- PIL or Pillow image
+    requires tricky installation of tesseract
+    """
+    #todo remove tesseract from requirements
     image = image.resize(tuple(x*2 for x in image.size), Image.BICUBIC)
     file = io.BytesIO()
     image.save(file, 'PNG')
@@ -46,13 +49,13 @@ def tess_number(image):
 
 def tess_digit(image):
     """image -- PIL or Pillow image"""
-    glyph_path = 'parsers/digit_glyphs'
-    vals = []
+    glyph_path = os.path.join(os.path.dirname(__file__), 'digit_glyphs')
+    values = []
 
     h1 = image.histogram()
     for file in os.listdir(glyph_path):
         h2 = Image.open(os.path.join(glyph_path, file)).histogram()
         rms = eqdist(h1, h2)
-        vals.append((file[0], rms))
-    val = min(vals, key=lambda x: x[1])
+        values.append((file[0], rms))
+    val = min(values, key=lambda x: x[1])
     return val[0]

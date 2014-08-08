@@ -1,6 +1,6 @@
 """Google search utils """
-from googleapiclient.discovery import build
-from ..config import config
+from apiclient.discovery import build
+from ...config import config
 
 cses = {
     'wiki': '004999571245303029695:vg9td7rxfom',  # wiki + keywords

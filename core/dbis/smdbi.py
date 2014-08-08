@@ -1,4 +1,5 @@
 """Source manager database interface """
+import logging
 from .dbi import DBI
 
 class SourmManagerDBI(DBI):
@@ -17,9 +18,10 @@ class SourmManagerDBI(DBI):
         return cursor.fetchone()
 
     def add_tech(self, tech_name):
-        print("added tech")
+        logging.debug("Adding tech %s.", tech_name)
         self.conn.execute("INSERT into techs (tech_name) values(?)", (tech_name,))
         self.conn.commit()
+        logging.info("Tech %s added.", tech_name)
 
 if __name__ == "__main__":
     pass

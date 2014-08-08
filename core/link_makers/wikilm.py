@@ -2,10 +2,11 @@
 import json
 import re
 
+from core.utils.internet import google_search
 from .link_maker import LinkMaker
-from ..internet import google_search
-from ..internet.internet import get_from_url
-from ..internet.internet import sleep
+from ..utils.internet.internet import get_from_url
+from ..utils.internet.internet import sleep
+
 
 class WikiLinkMaker(LinkMaker):
     @staticmethod

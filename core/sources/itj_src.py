@@ -1,25 +1,22 @@
-"""wikipedia source manager"""
+"""IT jobs watch source manager """
 import datetime
-
 from .sourcemanager import source_decorator
-from ..dbis import wikidbi
-from ..crawlers import wiki_crawler
-from ..link_makers import wikilm
+from ..dbis import itjdbi
+from ..crawlers import itj_crawler
+from ..link_makers import itjlm
 from .errors import UnknownTechnology
 
 # todo uncomment
 #@source_decorator
-class WikiSrc():
-    earliest_date_available = datetime.date(2007, 12, 1)
-
+class ItjSrc():
     def __init__(self):
-        self.dbi = wikidbi.WikiDBI()
-        self.crawler = wiki_crawler.WikiCrawler()
-        self.link_maker = wikilm.WikiLinkMaker()
+        self.dbi = itjdbi.ItjDBI()
+        self.crawler = itj_crawler.ItjCrawler()
+        self.link_maker = itjlm.ItjLinkMaker()
 
     def get_series(self, tech_name, start_date=None, end_date=None):
-        pages = self.dbi.get_pages(tech_name)
-        if not pages:
+        name_id = self.dbi.get_name_id(tech_name)
+        if not name_id:
             raise UnknownTechnology(tech_name)
 
         # for page, page_id in pages:
@@ -32,15 +29,11 @@ class WikiSrc():
         return self.dbi.get_series_data(tech_name, start_date, end_date)
 
     def add_tech(self, tech_name):
-        pages = self.link_maker.make_links(tech_name)
-        self.dbi.add_pages(pages, tech_name)
-        for page in pages:
-            page_data = self.crawler.get_data(page, self.earliest_date_available,
-                                  self.earliest_date_available + datetime.timedelta(days=50))
-            self.dbi.add_series_data(page_data, page_name=page)
+        name = self.link_maker.make_links(tech_name)
+        self.dbi.add_name(name, tech_name)
 
-    pass
-
+        data = self.crawler.get_data(name)
+        self.dbi.add_series_data(data, tech_name)
 
 if __name__ == "__main__":
     pass
