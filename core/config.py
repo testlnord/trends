@@ -5,9 +5,14 @@ by json lib directly. So I piped it though jsmin as 'Douglas Crockford' has advi
 https://plus.google.com/+DouglasCrockfordEsq/posts/RK8qyGVaGSr
 """
 import json
+import logging.config
 from jsmin import jsmin
 from os import path
+import aadict
+
 config_path = path.join(path.dirname(path.abspath(__file__)), '..', 'config.json')
 config = json.loads(jsmin(open(config_path).read()))
 
-#todo try aadict
+logging.config.dictConfig(config['logging'])
+
+config = aadict.aadict.d2ar(config)

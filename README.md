@@ -16,18 +16,21 @@ _____
 - create user:
  + sudo -u postgres -i
  + psql
-  + create role ?user_name? createdb login;
-  + \q
+  ```
+  create role ?user_name? createdb login;
+  \q
+  ```
  + exit
 - create db. You can ignore username parameter if created user is same as your os-user name
   + createdb ?db_name? [-U ?user_name?]
-- add your db setting into config.json file
+- add your db setting into config.json file. Fill fields `db_name`, `db_user`, `db_pass`
+
 
 #### Sources configuration
 - Google trends
 
  Configure proxies.json file. Add there list of proxies and login information from google account. If you don`t
-  need proxies leave proxy field empty
+  need proxies leave proxy field empty:
   ```
   ...
   "proxy":"",
