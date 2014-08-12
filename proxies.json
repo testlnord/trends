@@ -1,0 +1,9 @@
+{
+    "proxies":[
+        {
+            "proxy": "http://user:password@host:port",
+            "user": "username",
+            "pass": "password"
+        }
+    ]
+}
