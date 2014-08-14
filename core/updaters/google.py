@@ -1,34 +1,25 @@
 """Google specific updater """
 import csv
-import json
 from io import StringIO
 import datetime
-import logging
-import psycopg2
 import googletrendscsvdownloader.pyGoogleTrendsCsvDownloader as gcd
 from ..config import config
 from ..utils.stuff import get_threshold_date
+from .parent import DataUpdater
 
 class OutOfProxies(Exception):
     pass
 
 
-class GoogleUpdater:
+class GoogleUpdater(DataUpdater):
     setting_path = "../src_conf/google.json"
 
     def __init__(self):
-        self.settings = json.load(open(self.setting_path))
-        self.logger = logging.getLogger(__name__)
+        super().__init__(self.setting_path)
 
         self.proxy_iter = iter(self.settings["proxies"])
         self.make_google_connection()
 
-        try:
-            self.connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
-                                               password=config['db_pass'])
-        except:
-            self.logger.error("Couldn't connect to database")
-            raise
         self.logger.info("Google updater initialized.")
 
     def next_proxy(self):
@@ -63,7 +54,7 @@ class GoogleUpdater:
         time_threshold = get_threshold_date(self.settings['refresh_time'])
         dirty = False
         for tech_id, tech in self.settings['techs'].items():
-            if tech['last_date'] < time_threshold.strftime('%Y-%m-%d'):
+            if tech['last_date'] < time_threshold.strftime(config['date_format']):
                 tech_name = tech['name'][0]
                 self.logger.info("Updating tech: %s", tech_name)
                 try:
@@ -91,13 +82,10 @@ class GoogleUpdater:
                     # We should update date for every tech.
                     self.logger.debug("Updating last_date property")
                     max_date = max(data, key=lambda x: x[0])[0]
-                    self.settings['techs'][tech_id]['last_date'] = max_date.strftime('%Y-%m-%d')
+                    self.settings['techs'][tech_id]['last_date'] = max_date.strftime(config['date_format'])
                     self.commit_settings()
 
         return dirty
-
-    def commit_settings(self):
-        json.dump(self.settings, open(self.setting_path, 'w'))
 
     @staticmethod
     def parse_csv(csv_data):
@@ -112,7 +100,7 @@ class GoogleUpdater:
             if start and not row:
                 break
             if start:
-                d = datetime.datetime.strptime(row[0][:10], '%Y-%m-%d')
+                d = datetime.datetime.strptime(row[0][:10], config['date_format'])
                 if datetime.datetime.now() - datetime.timedelta(weeks=1) < d:
                     break
                 v = int(row[1])

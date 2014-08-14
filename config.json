@@ -15,6 +15,8 @@
     //todo remove my key
     "google_api_key": "AIzaSyAU1Gd-n7w9wzcF082rZYIJm65-o_s2tV0",
 
+    "date_format": "%Y-%m-%d",  // you do NOT need to change it
+
     "logging":{
         "version": 1,
         "disable_existing_loggers": "False",
