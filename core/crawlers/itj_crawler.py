@@ -68,16 +68,16 @@ class ItjCrawler:
                 word += tess_digit(glyph).splitlines()[0]
 
             years.append((x1, x2, int(word)))
-
+        self.logger.debug("Years on image %s", str(years))
         #getting data points
         result = []
         for x, y, d in self.get_data_point(image, years):
             v = self.y2value(y, percents)
-            #d = self.x2date(x, years)
+            # d = self.x2date(x, years)
 
             result.append((d, v))
 
-        logging.debug(result)
+        self.logger.debug(result)
         return result
 
     @staticmethod
@@ -109,23 +109,27 @@ class ItjCrawler:
     def get_data_point(image, years):
         # pre tail
         l, r, year = years[0]
-        for x in range(12):
-            date = datetime.date(year - 1, 12 - x, 1)
+        for m in range(12):
+            date = datetime.date(year - 1, 12 - m, 1)
             c_year = datetime.date(year, 1, 1)
             x = l + int((date - c_year).total_seconds()
                         / (datetime.date(year + 1, 1, 1) - c_year).total_seconds()*(r-l))
             pts = []
-            for y in range(image.size[1]):
-                if eqdist(image.getpixel((x, y)), (250, 150, 5, 255)) < 10:  # MAGIC THRESHOLD orange color
-                    pts.append(y)
+            try:
+                for y in range(image.size[1]):
+                    if eqdist(image.getpixel((x, y)), (250, 150, 5, 255)) < 10:  # MAGIC THRESHOLD orange color
+                        pts.append(y)
+            except IndexError:
+                pts = []
+                pass  # if coord is out of image then just live pts array empty
 
             if pts:
                 y = sum(pts)/len(pts)
                 yield (x, y, date)
         # data bw years
         for l, r, year in years:
-            for x in range(12):
-                date = datetime.date(year, x + 1, 1)
+            for m in range(12):
+                date = datetime.date(year, m + 1, 1)
                 c_year = datetime.date(year, 1, 1)
                 x = l + int((date - c_year).total_seconds()
                             / (datetime.date(year + 1, 1, 1) - c_year).total_seconds()*(r-l))
@@ -137,6 +141,29 @@ class ItjCrawler:
                 if pts:
                     y = sum(pts)/len(pts)
                     yield (x, y, date)
+        # data in last year
+        l, r, year = years[-1]
+        dlr = r - l
+        l = r
+        r += dlr
+
+        year += 1
+        for m in range(12):
+            date = datetime.date(year, m + 1, 1)
+            c_year = datetime.date(year, 1, 1)
+            x = l + int((date - c_year).total_seconds()
+                        / (datetime.date(year + 1, 1, 1) - c_year).total_seconds()*(r-l))
+            pts = []
+            try:
+                for y in range(image.size[1]):
+                    if eqdist(image.getpixel((x, y)), (250, 150, 5, 255)) < 10:  # MAGIC THRESHOLD orange color
+                        pts.append(y)
+            except IndexError:
+                # we are out ouf image, should stop
+                break
+            if pts:
+                y = sum(pts)/len(pts)
+                yield (x, y, date)
         raise StopIteration()
 
     @staticmethod
