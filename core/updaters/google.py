@@ -29,6 +29,7 @@ class GoogleUpdater:
         except:
             self.logger.error("Couldn't connect to database")
             raise
+        self.logger.info("Google updater initialized.")
 
     def next_proxy(self):
         try:
