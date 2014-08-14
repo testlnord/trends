@@ -12,7 +12,10 @@ __author__ = 'user'
 
 class WikiCrawler:
     @staticmethod
-    def get_data(page_name, date_from, date_to=datetime.datetime.now().date()) -> list:
+    def get_data(page_name, date_from, date_to=None) -> list:
+        if date_to is None:
+            date_to = datetime.date.today()
+
         page_name = page_name.replace(" ", "_")
         logging.info("Getting wikipedia data for page: %s", page_name)
         month = datetime.date(date_from.year, date_from.month, 1)

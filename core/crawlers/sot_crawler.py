@@ -13,7 +13,10 @@ __author__ = 'user'
 
 class SotCrawler:
     @staticmethod
-    def get_data(tag, date_from, date_to=datetime.datetime.now().date()) -> list:
+    def get_data(tag, date_from, date_to=None) -> list:
+        if date_to is None:
+            date_to = datetime.datetime.now().date()
+        date_from -= datetime.timedelta(days=-date_from.weekday())  # getting monday date
         tag = internet.quote(tag.replace(" ", "-"))
         result = []
         week = date_from

@@ -1,22 +1,27 @@
 """crawler for ITjobs """
+
 import logging
-import datetime
 from PIL import ImageOps
 from PIL import Image
+import datetime
+import io
+import numpy
 from ..utils.internet import internet
-from ..utils.ocr.mytess import *
+from ..utils.ocr.mytess import tess_digit, tess_percents, eqdist
 
-__author__ = 'user'
 
 class ItjCrawler:
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
 
     def get_data(self, name) -> list:
-        logging.info("Getting itjobs plot: %s", name)
+        self.logger.info("Getting itjobs plot: %s", name)
         image = self._get_image(name)
         result = self._parse_image(image)
         return result
 
-    def _get_image(self, name):
+    @staticmethod
+    def _get_image(name):
         query = '+'.join(name.split(' '))
         url = "http://www.itjobswatch.co.uk/charts/permanent-demand-trend.aspx?s="+query+"&l=uk"
         data = internet.get_from_url(url, binary=True)
@@ -96,7 +101,7 @@ class ItjCrawler:
         for x in range(20, 615):
             if image.getpixel((x, line_y - 2)) == (0, 0, 0, 255):
                 if prev_x is not None:
-                    yield (prev_x, x, y)
+                    yield (prev_x, x, line_y)
                 prev_x = x
         raise StopIteration()
 
@@ -170,9 +175,3 @@ class ItjCrawler:
                 if d > datetime.datetime.now().date():
                     raise RuntimeError((x, d, years))
                 return d
-
-
-if __name__ == "__main__":
-    pass
-
-#todo logging everywhere!!!!!
