@@ -50,9 +50,21 @@ class AjaxHandler(tornado.web.RequestHandler):
         min_max_date = min(max_dates)
 
         for k in res:
-            res[k] = [v for v in res[k] if min_max_date >= v['date'] >= max_min_date]
+            res[k] = {v['date']: v['val'] for v in res[k] if min_max_date >= v['date'] >= max_min_date}
 
-        self.write(str(json_encode(res)))
+        captions = ["date"]+list(res.keys())
+        csv_lines = ['\t'.join(captions)]
+
+        for date in sorted(res['total'].keys()):
+            words = [date]
+            for caption in captions[1:]:
+                try:
+                    words.append(str(res[caption][date]))
+                except KeyError:
+                    words.append("0")
+            csv_lines.append('\t'.join(words))
+
+        self.write('\n'.join(csv_lines))
 
 if __name__ == "__main__":
     application = tornado.web.Application([

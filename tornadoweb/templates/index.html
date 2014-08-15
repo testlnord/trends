@@ -43,7 +43,7 @@ svg {
 
 .brush .extent {
   stroke: #fff;
-  fill-opacity: .125;
+  fill-opasource: .125;
   shape-rendering: crispEdges;
 }
 
@@ -52,141 +52,131 @@ svg {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 </head>
    <body>
-<script>
-var json_data;
-function getData(){
-  var tid = $("#tech_selector").find(":selected").val();
-  $.ajax({dataType: "json", url:"/tech/"+tid, success:function(result){
-      json_data = result["google"]
-      $("#div1").html(result["google"]);
+ <script>
+var margin = {top: 20, right: 80, bottom: 30, left: 50},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
 
-  }});
-  $(".plot").remove()
-  d3.json("tech/"+tid, update_all);
-};
+    var parseDate = d3.time.format("%Y %m %d").parse;
 
-var margin = {top: 10, right: 10, bottom: 100, left: 40},
-    margin2 = {top: 430, right: 10, bottom: 20, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom,
-    height2 = 500 - margin2.top - margin2.bottom;
+var color = d3.scale.category10();
 
-var parseDate = d3.time.format("%Y %m %d").parse;
-
-var x = d3.time.scale().range([0, width]),
-    x2 = d3.time.scale().range([0, width]),
-    y = d3.scale.linear().range([height, 0]),
-    y2 = d3.scale.linear().range([height2, 0]);
-
-var xAxis = d3.svg.axis().scale(x).orient("bottom"),
-    xAxis2 = d3.svg.axis().scale(x2).orient("bottom"),
-    yAxis = d3.svg.axis().scale(y).orient("left");
-
-var brush = d3.svg.brush()
-    .x(x2)
-    .on("brush", brushed);
-
-var area = d3.svg.line()
-    .interpolate("monotone")
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.val); });
-
-var area2 = d3.svg.line()
-    .interpolate("monotone")
-    .x(function(d) { return x2(d.date); })
-    .y(function(d) { return y2(d.val); });
-
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom);
-
-svg.append("defs").append("clipPath")
-    .attr("id", "clip")
-  .append("rect")
-    .attr("width", width)
-    .attr("height", height);
-
-var focus = svg.append("g")
-    .attr("class", "focus")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-var context = svg.append("g")
-    .attr("class", "context")
-    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-
-function update_all(error, data){
-    if (data.hasOwnProperty('google')){
-        update(data, 'google')
+function linecolor(name){
+    if (name == 'total'){
+        return "black";
     }
-    if (data.hasOwnProperty('wiki')){
-        update(data, 'wiki')
+    if (name == 'google'){
+        return "#e41a1c";
     }
-    if (data.hasOwnProperty('itj')){
-        update(data, 'itj')
+    if (name == 'wiki'){
+        return "#984ea3";
     }
-    if (data.hasOwnProperty('sot')){
-        update(data, 'sot')
+    if (name == 'sot'){
+        return "#377eb8";
     }
-    if (data.hasOwnProperty('total')){
-        update(data, 'total')
+    if (name == 'itj'){
+        return "#4daf4a";
     }
 }
 
-function update(data, field_name) {
-  data = (data[field_name]).map(type)
+var x, y;
+var xAxis, yAxis, line, svg;
+function init_svg() {
 
-  x.domain(d3.extent(data.map(function(d) { return d.date; })));
-  y.domain([0, d3.max(data.map(function(d) { return d.val; }))]);
-  x2.domain(x.domain());
-  y2.domain(y.domain());
+    x = d3.time.scale()
+            .range([0, width]);
 
-  focus.append("path")
-      .datum(data)
-      .attr("class", "line plot " + field_name)
-      .attr("d", area);
+    y = d3.scale.linear()
+            .range([height, 0]);
 
+    xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
 
-  focus.append("g")
-      .attr("class", "x axis plot")
+    yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left");
+
+    line = d3.svg.line()
+            .interpolate("basis")
+            .x(function (d) {
+                return x(d.date);
+            })
+            .y(function (d) {
+                return y(d.temperature);
+            });
+
+    svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+}
+
+update = function(error, data) {
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+  });
+
+  var cities = color.domain().map(function(name) {
+    return {
+      name: name,
+      values: data.map(function(d) {
+        return {date: d.date, temperature: +d[name]};
+      })
+    };
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([
+    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
+    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+  ]);
+
+  svg.append("g")
+      .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
-  focus.append("g")
-      .attr("class", "y axis plot")
+  svg.append("g")
+      .attr("class", "y axis")
       .call(yAxis);
 
-  context.append("path")
-      .datum(data)
-      .attr("class", "line plot " + field_name)
-      .attr("d", area2);
 
-  context.append("g")
-      .attr("class", "x axis plot")
-      .attr("transform", "translate(0," + height2 + ")")
-      .call(xAxis2);
+  var source = svg.selectAll(".source")
+      .data(cities)
+    .enter().append("g")
+      .attr("class", "source");
 
-  context.append("g")
-      .attr("class", "x brush plot")
-      .call(brush)
-    .selectAll("rect")
-      .attr("y", -6)
-      .attr("height", height2 + 7);
+  source.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return linecolor(d.name); })
+      .style("stroke-width", 2);
 
+  source.append("text")
+      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+      .attr("x", 3)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+};
+
+function getData(){
+    var selector = document.getElementById("tech_selector");
+    var tid = selector.options[selector.selectedIndex].value
+    var element = document.getElementsByTagName("svg")
+    for (index = element.length - 1; index >= 0; index--) {
+        element[index].parentNode.removeChild(element[index]);
+    }
+    init_svg()
+    d3.tsv("tech/"+tid, update)
 }
-
-function brushed() {
-  x.domain(brush.empty() ? x2.domain() : brush.extent());
-  focus.selectAll(".line").attr("d", area);
-  focus.selectAll(".x.axis").call(xAxis);
-}
-
-function type(d) {
-  d.date = parseDate(d.date);
-  d.val = +d.val;
-  return d;
-}
-
 </script>
+
 <select id="tech_selector" onchange="getData()">
     {% for tech_id, tech_name in [(tid, info['name']) for tid, info in techs if 'visible' not in info or info['visible'] == 1] %}
     <option value="{{ (tech_id) }}">{{ (tech_name) }}</option>
