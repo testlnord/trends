@@ -2,12 +2,12 @@
 
 from .parent import DataUpdater
 from ..utils.stuff import get_threshold_date
-from ..config import config
+from ..config import config, project_root
 from ..crawlers.itj_crawler import ItjCrawler
 
 
 class ItjUpdater(DataUpdater):
-    setting_path = "../src_conf/itj.json"
+    setting_path = project_root+"/src_conf/itj.json"
 
     def __init__(self):
         super().__init__(self.setting_path)

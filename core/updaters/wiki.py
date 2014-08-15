@@ -5,10 +5,11 @@ import re
 from .parent import DataUpdater
 from ..utils.stuff import get_threshold_date
 from ..utils.internet import internet
-from ..config import config
+from ..config import config, project_root
+
 
 class WikiUpdater(DataUpdater):
-    setting_path = "../src_conf/wiki.json"
+    setting_path = project_root+"/src_conf/wiki.json"
 
     def __init__(self):
         super().__init__(self.setting_path)

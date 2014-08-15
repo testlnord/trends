@@ -3,12 +3,12 @@ import datetime
 
 from .parent import DataUpdater
 from ..utils.stuff import get_threshold_date
-from ..config import config
+from ..config import config, project_root
 from ..crawlers import sot_crawler
 
 
 class SotUpdater(DataUpdater):
-    setting_path = "../src_conf/sot.json"
+    setting_path = project_root+"/src_conf/sot.json"
 
     def __init__(self):
         super().__init__(self.setting_path)

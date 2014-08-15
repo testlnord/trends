@@ -3,7 +3,7 @@ import csv
 from io import StringIO
 import datetime
 import googletrendscsvdownloader.pyGoogleTrendsCsvDownloader as gcd
-from ..config import config
+from ..config import config, project_root
 from ..utils.stuff import get_threshold_date
 from .parent import DataUpdater
 
@@ -12,7 +12,7 @@ class OutOfProxies(Exception):
 
 
 class GoogleUpdater(DataUpdater):
-    setting_path = "../src_conf/google.json"
+    setting_path = project_root+"/src_conf/google.json"
 
     def __init__(self):
         super().__init__(self.setting_path)
