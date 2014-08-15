@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Trends</title>
+<style>
+
+svg {
+  font: 10px sans-serif;
+}
+
+.line {
+  fill: none;
+  clip-path: url(#clip);
+}
+
+.google {
+    stroke: red;
+}
+
+.wiki {
+    stroke: blue
+}
+
+.sot {
+    stroke: yellow
+}
+
+.itj {
+    stroke: green
+}
+
+.total {
+    stroke: black
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+   <body>
+<script>
+var json_data;
+function getData(){
+  var tid = $("#tech_selector").find(":selected").val();
+  $.ajax({dataType: "json", url:"/tech/"+tid, success:function(result){
+      json_data = result["google"]
+      $("#div1").html(result["google"]);
+
+  }});
+  $(".plot").remove()
+  d3.json("tech/"+tid, update_all);
+};
+
+var margin = {top: 10, right: 10, bottom: 100, left: 40},
+    margin2 = {top: 430, right: 10, bottom: 20, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom,
+    height2 = 500 - margin2.top - margin2.bottom;
+
+var parseDate = d3.time.format("%Y %m %d").parse;
+
+var x = d3.time.scale().range([0, width]),
+    x2 = d3.time.scale().range([0, width]),
+    y = d3.scale.linear().range([height, 0]),
+    y2 = d3.scale.linear().range([height2, 0]);
+
+var xAxis = d3.svg.axis().scale(x).orient("bottom"),
+    xAxis2 = d3.svg.axis().scale(x2).orient("bottom"),
+    yAxis = d3.svg.axis().scale(y).orient("left");
+
+var brush = d3.svg.brush()
+    .x(x2)
+    .on("brush", brushed);
+
+var area = d3.svg.line()
+    .interpolate("monotone")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.val); });
+
+var area2 = d3.svg.line()
+    .interpolate("monotone")
+    .x(function(d) { return x2(d.date); })
+    .y(function(d) { return y2(d.val); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom);
+
+svg.append("defs").append("clipPath")
+    .attr("id", "clip")
+  .append("rect")
+    .attr("width", width)
+    .attr("height", height);
+
+var focus = svg.append("g")
+    .attr("class", "focus")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var context = svg.append("g")
+    .attr("class", "context")
+    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+function update_all(error, data){
+    if (data.hasOwnProperty('google')){
+        update(data, 'google')
+    }
+    if (data.hasOwnProperty('wiki')){
+        update(data, 'wiki')
+    }
+    if (data.hasOwnProperty('itj')){
+        update(data, 'itj')
+    }
+    if (data.hasOwnProperty('sot')){
+        update(data, 'sot')
+    }
+    if (data.hasOwnProperty('total')){
+        update(data, 'total')
+    }
+}
+
+function update(data, field_name) {
+  data = (data[field_name]).map(type)
+
+  x.domain(d3.extent(data.map(function(d) { return d.date; })));
+  y.domain([0, d3.max(data.map(function(d) { return d.val; }))]);
+  x2.domain(x.domain());
+  y2.domain(y.domain());
+
+  focus.append("path")
+      .datum(data)
+      .attr("class", "line plot " + field_name)
+      .attr("d", area);
+
+
+  focus.append("g")
+      .attr("class", "x axis plot")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  focus.append("g")
+      .attr("class", "y axis plot")
+      .call(yAxis);
+
+  context.append("path")
+      .datum(data)
+      .attr("class", "line plot " + field_name)
+      .attr("d", area2);
+
+  context.append("g")
+      .attr("class", "x axis plot")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis2);
+
+  context.append("g")
+      .attr("class", "x brush plot")
+      .call(brush)
+    .selectAll("rect")
+      .attr("y", -6)
+      .attr("height", height2 + 7);
+
+}
+
+function brushed() {
+  x.domain(brush.empty() ? x2.domain() : brush.extent());
+  focus.selectAll(".line").attr("d", area);
+  focus.selectAll(".x.axis").call(xAxis);
+}
+
+function type(d) {
+  d.date = parseDate(d.date);
+  d.val = +d.val;
+  return d;
+}
+
+</script>
+<select id="tech_selector" onchange="getData()">
+    {% for tech_id, tech_name in [(tid, info['name']) for tid, info in techs if 'visible' not in info or info['visible'] == 1] %}
+    <option value="{{ (tech_id) }}">{{ (tech_name) }}</option>
+    {% end %}
+</select>
+<div id="div1"></div>
+</body>
+</html>
