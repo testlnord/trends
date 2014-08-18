@@ -12,11 +12,11 @@ from core.updaters.sousers import SoUsersUpdater
 import core.stat.normalize as normalize
 
 
+# noinspection PyBroadException
 def update_data():
     logger = logging.getLogger(__name__)
 
     dirty = False
-
 
     logger.info("Updating google data")
     try:
