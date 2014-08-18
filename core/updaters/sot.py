@@ -11,7 +11,7 @@ class SotUpdater(DataUpdater):
     setting_path = project_root+"/src_conf/sot.json"
 
     def __init__(self):
-        super().__init__(self.setting_path)
+        super().__init__(self.setting_path, __name__)
         self.crawler = sot_crawler.SotCrawler(self.settings["apikey"])
 
     def update_data(self):

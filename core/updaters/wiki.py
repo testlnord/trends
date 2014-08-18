@@ -12,7 +12,7 @@ class WikiUpdater(DataUpdater):
     setting_path = project_root+"/src_conf/wiki.json"
 
     def __init__(self):
-        super().__init__(self.setting_path)
+        super().__init__(self.setting_path, __name__)
         self.logger.info("Wiki updater initialized.")
 
     def update_data(self):

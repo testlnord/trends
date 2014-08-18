@@ -15,7 +15,7 @@ class GoogleUpdater(DataUpdater):
     setting_path = project_root+"/src_conf/google.json"
 
     def __init__(self):
-        super().__init__(self.setting_path)
+        super().__init__(self.setting_path, __name__)
 
         self.proxy_iter = iter(self.settings["proxies"])
         self.make_google_connection()

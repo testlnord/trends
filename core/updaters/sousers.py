@@ -10,7 +10,7 @@ class SoUsersUpdater(DataUpdater):
     setting_path = project_root+"/src_conf/so_users.json"
 
     def __init__(self):
-        super().__init__(self.setting_path)
+        super().__init__(self.setting_path, __name__)
         self.logger.info("SO users updater initialized.")
 
     def update_data(self):
