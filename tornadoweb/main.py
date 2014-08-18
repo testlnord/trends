@@ -28,7 +28,7 @@ class AjaxHandler(tornado.web.RequestHandler):
         try:
             tid = int(slug)
         except ValueError:
-            self.write("{}")
+            self.write("{}")  # todo redirect or 404 error
             return
         cur = self.db_connection.cursor()
         cur.execute("select source, to_char(time, 'YYYY MM DD'), value from reports_1 where tech_id = %s", (tid,))

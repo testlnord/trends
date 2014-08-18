@@ -77,6 +77,9 @@ function linecolor(name){
     if (name == 'itj'){
         return "#4daf4a";
     }
+    if (name == 'sousers'){
+        return "#ff7f00";
+    }
 }
 
 var x, y;
@@ -167,16 +170,18 @@ update = function(error, data) {
 
 function getData(){
     var selector = document.getElementById("tech_selector");
-    var tid = selector.options[selector.selectedIndex].value
-    var element = document.getElementsByTagName("svg")
+    var tid = selector.options[selector.selectedIndex].value;
+    var element = document.getElementsByTagName("svg");
     for (index = element.length - 1; index >= 0; index--) {
         element[index].parentNode.removeChild(element[index]);
     }
-    init_svg()
-    d3.tsv("tech/"+tid, update)
+    init_svg();
+    d3.tsv("tech/"+tid, update);
 }
 </script>
 
+<!--suppress XmlInvalidId -->
+ <label for="tech_selector">Technology</label>
 <select id="tech_selector" onchange="getData()">
     {% for tech_id, tech_name in [(tid, info['name']) for tid, info in techs if 'visible' not in info or info['visible'] == 1] %}
     <option value="{{ (tech_id) }}">{{ (tech_name) }}</option>
