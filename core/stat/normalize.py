@@ -128,6 +128,7 @@ def normalize_sousers():
 
         data = data[:-1]
         data = statmodule.freq_month(data)
+        data = statmodule.divergence(data)
         data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'sousers' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",

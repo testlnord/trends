@@ -1,12 +1,22 @@
 """All stat functions and normalizations """
+import datetime
 from numpy import median
 import pandas
 import rpy2.robjects
 
 
+def freq_month(series):
+    result = {}
+    for d, v in series:
+        month = datetime.date(d.year, d.month, 1)
+        if month not in result:
+            result[month] = 0
+        result[month] += v
+    return result.items()
+
 def sort_ts(series):
     # sorts ts by date
-    return sorted(series, key=lambda x: x[1])
+    return sorted(series, key=lambda x: x[0])
 
 def outlierMAD(vals, k=10, t=3):
     """ Hampel filter
@@ -102,3 +112,16 @@ def prepare_data(raw_series_list):
 
 if __name__ == "__main__":
     pass
+
+
+def divergence(series):
+    result_series = []
+    prev = None
+    for d, v in series:
+        if prev is None:
+            prev = v
+            result_series.append((d, 0))
+        else:
+            result_series.append((d, v - prev))
+            prev = v
+    return result_series
