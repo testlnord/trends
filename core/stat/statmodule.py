@@ -2,7 +2,7 @@
 import datetime
 from numpy import median
 import pandas
-import rpy2.robjects
+
 
 
 def freq_month(series):
@@ -14,11 +14,13 @@ def freq_month(series):
         result[month] += v
     return result.items()
 
+
 def sort_ts(series):
     # sorts ts by date
     return sorted(series, key=lambda x: x[0])
 
-def outlierMAD(vals, k=10, t=3):
+
+def hampel(vals, k, t=3):
     """ Hampel filter
 
     Exports Hampel filter from R's pracma package. For more info see R documentation.
@@ -27,14 +29,20 @@ def outlierMAD(vals, k=10, t=3):
     :param t: threshold, default is 3 (Pearson's rule).
     :return: list without outliers
     """
-    if not outlierMAD.pracma:
-        outlierMAD.pracma = True
-        rpy2.robjects.r.library('pracma')  # load library before first usage
-        
-    df = rpy2.robjects.IntVector(vals)
-    d = rpy2.robjects.r.hampel(df, k, t)
-    return list(d[0])
-outlierMAD.pracma = False
+
+    n = len(vals)
+    y = vals
+    ind = []
+    L = 1.4826  # expectation of 1.4826 times the MAD for large samples of normally distributed Xi
+                # is approximately equal to the population standard deviation
+    for i in range(k + 1, n - k):
+        vals0 = median(vals[i - k:i + k])
+        S0 = L * median([abs(v - vals0) for v in vals[i - k:i + k]])
+        if abs(vals[i] - vals0) > t * S0:
+            y[i] = vals0
+            ind.append(i)
+
+    return y, ind
 
 
 def outliers_filter(series):
@@ -46,7 +54,7 @@ def outliers_filter(series):
             break
     vals = vals[pred_z:]
     try:
-        vals = outlierMAD(vals)
+        vals, _ = hampel(vals)
         data = [(d, vals[idx - pred_z]) if idx > pred_z else (d, 0) for idx, (d, _) in enumerate(series)]
     except TypeError:
         data = series
@@ -84,13 +92,14 @@ def normalize_series(series):
     max_val = max(data, key=(lambda v: v[1]))[1]
     if max_val == min_val:
         return [(x, 0.5) for x, _ in data]
-    return [(x, float(y - min_val)/(max_val - min_val)) for x, y in data]
+    return [(x, float(y - min_val) / (max_val - min_val)) for x, y in data]
 
 
 def merge(series_list):
     # merges several ts into one series
-    #todo write impl merge
+    # todo write impl merge
     return series_list
+
 
 def to_per_month_ts(series):
     """ Makes ts with per month frequency
@@ -99,7 +108,7 @@ def to_per_month_ts(series):
     :param series: time series with frequency higher or equal 1 month
     :return: monthly ts
     """
-    #todo write impl per month
+    # todo write impl per month
     return series
 
 
@@ -108,7 +117,8 @@ def prepare_data(raw_series_list):
     :param raw_series_list: data from db
     :return: data for user
     """
-    #todo write prepare data
+    # todo write prepare data
+
 
 if __name__ == "__main__":
     pass

@@ -11,16 +11,9 @@ import sqlite3
 import urllib.parse as urlp
 
 from numpy import median
-import rpy2.robjects
 
 from experiments.wiki_backlinks_exp.parser import Parser
 
-
-rpy2.robjects.r.library('pracma')
-def outlinerMAD(vals):
-    df = rpy2.robjects.IntVector(vals)
-    d = rpy2.robjects.r.hampel(df, 10)
-    return list(d[0])
 
 
 class WikiParser(Parser):
@@ -152,28 +145,6 @@ class WikiParser(Parser):
                 result.append((date, response[k]))
         return result
 
-    def get_data(self, raw_data):
-        raw_data = sorted(raw_data, key=lambda x: x[1])
-        vals = [x for d, x in raw_data]
-        pred_z = 0
-        for idx, v in enumerate(vals):
-            if v > 1:
-                pred_z = idx
-                break
-        vals = vals[pred_z:]
-        med = median(vals)
-        mad = median([abs(x - med) for x in vals])
-        #vals = [x if med - 4 * mad < x < med + 4 * mad else None for x in vals]
-        try:
-            vals = outlinerMAD(vals)
-            #
-            # df = pandas.DataFrame([0] + vals)
-            # df = df.interpolate()
-            # vals = list(df[0])[1:]
-            data = [(d, vals[idx - pred_z]) if idx > pred_z else (d, 0) for idx, (d, _) in enumerate(raw_data)]
-        except TypeError:
-            data = raw_data
-        return super().get_data(data)
 
 
 if __name__ == '__main__':
