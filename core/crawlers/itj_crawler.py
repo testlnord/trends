@@ -27,25 +27,17 @@ class ItjCrawler:
         data = internet.get_from_url(url, binary=True)
         return Image.open(io.BytesIO(data), 'r')
 
-    def _parse_image(self, image):
-        #getting percents
-        percents = []
-        for y in self.get_percent_coord(image):
-            box = (620, y - 7, 670, y + 7)
-            region = image.crop(box)
-            val = tess_percents(region)[:-1]
-            percents.append((y, float(val)))
-
-        #getting years
+    def years_from_image(self, image):
+        # getting years
         years = []
         for x1, x2, y in self.get_year_coord(image):
-            box = (x1+1, y - 7, x2, y + 7)
+            box = (x1 + 1, y - 7, x2, y + 7)
             region = image.crop(box)
             x = 0
             while region.getpixel((x, 7)) == (0, 0, 0, 255):
                 region.putpixel((x, 7), (255, 255, 255, 255))
                 x += 1
-            x = region.size[0]-1
+            x = region.size[0] - 1
             while region.getpixel((x, 7)) == (0, 0, 0, 255):
                 region.putpixel((x, 7), (255, 255, 255, 255))
                 x -= 1
@@ -58,7 +50,7 @@ class ItjCrawler:
                 #have some issues with last ones, they crops and
                 #starts to have (0,0,0,0)-colored stripe
                 #little hack to eliminate it
-                data = numpy.array(glyph)   # "data" is a height x width x 4 numpy array
+                data = numpy.array(glyph)  # "data" is a height x width x 4 numpy array
                 red, green, blue, alpha = data.T  # Temporarily unpack the bands for readability
                 # Replace zeros with white...
                 zero_areas = (red == 0) & (blue == 0) & (green == 0) & (alpha == 0)
@@ -68,7 +60,25 @@ class ItjCrawler:
                 word += tess_digit(glyph).splitlines()[0]
 
             years.append((x1, x2, int(word)))
+        # add first year:
+        l, r, year = years[0]
+        years = [(l-(r-l), l, year - 1)] + years
+        # add current year
+        l, r, year = years[-1]
+        years.append((r, r+(r-l), year + 1))
         self.logger.debug("Years on image %s", str(years))
+        return years
+
+    def _parse_image(self, image):
+        #getting percents
+        percents = []
+        for y in self.get_percent_coord(image):
+            box = (620, y - 7, 670, y + 7)
+            region = image.crop(box)
+            val = tess_percents(region)[:-1]
+            percents.append((y, float(val)))
+
+        years = self.years_from_image(image)
         #getting data points
         result = []
         for x, y, d in self.get_data_point(image, years):
@@ -90,16 +100,26 @@ class ItjCrawler:
     @staticmethod
     def get_year_coord(image):
         #get line coord
-        line_y = 0
-        for y in range(image.size[1] - 1, 0, -1):
-            if image.getpixel((25, y)) == (0, 0, 0, 255):
+        line_y = None
+        # looking for hor line on left side
+        for y in range(image.size[1] - 1, 260, -1):
+            if image.getpixel((24, y)) == image.getpixel((25, y)) \
+                    == image.getpixel((26, y)) == (0, 0, 0, 255):
                 line_y = y
                 break
-
+        # looking for hor line on right side
+        for y in range(image.size[1] - 1, 260, -1):
+            if image.getpixel((609, y)) == image.getpixel((610, y)) \
+                    == image.getpixel((611, y)) == (0, 0, 0, 255):
+                if line_y is None or y < line_y:
+                    line_y = y
+                break
+        if line_y is None:
+            line_y = 270
         #get year borders
         prev_x = None
         for x in range(20, 615):
-            if image.getpixel((x, line_y - 2)) == (0, 0, 0, 255):
+            if image.getpixel((x, line_y - 7)) == (0, 0, 0, 255):
                 if prev_x is not None:
                     yield (prev_x, x, line_y)
                 prev_x = x
@@ -107,63 +127,24 @@ class ItjCrawler:
 
     @staticmethod
     def get_data_point(image, years):
-        # pre tail
-        l, r, year = years[0]
-        for m in range(12):
-            date = datetime.date(year - 1, 12 - m, 1)
-            c_year = datetime.date(year, 1, 1)
-            x = l + int((date - c_year).total_seconds()
-                        / (datetime.date(year + 1, 1, 1) - c_year).total_seconds()*(r-l))
-            pts = []
-            try:
-                for y in range(image.size[1]):
-                    if eqdist(image.getpixel((x, y)), (250, 150, 5, 255)) < 10:  # MAGIC THRESHOLD orange color
-                        pts.append(y)
-            except IndexError:
-                pts = []
-                pass  # if coord is out of image then just live pts array empty
-
-            if pts:
-                y = sum(pts)/len(pts)
-                yield (x, y, date)
         # data bw years
         for l, r, year in years:
+            month_width = (r - l)/12
             for m in range(12):
                 date = datetime.date(year, m + 1, 1)
                 c_year = datetime.date(year, 1, 1)
-                x = l + int((date - c_year).total_seconds()
-                            / (datetime.date(year + 1, 1, 1) - c_year).total_seconds()*(r-l))
+                x = l + int(round(month_width*m))
                 pts = []
-                for y in range(image.size[1]):
-                    if eqdist(image.getpixel((x, y)), (250, 150, 5, 255)) < 10:  # MAGIC THRESHOLD orange color
-                        pts.append(y)
-
+                try:
+                    for y in range(image.size[1]):
+                        if eqdist(image.getpixel((x, y)), (250, 150, 5, 255)) < 20:  # MAGIC THRESHOLD orange color
+                            pts.append(y)
+                except IndexError:
+                    pts = []
+                    pass  # if coord is out of image then just live pts array empty
                 if pts:
                     y = sum(pts)/len(pts)
                     yield (x, y, date)
-        # data in last year
-        l, r, year = years[-1]
-        dlr = r - l
-        l = r
-        r += dlr
-
-        year += 1
-        for m in range(12):
-            date = datetime.date(year, m + 1, 1)
-            c_year = datetime.date(year, 1, 1)
-            x = l + int((date - c_year).total_seconds()
-                        / (datetime.date(year + 1, 1, 1) - c_year).total_seconds()*(r-l))
-            pts = []
-            try:
-                for y in range(image.size[1]):
-                    if eqdist(image.getpixel((x, y)), (250, 150, 5, 255)) < 10:  # MAGIC THRESHOLD orange color
-                        pts.append(y)
-            except IndexError:
-                # we are out ouf image, should stop
-                break
-            if pts:
-                y = sum(pts)/len(pts)
-                yield (x, y, date)
         raise StopIteration()
 
     @staticmethod
