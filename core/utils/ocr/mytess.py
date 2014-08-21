@@ -7,8 +7,6 @@ import os
 
 __author__ = 'user'
 
-import subprocess
-import io
 from PIL import Image, ImageOps
 import numpy
 
