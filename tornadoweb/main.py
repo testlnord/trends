@@ -1,16 +1,17 @@
-import json
+#!/usr/bin/env python3.4
+from config import config
 import tornado.ioloop
 import tornado.web
 from tornado import template
 import psycopg2
 from tornado.escape import json_encode
 
-
 class MainHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.template_loader = template.Loader("templates")
-        self.db_connection = psycopg2.connect(database='new.db', user='user', password='')
+        self.db_connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
+                                              password=config['db_pass'])
 
     def get(self):
         cur = self.db_connection.cursor()
@@ -22,7 +23,8 @@ class AjaxHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.template_loader = template.Loader("templates")
-        self.db_connection = psycopg2.connect(database='new.db', user='user', password='')
+        self.db_connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
+                                              password=config['db_pass'])
 
     def get(self, slug):
         try:
@@ -71,5 +73,5 @@ if __name__ == "__main__":
         (r"/", MainHandler),
         (r"/tech/([^/]+)", AjaxHandler)
     ])
-    application.listen(8888)
+    application.listen(config["port"])
     tornado.ioloop.IOLoop.instance().start()
