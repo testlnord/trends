@@ -5,6 +5,7 @@ import urllib.parse
 import urllib.error
 import time
 from ...config import config
+from http.client import BadStatusLine
 
 __author__ = 'user'
 
@@ -42,7 +43,7 @@ def get_from_url(url, min_delay=1, max_delay=3, binary=False, force_wait=False, 
         try:
             response = ur.urlopen(req)
             break
-        except urllib.error.HTTPError:
+        except (urllib.error.HTTPError, BadStatusLine):
             attempts += 1
             if attempts < max_attempts:
                 sleep(min_delay, max_delay)

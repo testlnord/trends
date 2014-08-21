@@ -1,7 +1,43 @@
 {
     "proxies":[
         {
-            "proxy": "http://user:password@host:port",
+            "proxy": "",
+            "user": "antonionorth20",
+            "pass": "1234qwer!"
+        },
+        {
+            "proxy": "http://trends210:TRENDS2IO@5.255.90.60:80",
+            "user": "fgallyan@gmail.com",
+            "pass": "iklhnm!1"
+        },
+        {
+            "proxy":"http://trends210:TRENDS2IO@84.201.8.133:80",
+            "user": "christ.stullman",
+            "pass": "ert345t%"
+        },
+        {
+            "proxy":"http://trends210:TRENDS2IO@5.255.90.6:80"
+        },
+        {
+            "proxy":"http://trends210:TRENDS2IO@5.255.90.65:80"
+        },
+        {
+            "proxy":"http://trends210:TRENDS2IO@5.255.75.223:80"
+        },
+        {
+            "proxy":"http://trends210:TRENDS2IO@84.201.8.145:80"
+        },
+        {
+            "proxy":"http://trends210:TRENDS2IO@5.255.75.225:80"
+        },
+        {
+            "proxy":"http://trends210:TRENDS2IO@5.255.90.58:80"
+        },
+        {
+            "proxy":"http://trends210:TRENDS2IO@81.4.104.210:80"
+        },
+        {
+            "proxy": "http://trends210:TRENDS2IO@5.255.75.143:80",
             "user": "username",
             "pass": "password"
         }

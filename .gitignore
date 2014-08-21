@@ -3,7 +3,10 @@
 #idea dirs
 .idea/
 
-#data files
+# private configs
+proxies.json
+
+# data files
 *.db
 *.sqlite3
 *.pkl

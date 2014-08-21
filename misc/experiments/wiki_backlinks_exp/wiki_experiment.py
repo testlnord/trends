@@ -6,7 +6,7 @@ import pickle
 
 import matplotlib.pyplot as plt
 
-from core.parsers.wiki import WikiParser
+from experiments.wiki_backlinks_exp.wiki import WikiParser
 
 
 ass = ["Windows Strata", "Windows Cloud", "Windows azure_", "Windows Azure Fabric Controller",

@@ -13,7 +13,7 @@ import urllib.parse as urlp
 from numpy import median
 import rpy2.robjects
 
-from core.parsers.parser import Parser
+from experiments.wiki_backlinks_exp.parser import Parser
 
 
 rpy2.robjects.r.library('pracma')

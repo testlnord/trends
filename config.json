@@ -29,7 +29,8 @@
             "default": {
                 "level": "DEBUG",
                 "class": "logging.FileHandler",
-                "filename": "trends.log"
+                "filename": "trends.log",
+                "formatter": "standard"
             }
         },
         "loggers": {

@@ -2,7 +2,6 @@
 
 Need only during development.
 """
-import gzip
 import json
 import os
 import pickle

@@ -3,7 +3,7 @@ from html.parser import HTMLParser
 import logging
 import re
 
-from core.utils.internet import google_search
+from core.utils.internet.google_search import google_search
 from .link_maker import LinkMaker
 from ..utils.internet.internet import get_from_url, quote
 from ..utils.internet.internet import sleep
@@ -14,7 +14,7 @@ class ItjLinkMaker(LinkMaker):
     def make_links(self, tech_name):
         itj_tag_link_pattern = re.compile('http://www.itjobswatch.co.uk/jobs/uk/(.*).do')
         
-        itj_res = ItjLinkMaker._search_itj(tech_name)
+        itj_res = self._search_itj(tech_name)
         if not itj_res['items']:
             logging.warning("Nothing found in itjobs website for request: %s.", tech_name)
             itj_res = google_search(tech_name, cse_name='itjobs')
@@ -36,9 +36,11 @@ class ItjLinkMaker(LinkMaker):
         return itj_name
 
     class ItjSearchParser(HTMLParser):
-        result = []
-        table_start = False
-        read_link = False
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.result = []
+            self.table_start = False
+            self.read_link = False
         
         def handle_starttag(self, tag, attrs):
             if tag == 'table' and ('class', 'results') in attrs:
@@ -49,10 +51,9 @@ class ItjLinkMaker(LinkMaker):
                 attrs = dict(attrs)
                 self.result.append({'link': 'http://www.itjobswatch.co.uk' + attrs['href'], 'title': attrs['title']})
                 self.read_link = False
-    
-    
-    @staticmethod
-    def _search_itj(tech_name):
+
+
+    def _search_itj(self, tech_name):
         url = "http://www.itjobswatch.co.uk/default.aspx?page=1&sortby=0&orderby=0&q={0}&id=0&lid=2618".format(
                 quote(tech_name.replace(' ', '+')))
         page = get_from_url(url)
@@ -61,8 +62,10 @@ class ItjLinkMaker(LinkMaker):
         return {'items': isp.result}
 
     class ItjPageParser(HTMLParser):
-        read_image = False
-        img_src = None
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.read_image = False
+            self.img_src = None
     
         def handle_starttag(self, tag, attrs):
             if tag == 'a' and ('id', 'demand_trend') in attrs:

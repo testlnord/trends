@@ -14,8 +14,6 @@ class TestItjCrawler(TestCase):
         self.test_image2 = Image.open(os.path.join(self.dir, "testimg2.png"))
 
     def test__parse_image(self):
-        print(self.crawler._parse_image(self.test_image1))
-        print(self.crawler._parse_image(self.test_image2))
         self.assertEqual(len(self.crawler._parse_image(self.test_image1)), 127)
         self.assertEqual(len(self.crawler._parse_image(self.test_image2)), 122)
 

@@ -45,6 +45,7 @@ class WikiUpdater(DataUpdater):
 
                 self.logger.debug("Updating values in settings")
                 self.settings['techs'][tech_id]['last_date'] = max_date.strftime(config['date_format'])
+                self.commit_settings()
 
         return dirty
 
