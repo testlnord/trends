@@ -1,77 +1,46 @@
 #!/usr/bin/env python3.4
 from config import config
+import logging
+import sys
 import tornado.ioloop
 import tornado.web
-from tornado import template
-import psycopg2
-from tornado.escape import json_encode
+from handlers import MainHandler, AjaxHandler
+from daemon3x import daemon
 
-class MainHandler(tornado.web.RequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.template_loader = template.Loader("templates")
-        self.db_connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
-                                              password=config['db_pass'])
 
-    def get(self):
-        cur = self.db_connection.cursor()
-        cur.execute("select id, info::json from techs")
-        template = self.template_loader.load('index.html')
-        self.write(template.generate(techs=cur.fetchall()))
-
-class AjaxHandler(tornado.web.RequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.template_loader = template.Loader("templates")
-        self.db_connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
-                                              password=config['db_pass'])
-
-    def get(self, slug):
+class TrendsWebServer(daemon):
+    def run(self):
+        logger = logging.getLogger(__name__)
+        logger.info("Logging initialized. Creating application...")
+        application = tornado.web.Application([
+            (r"/", MainHandler),
+            (r"/tech/([^/]+)", AjaxHandler)
+        ])
+        logger.info("Application created. Starting to listen port...")
+        application.listen(config["port"])
+        logger.info("Starting application...")
+        # noinspection PyBroadException
         try:
-            tid = int(slug)
-        except ValueError:
-            self.write("{}")  # todo redirect or 404 error
-            return
-        cur = self.db_connection.cursor()
-        cur.execute("select source, to_char(time, 'YYYY MM DD'), value from reports_1 where tech_id = %s", (tid,))
-        res = {}
-        for rec in cur.fetchall():
-            if rec[0] not in res:
-                res[rec[0]] = []
-            res[rec[0]].append({'date': rec[1], 'val': rec[2]})
-
-        cur.execute("select to_char(time, 'YYYY MM DD'), value from reports_2 where tech_id = %s", (tid,))
-        res['total'] = sorted(({'date': d, 'val': v} for d, v in cur.fetchall()), key=lambda x:x['date'])
-
-        min_dates = []
-        max_dates = []
-        for k in res:
-            min_dates.append(min(res[k], key=lambda x: x['date'])['date'])
-            max_dates.append(max(res[k], key=lambda x: x['date'])['date'])
-        max_min_date = max(min_dates)
-        min_max_date = min(max_dates)
-
-        for k in res:
-            res[k] = {v['date']: v['val'] for v in res[k] if min_max_date >= v['date'] >= max_min_date}
-
-        captions = ["date"]+list(res.keys())
-        csv_lines = ['\t'.join(captions)]
-
-        for date in sorted(res['total'].keys()):
-            words = [date]
-            for caption in captions[1:]:
-                try:
-                    words.append(str(res[caption][date]))
-                except KeyError:
-                    words.append("0")
-            csv_lines.append('\t'.join(words))
-
-        self.write('\n'.join(csv_lines))
+            tornado.ioloop.IOLoop.instance().start()
+        except:  # I don't know what can happen here
+            logger.error("Application crashed.", exc_info=True)
+            logger.info("Stopping daemon.")
+            self.stop()
 
 if __name__ == "__main__":
-    application = tornado.web.Application([
-        (r"/", MainHandler),
-        (r"/tech/([^/]+)", AjaxHandler)
-    ])
-    application.listen(config["port"])
-    tornado.ioloop.IOLoop.instance().start()
+    my_daemon = TrendsWebServer('/tmp/trendsws.pid')
+    if len(sys.argv) == 2:
+        if 'start' == sys.argv[1]:
+            my_daemon.start()
+        elif 'stop' == sys.argv[1]:
+            my_daemon.stop()
+        elif 'restart' == sys.argv[1]:
+            my_daemon.restart()
+        else:
+            print("Unknown command")
+            sys.exit(2)
+        sys.exit(0)
+    else:
+        print("usage: %s start|stop|restart" % sys.argv[0])
+        sys.exit(2)
+

@@ -4,6 +4,30 @@
     // DB settings
     "db_name" : "new.db",
     "db_user" : "user",
-    "db_pass" : ""
+    "db_pass" : "",
 
+    "logging":{
+        "version": 1,
+        "disable_existing_loggers": "False",
+        "formatters": {
+            "standard": {
+                "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+            }
+        },
+        "handlers": {
+            "default": {
+                "level": "DEBUG",
+                "class": "logging.FileHandler",
+                "filename": "websrv.log",
+                "formatter": "standard"
+            }
+        },
+        "loggers": {
+            "": {
+                "handlers": ["default"],
+                "level": "DEBUG",
+                "propagate": "True"
+            }
+        }
+    }
 }
