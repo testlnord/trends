@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .invis_selector {
+            display: none;
+        }
+
+        .tech_selector {
+            display: inline;
+
+        }
+
+        svg {
+            font: 10px sans-serif;
+        }
+
+        .line {
+            fill: none;
+            clip-path: url(#clip);
+        }
+
+        .google {
+            stroke: #e41a1c;
+            color: #e41a1c;
+        }
+
+        .wiki {
+            stroke: #984ea3;
+            color: #984ea3;
+        }
+
+        .sot {
+            stroke: #377eb8;
+            color: #377eb8;
+        }
+
+        .sousers {
+            stroke: #ff7f00;
+            color: #ff7f00;
+        }
+
+        .itj {
+            stroke: #4daf4a;
+            color: #4daf4a;
+        }
+
+        .total {
+            stroke: black;
+            color: black;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .brush .extent {
+            stroke: #fff;
+            fill-opasource: .125;
+            shape-rendering: crispEdges;
+        }
+
+    </style>
+    <!--script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script -->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body onload="page_load()">
+<script>
+    var margin = {top: 20, right: 80, bottom: 30, left: 50},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+    var parseDate = d3.time.format("%Y %m %d").parse;
+
+    var svg;
+    function init_svg(margin, width, height) {
+        svg = d3.select("#main").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    }
+
+    function plot(error, data) {
+        var tech_names = d3.keys(data[0]).filter(function (key) {return key !== "date";});
+
+        data.forEach(function (d) {d.date = parseDate(d.date);});
+
+        var techs = tech_names.map(function (name) {
+            return {
+                name: name,
+                data_points: data.map(function (d) {return {date: d.date, value: +d[name]};})
+            };
+        });
+        var x = d3.time.scale()
+                .range([0, width])
+                .domain(d3.extent(data, function (d) {return d.date;}));
+        var y = d3.scale.linear()
+                .range([height, 0])
+                .domain([
+                    d3.min(techs, function (c) {return d3.min(c.data_points, function (v) {return v.value;});}),
+                    d3.max(techs, function (c) {return d3.max(c.data_points, function (v) {return v.value;});})
+                ]);
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+        var line = d3.svg.line()
+                .interpolate("basis")
+                .x(function (d) {
+                    return x(d.date);
+                })
+                .y(function (d) {
+                    return y(d.value);
+                });
+
+        svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+        svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
+
+
+        var source = svg.selectAll(".source")
+                .data(techs)
+                .enter().append("g")
+                .attr("class", "source");
+        source.append("path")
+                .attr("class", function (d) {return "line " + d.name;})
+                .attr("d", function (d) {return line(d.data_points);})
+                .style("stroke-width", 2);
+
+        var legend = [];
+        for (var tech_name_id = 0; tech_name_id < tech_names.length; tech_name_id ++ ){
+            legend[legend.length] = {name: tech_names[tech_name_id], x: width - 10, y: 15*tech_name_id + 15};
+        }
+
+        var legend_img = svg.selectAll(".legend").data(legend).enter().append("g");
+        legend_img.append("circle")
+                .attr("cx", function (l) {return l.x;})
+                .attr("cy", function (l) {return l.y;})
+                .attr("r", 3)
+                .attr("class", function (l) {return l.name;})
+                .style("fill", "none").style("stroke-width", 5);
+        legend_img.append("text")
+                .attr("x", function(l){return l.x;})
+                .attr("y", function(l){return l.y;})
+                .attr("dx", "1.35em")
+                .attr("dy", ".25em")
+                .text(function (d) {
+                    return d.name;
+                });
+    };
+
+    function redraw(ids) {
+        var element = document.getElementsByTagName("svg");
+        for (var index = element.length - 1; index >= 0; index--) {
+            element[index].parentNode.removeChild(element[index]);
+        }
+        init_svg(margin, width, height);
+        d3.tsv("csv/" + ids.join(), plot);
+    }
+    function get_ids() {
+        if (window.location.hash) {
+            var ids = window.location.hash.slice(1).split(',').slice(0, 5);
+            //todo check for integer and range
+            return ids;
+        } else {
+            return [];
+        }
+    }
+    function set_ids(ids) {
+        window.location.hash = ids.join();
+        selectors_update();
+    }
+    function selectors_update() {
+        var ids = get_ids();
+        for (var tsid = 0; tsid < 5; tsid++) {
+            selector = document.getElementById("ts_" + tsid);
+            if (tsid < ids.length) {
+                selector.className = "tech_selector";
+                selector.value = ids[tsid];
+            } else if (tsid == ids.length) {
+                selector.className = "tech_selector";
+                selector.value = "";
+            } else {
+                selector.className = "invis_selector";
+            }
+
+        }
+        redraw(ids);
+    }
+    function page_load() {
+        selectors_update();
+    }
+    function change_selection(sel_id) {
+        var ids = get_ids();
+        var selector = document.getElementById("ts_" + sel_id);
+        var tech_id = selector.options[selector.selectedIndex].value;
+        if (ids.length > sel_id) {
+            ids[sel_id] = tech_id;
+        } else {
+            ids[ids.length] = tech_id;
+        }
+        set_ids(ids);
+
+    }
+
+    function remove_selector() {
+        var ids = get_ids();
+        if (ids.length > 1) {
+            set_ids(ids.slice(0, -1));
+        }
+    }
+</script>
+
+<div id="plots" style="width: 1000px; text-align: center; margin-left: 40px;">
+    <div id="selectors">
+        {% for sel_id in range(5) %}
+        <select id="ts_{{ sel_id }}" onchange="change_selection({{sel_id}})" name="tech_selector">
+            {% for tech_id, tech_name in [(tid, info['name']) for tid, info in techs if 'visible' not in info or
+            info['visible'] == 1] %}
+            <option value="{{tech_id}}">{{tech_name}}</option>
+            {% end %}
+        </select>
+        {% end %}
+        <input type="image" src="http://www.vista-training.com/assets/image/txt_close_button.gif"
+               name="image" width="16" height="16" onclick="remove_selector()">
+    </div>
+    <div id="main" style="width:100%;"></div>
+    <div id="techs" style="float: left;width: 50%"></div>
+    <div id="sources" style="float: right; width:50%"></div>
+</div>
+</body>
+</html>

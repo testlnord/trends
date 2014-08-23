@@ -4,7 +4,7 @@ import logging
 import sys
 import tornado.ioloop
 import tornado.web
-from handlers import MainHandler, AjaxHandler
+from handlers import MainHandler, AjaxHandler, TechsHandler
 from daemon3x import daemon
 
 
@@ -14,7 +14,8 @@ class TrendsWebServer(daemon):
         logger.info("Logging initialized. Creating application...")
         application = tornado.web.Application([
             (r"/", MainHandler),
-            (r"/tech/([^/]+)", AjaxHandler)
+            (r"/tech", TechsHandler),
+            (r"/csv/([^/]+)", AjaxHandler)
         ])
         logger.info("Application created. Starting to listen port...")
         application.listen(config["port"])
