@@ -3,6 +3,8 @@ from tornado import template
 import psycopg2
 import tornado.web
 from config import config
+import json
+
 
 class MainHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
@@ -52,10 +54,13 @@ class AjaxHandler(tornado.web.RequestHandler):
             self.write_error(406)
             return
         cur = self.db_connection.cursor()
-        res = None
+        a = ','.join((str(x) for x in tids))
+        cur.execute("select id, info::json from techs where id in (" + a + ')')
+        result = {i: {'tech_name': info['name']} for i, info in cur.fetchall()}
         for tid in tids:
-            cur.execute("select source, to_char(time, 'YYYY MM DD'), value from reports_1 where tech_id = %s", (tid,))
             res = {}
+            cur.execute("select source, to_char(time, 'YYYY MM DD'), value from reports_1 where tech_id = %s", (tid,))
+
             for rec in cur.fetchall():
                 if rec[0] not in res:
                     res[rec[0]] = []
@@ -76,19 +81,11 @@ class AjaxHandler(tornado.web.RequestHandler):
                 res[k] = {d: v for d, v in res[k] if min_max_date >= d >= max_min_date}
                 miv = min(res[k].values())
                 mav = max(res[k].values())
-                res[k] = {d: (v-miv)/(mav-miv) for d, v in res[k].items()}
-            break
-        captions = ["date"]+list(res.keys())
-        csv_lines = ['\t'.join(captions)]
+                res[k] = [{'date': d, 'value': (v-miv)/(mav-miv)} for d, v in res[k].items()]
 
-        for date in sorted(res['total'].keys()):
-            words = [date]
-            for caption in captions[1:]:
-                try:
-                    words.append(str(res[caption][date]))
-                except KeyError:
-                    words.append("0")
-            csv_lines.append('\t'.join(words))
-        self.set_header("Content-Type", "text/csv")
-        self.write('\n'.join(csv_lines))
+            result[tid].update(res)
+
+
+        self.set_header("Content-Type", "application/json")
+        self.write(json.dumps(result))
 

@@ -22,6 +22,28 @@
             clip-path: url(#clip);
         }
 
+        .t0{
+            stroke:#7fc97f;
+            color: #7fc97f;
+        }
+        .t1{
+            stroke:#beaed4;
+            color:#beaed4;
+        }
+        .t2{
+            stroke:#fdc086;
+            color:#fdc086;
+        }
+        .t3{
+            stroke:#ffff99;
+            color:#ffff99;
+        }
+        .t4{
+            stroke:#386cb0;
+            color:#386cb0;
+        }
+
+
         .google {
             stroke: #e41a1c;
             color: #e41a1c;
@@ -78,28 +100,75 @@
     var parseDate = d3.time.format("%Y %m %d").parse;
 
     var svg;
-    function init_svg(margin, width, height) {
-        svg = d3.select("#main").append("svg")
+
+    function update(error, data){
+        var ids = get_ids();
+
+        var main_data = {};
+        for (var tid = 0; tid < ids.length; tid++){
+            main_data[data[ids[tid]].tech_name] = {data: data[ids[tid]].total.sort(function(a,b){return new Date(a.date) - new Date(b.date) }), style: "t"+tid};
+        }
+        var svg = d3.select("#main").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        svg.width = width;
+        svg.height = height;
+        plot(svg, main_data);
+
+        var svg_google = d3.select("#sources").append("svg")
+                .attr("width", (width + margin.left + margin.right)/2)
+                .attr("height", (height + margin.top + margin.bottom)/2)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var google_data = {};
+        for (var tid = 0; tid < ids.length; tid++){
+            if (data[ids[tid]].google) {
+                google_data[data[ids[tid]].tech_name] = {data: data[ids[tid]].google.sort(function (a, b) {
+                    return new Date(a.date) - new Date(b.date)
+                }), style: "t" + tid};
+            }
+        }
+        svg_google.width = width/2;
+        svg_google.height = height/2;
+        plot(svg_google, google_data);
+
+        var tech0_data = {}
+        var srcs = d3.keys(data[ids[0]]).filter(function(name){return name !== "tech_name"  });
+        console.log(srcs)
+        for (var sid = 0; sid < srcs.length; sid++){
+            tech0_data[srcs[sid]] = {data: data[ids[0]][srcs[sid]].sort(function (a, b) {
+                    return new Date(a.date) - new Date(b.date)
+                }), style: srcs[sid]};
+        }
+        console.log(tech0_data)
+        var svg_tech0 = d3.select("#techs").append("svg")
+                .attr("width", (width + margin.left + margin.right)/2)
+                .attr("height", (height + margin.top + margin.bottom)/2)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        svg_tech0.width = width/2;
+        svg_tech0.height = height/2;
+        plot(svg_tech0, tech0_data)
+
     }
 
-    function plot(error, data) {
-        var tech_names = d3.keys(data[0]).filter(function (key) {return key !== "date";});
-
-        data.forEach(function (d) {d.date = parseDate(d.date);});
+    function plot(svg, data, width, height) {
+        var tech_names = d3.keys(data);
+        var width = svg.width - 30;
+        var height = svg.height - 40;
 
         var techs = tech_names.map(function (name) {
             return {
                 name: name,
-                data_points: data.map(function (d) {return {date: d.date, value: +d[name]};})
+                style: data[name].style,
+                data_points: data[name].data.map(function (d) {return {date: parseDate(d.date), value: +d.value};})
             };
         });
         var x = d3.time.scale()
                 .range([0, width])
-                .domain(d3.extent(data, function (d) {return d.date;}));
+                .domain(d3.extent(techs[0].data_points, function (d) {return d.date;}));
         var y = d3.scale.linear()
                 .range([height, 0])
                 .domain([
@@ -138,13 +207,14 @@
                 .enter().append("g")
                 .attr("class", "source");
         source.append("path")
-                .attr("class", function (d) {return "line " + d.name;})
+                .attr("class", function (d) {return "line " + d.style;})
                 .attr("d", function (d) {return line(d.data_points);})
                 .style("stroke-width", 2);
 
         var legend = [];
         for (var tech_name_id = 0; tech_name_id < tech_names.length; tech_name_id ++ ){
-            legend[legend.length] = {name: tech_names[tech_name_id], x: width - 10, y: 15*tech_name_id + 15};
+            legend[legend.length] = {name: tech_names[tech_name_id], x: width - 10, y: 15*tech_name_id + 15,
+                style: data[tech_names[tech_name_id]].style};
         }
 
         var legend_img = svg.selectAll(".legend").data(legend).enter().append("g");
@@ -152,7 +222,7 @@
                 .attr("cx", function (l) {return l.x;})
                 .attr("cy", function (l) {return l.y;})
                 .attr("r", 3)
-                .attr("class", function (l) {return l.name;})
+                .attr("class", function (l) {return l.style;})
                 .style("fill", "none").style("stroke-width", 5);
         legend_img.append("text")
                 .attr("x", function(l){return l.x;})
@@ -162,16 +232,18 @@
                 .text(function (d) {
                     return d.name;
                 });
-    };
+    }
 
     function redraw(ids) {
+        // delete all plots
         var element = document.getElementsByTagName("svg");
         for (var index = element.length - 1; index >= 0; index--) {
             element[index].parentNode.removeChild(element[index]);
         }
-        init_svg(margin, width, height);
-        d3.tsv("csv/" + ids.join(), plot);
+        // get data and make new plots inside update
+        d3.json("csv/" + ids.join(), update); //todo change url
     }
+
     function get_ids() {
         if (window.location.hash) {
             var ids = window.location.hash.slice(1).split(',').slice(0, 5);
@@ -181,6 +253,7 @@
             return [];
         }
     }
+
     function set_ids(ids) {
         window.location.hash = ids.join();
         selectors_update();
