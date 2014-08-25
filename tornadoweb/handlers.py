@@ -67,9 +67,6 @@ class AjaxHandler(tornado.web.RequestHandler):
                     res[rec[0]] = []
                 res[rec[0]].append((rec[1], rec[2]))
 
-            cur.execute("select to_char(time, 'YYYY MM DD'), value from reports_2 where tech_id = %s", (tid,))
-            res['total'] = sorted(cur.fetchall(), key=lambda x:x[0])
-
             min_dates = []
             max_dates = []
             for k in res:
@@ -95,12 +92,17 @@ class AjaxHandler(tornado.web.RequestHandler):
                                       'max': max(minmax_dict[k]['max'], max(res[k].values()))}
         # normalize values with new min and max
         for res in result.values():
+            average = {}
             for k in res:
                 if k == 'tech_name':
                     continue
                 res[k] = [{'date': d, 'value': (v-minmax_dict[k]['min'])/(minmax_dict[k]['max']-minmax_dict[k]['min'])}
                           for d, v in res[k].items()]
-
+                if not average:
+                    average = {d['date']: [d['value']] for d in res[k]}
+                else:
+                    [average[d['date']].append(d['value']) for d in res[k]]  # inline for loop
+            res['total'] = [{'date': d, 'value': (sum(v)/len(v))} for d, v in average.items()]
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(result))
 
