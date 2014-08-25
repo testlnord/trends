@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python3
 from config import config
 import logging
 import sys
@@ -13,6 +13,7 @@ class TrendsWebServer(daemon):
         logger = logging.getLogger(__name__)
         logger.info("Logging initialized. Creating application...")
         application = tornado.web.Application([
+            (r'/images/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_dir']}),
             (r"/", MainHandler),
             (r"/tech", TechsHandler),
             (r"/json/([^/]+)", AjaxHandler)
