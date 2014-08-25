@@ -4,7 +4,7 @@ import logging
 import sys
 import tornado.ioloop
 import tornado.web
-from handlers import MainHandler, AjaxHandler, TechsHandler
+from handlers import MainHandler, AjaxHandler, TechsHandler, CsvHandler
 from daemon3x import daemon
 
 
@@ -16,7 +16,8 @@ class TrendsWebServer(daemon):
             (r'/images/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_dir']}),
             (r"/", MainHandler),
             (r"/tech", TechsHandler),
-            (r"/json/([^/]+)", AjaxHandler)
+            (r"/json/([^/]+)", AjaxHandler),
+            (r"/csv/([^/]+)", CsvHandler),
         ])
         logger.info("Application created. Starting to listen port...")
         application.listen(config["port"])

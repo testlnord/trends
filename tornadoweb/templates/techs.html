@@ -93,6 +93,22 @@
 </head>
 <body onload="page_load()">
 <script>
+    var downloadURL = function downloadURL(url) {
+        var hiddenIFrameID = 'hiddenDownloader',
+            iframe = document.getElementById(hiddenIFrameID);
+        if (iframe === null) {
+            iframe = document.createElement('iframe');
+            iframe.id = hiddenIFrameID;
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+        }
+        iframe.src = url;
+    };
+    var downloadCsv = function downloadCsv(type){
+        var args = Array.prototype.slice.call(arguments);
+        var url = "/csv/" + args.join(',')+'.csv';
+        downloadURL(url);
+    };
     var margin = {top: 20, right: 80, bottom: 30, left: 50},
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
@@ -100,7 +116,6 @@
     var parseDate = d3.time.format("%Y %m %d").parse;
 
     var svg;
-
     function update(error, data) {
         var ids = get_ids();
 
@@ -110,6 +125,9 @@
                 return new Date(a.date) - new Date(b.date)
             }), style: "t" + tid};
         }
+        d3.select("#main").append("p").text("Average values ")
+                .append("input").attr("type", "image").attr("src", "images/csv.gif")
+                .attr("name", "main_csv").attr("onclick", "downloadCsv('norm', 'average',"+ids+")");
         var svg = d3.select("#main").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -130,7 +148,11 @@
                 }
             }
             if (Object.keys(source_data).length) {
-                d3.select("#sources").append("p").text(srcs[sid]);
+                var caption = d3.select("#sources").append("p").text(srcs[sid]);
+                caption.append("input").attr("type", "image").attr("src", "images/csv.gif")
+                .attr("name", "main_csv").attr("onclick", "downloadCsv('norm', '"+srcs[sid]+"',"+ids+")");
+                caption.append("input").attr("type", "image").attr("src", "images/raw.gif")
+                .attr("name", "main_csv").attr("onclick", "downloadCsv('raw', '"+srcs[sid]+"',"+ids+")");
                 var svg_source = d3.select("#sources").append("svg")
                         .attr("width", (width + margin.left + margin.right) / 2)
                         .attr("height", (height + margin.top + margin.bottom) / 2)
@@ -152,7 +174,11 @@
                     return new Date(a.date) - new Date(b.date)
                 }), style: srcs[sid]};
             }
-            d3.select("#techs").append("p").text(data[ids[tid]].tech_name);
+            var caption = d3.select("#techs").append("p").text(data[ids[tid]].tech_name);
+            caption.append("input").attr("type", "image").attr("src", "images/csv.gif")
+            .attr("name", "main_csv").attr("onclick", "downloadCsv('norm', " + ids[tid]+")");
+            caption.append("input").attr("type", "image").attr("src", "images/raw.gif")
+            .attr("name", "main_csv").attr("onclick", "downloadCsv('raw', " + ids[tid]+")");
             var svg_tech = d3.select("#techs").append("svg")
                     .attr("width", (width + margin.left + margin.right) / 2)
                     .attr("height", (height + margin.top + margin.bottom) / 2)
@@ -323,7 +349,7 @@
         </select>
         {% end %}
         <input type="image" src="images/close.gif"
-               name="image" width="16" height="16" onclick="remove_selector()">
+               name="close" width="16" height="16" onclick="remove_selector()">
     </div>
     <div id="main" class="plot-place" style="width:100%;"></div>
     <div id="techs" class="plot-place" style="float: left;width: 50%"></div>
