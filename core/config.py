@@ -13,8 +13,12 @@ import aadict
 
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+local_config_path = path.join(project_root, 'local.config.json')
 config_path = path.join(project_root, 'config.json')
+
 config = json.loads(jsmin(open(config_path).read()))
+if path.exists(local_config_path):
+    config.update(json.loads(jsmin(open(local_config_path).read())))
 
 logging.config.dictConfig(config['logging'])
 

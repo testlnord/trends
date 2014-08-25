@@ -30,8 +30,9 @@ class ItjUpdater(DataUpdater):
                         self.logger.debug("Updating database")
                         cur = self.connection.cursor()
                         cur.execute("delete from rawdata where source='itj' and tech_id = %s", (tech_id,))
+                        # multiply values by factor 1000, to save percents in integer field
                         cur.executemany("insert into rawdata(source, tech_id, time, value) values (%s, %s, %s, %s)",
-                                        (('itj', tech_id, d, v) for d, v in data))
+                                        (('itj', tech_id, d, v*1000) for d, v in data))
                         self.connection.commit()
                         dirty = True
 

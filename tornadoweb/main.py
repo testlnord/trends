@@ -1,10 +1,10 @@
-#!/usr/bin/env python3.4
+#!/usr/bin/env python3
 from config import config
 import logging
 import sys
 import tornado.ioloop
 import tornado.web
-from handlers import MainHandler, AjaxHandler
+from handlers import MainHandler, AjaxHandler, TechsHandler
 from daemon3x import daemon
 
 
@@ -13,8 +13,10 @@ class TrendsWebServer(daemon):
         logger = logging.getLogger(__name__)
         logger.info("Logging initialized. Creating application...")
         application = tornado.web.Application([
+            (r'/images/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_dir']}),
             (r"/", MainHandler),
-            (r"/tech/([^/]+)", AjaxHandler)
+            (r"/tech", TechsHandler),
+            (r"/json/([^/]+)", AjaxHandler)
         ])
         logger.info("Application created. Starting to listen port...")
         application.listen(config["port"])
