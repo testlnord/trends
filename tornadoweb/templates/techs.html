@@ -69,7 +69,7 @@
             color: #4daf4a;
         }
 
-        .total {
+        .average {
             stroke: black;
             color: black;
         }
@@ -106,7 +106,7 @@
 
         var main_data = {};
         for (var tid = 0; tid < ids.length; tid++) {
-            main_data[data[ids[tid]].tech_name] = {data: data[ids[tid]].total.sort(function (a, b) {
+            main_data[data[ids[tid]].tech_name] = {data: data[ids[tid]].average.sort(function (a, b) {
                 return new Date(a.date) - new Date(b.date)
             }), style: "t" + tid};
         }
@@ -122,42 +122,42 @@
         var srcs = ["google", "itj", "sot", "sousers", "wiki"];
         for (var sid = 0; sid < srcs.length; sid++){
             d3.select("#sources").append("p").text(srcs[sid]);
-            var svg_google = d3.select("#sources").append("svg")
+            var svg_source = d3.select("#sources").append("svg")
                          .attr("width", (width + margin.left + margin.right) / 2)
                          .attr("height", (height + margin.top + margin.bottom) / 2)
                          .append("g")
                          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            var google_data = {};
+            var source_data = {};
             for (var tid = 0; tid < ids.length; tid++) {
                 if (data[ids[tid]][srcs[sid]]) {
-                    google_data[data[ids[tid]].tech_name] = {data: data[ids[tid]][srcs[sid]].sort(function (a, b) {
+                    source_data[data[ids[tid]].tech_name] = {data: data[ids[tid]][srcs[sid]].sort(function (a, b) {
                         return new Date(a.date) - new Date(b.date)
                     }), style: "t" + tid};
                 }
             }
-            svg_google.width = width / 2;
-            svg_google.height = height / 2;
-            plot(svg_google, google_data);
+            svg_source.width = width / 2;
+            svg_source.height = height / 2;
+            plot(svg_source, source_data);
         }
         for (var tid = 0; tid < ids.length; tid++) {
-            var tech0_data = {}
+            var tech_data = {}
             var srcs = d3.keys(data[ids[tid]]).filter(function (name) {
                 return name !== "tech_name"
             });
             for (var sid = 0; sid < srcs.length; sid++) {
-                tech0_data[srcs[sid]] = {data: data[ids[tid]][srcs[sid]].sort(function (a, b) {
+                tech_data[srcs[sid]] = {data: data[ids[tid]][srcs[sid]].sort(function (a, b) {
                     return new Date(a.date) - new Date(b.date)
                 }), style: srcs[sid]};
             }
             d3.select("#techs").append("p").text(data[ids[tid]].tech_name);
-            var svg_tech0 = d3.select("#techs").append("svg")
+            var svg_tech = d3.select("#techs").append("svg")
                     .attr("width", (width + margin.left + margin.right) / 2)
                     .attr("height", (height + margin.top + margin.bottom) / 2)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            svg_tech0.width = width / 2;
-            svg_tech0.height = height / 2;
-            plot(svg_tech0, tech0_data);
+            svg_tech.width = width / 2;
+            svg_tech.height = height / 2;
+            plot(svg_tech, tech_data);
         }
 
     }

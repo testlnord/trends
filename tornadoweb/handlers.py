@@ -102,7 +102,7 @@ class AjaxHandler(tornado.web.RequestHandler):
                     average = {d['date']: [d['value']] for d in res[k]}
                 else:
                     [average[d['date']].append(d['value']) for d in res[k]]  # inline for loop
-            res['total'] = [{'date': d, 'value': (sum(v)/len(v))} for d, v in average.items()]
+            res['average'] = [{'date': d, 'value': (sum(v)/len(v))} for d, v in average.items()]
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(result))
 
