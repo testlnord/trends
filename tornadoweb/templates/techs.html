@@ -244,12 +244,14 @@
 
     function redraw(ids) {
         // delete all plots
-        var element = document.getElementsByTagName("svg");
-        for (var index = element.length - 1; index >= 0; index--) {
-            element[index].parentNode.removeChild(element[index]);
+        var plot_places = document.getElementsByClassName("plot-place");
+        for (var ppi = 0; ppi < plot_places.length; ppi++) {
+            for (var index = plot_places[ppi].childNodes.length - 1; index >= 0; index--) {
+                plot_places[ppi].removeChild(plot_places[ppi].childNodes[index]);
+            }
         }
         // get data and make new plots inside update
-        d3.json("csv/" + ids.join(), update); //todo change url
+        d3.json("json/" + ids.join(), update); //todo change url
     }
 
     function get_ids() {
@@ -320,9 +322,9 @@
         <input type="image" src="http://www.vista-training.com/assets/image/txt_close_button.gif"
                name="image" width="16" height="16" onclick="remove_selector()">
     </div>
-    <div id="main" style="width:100%;"></div>
-    <div id="techs" style="float: left;width: 50%"></div>
-    <div id="sources" style="float: right; width:50%"></div>
+    <div id="main" class="plot-place" style="width:100%;"></div>
+    <div id="techs" class="plot-place" style="float: left;width: 50%"></div>
+    <div id="sources" class="plot-place" style="float: right; width:50%"></div>
 </div>
 </body>
 </html>

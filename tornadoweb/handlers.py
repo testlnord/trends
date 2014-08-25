@@ -1,4 +1,5 @@
 """tornado handlers"""
+import logging
 from tornado import template
 import psycopg2
 import tornado.web
@@ -17,7 +18,7 @@ class MainHandler(tornado.web.RequestHandler):
         tech_id = self.get_argument("tech_selector", '')
         try:
             tech_id = int(tech_id)
-            self.redirect("/tech/"+str(tech_id))
+            self.redirect("/tech#"+str(tech_id))
             return
         except ValueError:
             pass
@@ -76,15 +77,29 @@ class AjaxHandler(tornado.web.RequestHandler):
                 max_dates.append(max(res[k], key=lambda x: x[0])[0])
             max_min_date = max(min_dates)
             min_max_date = min(max_dates)
-
             for k in res:
                 res[k] = {d: v for d, v in res[k] if min_max_date >= d >= max_min_date}
-                miv = min(res[k].values())
-                mav = max(res[k].values())
-                res[k] = [{'date': d, 'value': (v-miv)/(mav-miv)} for d, v in res[k].items()]
-
             result[tid].update(res)
+        # renorm values
+        # get min and max for each of source in selected techs
+        minmax_dict = {}
+        for res in result.values():
+            for k in res:
+                if k == 'tech_name':
+                    continue
+                if k not in minmax_dict:
+                    minmax_dict[k] = {'min': min(res[k].values()), 'max': max(res[k].values())}
 
+                else:
+                    minmax_dict[k] = {'min': min(minmax_dict[k]['min'], min(res[k].values())),
+                                      'max': max(minmax_dict[k]['max'], max(res[k].values()))}
+        # normalize values with new min and max
+        for res in result.values():
+            for k in res:
+                if k == 'tech_name':
+                    continue
+                res[k] = [{'date': d, 'value': (v-minmax_dict[k]['min'])/(minmax_dict[k]['max']-minmax_dict[k]['min'])}
+                          for d, v in res[k].items()]
 
         self.set_header("Content-Type", "application/json")
         self.write(json.dumps(result))

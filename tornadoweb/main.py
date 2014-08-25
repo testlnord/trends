@@ -15,7 +15,7 @@ class TrendsWebServer(daemon):
         application = tornado.web.Application([
             (r"/", MainHandler),
             (r"/tech", TechsHandler),
-            (r"/csv/([^/]+)", AjaxHandler)
+            (r"/json/([^/]+)", AjaxHandler)
         ])
         logger.info("Application created. Starting to listen port...")
         application.listen(config["port"])
