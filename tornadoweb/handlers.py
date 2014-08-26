@@ -89,11 +89,13 @@ def get_norm_data(connection, tids):
             res[k] = [
                 {'date': d, 'value': (v - minmax_dict[k]['min']) / (minmax_dict[k]['max'] - minmax_dict[k]['min'])}
                 for d, v in res[k].items()]
+            if k == 'google' and len(res) > 2:
+                continue
             if not average:
                 average = {d['date']: [d['value']] for d in res[k]}
             else:
                 [average[d['date']].append(d['value']) for d in res[k]]  # inline for loop
-        res['average'] = [{'date': d, 'value': (sum(v) / len(v))} for d, v in average.items()]
+        res['average'] = [{'date': d, 'value': (sum(v)/len(v))} for d, v in average.items()]
     return result
 
 
@@ -149,7 +151,7 @@ class CsvHandler(tornado.web.RequestHandler):
     @staticmethod
     def to_csv(result):
         names = list(result)
-        #make_header
+        #make header
         response = [','.join("time, {}".format(x) for x in names)]
         #make body
         for line in zip_longest(*[sorted(result[name], key=lambda x: x[0]) for name in names], fillvalue=("NA", "NA")):

@@ -147,7 +147,7 @@
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        main_div.append("div").attr("class", "link-box").append("a").text("Get data")
+        main_div.append("div").attr("class", "link-box").append("a").text("Get normalized data")
                 .attr("href", "javascript:downloadCsv('norm', 'average',"+ids+")");
         svg.width = width;
         svg.height = height;
@@ -171,7 +171,7 @@
                         .append("g")
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
                 var link_box = d3.select("#sources").append("div").attr("class", "link-box");
-                link_box.append("a").text("Get data")
+                link_box.append("a").text("Get normalized data")
                 .attr("href", "javascript:downloadCsv('norm', '"+srcs[sid]+"',"+ids+")");
                 link_box.append("a").text("Get raw data")
                 .attr("href", "javascript:downloadCsv('raw', '"+srcs[sid]+"',"+ids+")");
@@ -197,7 +197,7 @@
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             var link_box = d3.select("#techs").append("div").attr("class", "link-box");
-            link_box.append("a").text("Get data")
+            link_box.append("a").text("Get normalized data")
                 .attr("href", "javascript:downloadCsv('norm', " + ids[tid]+")");
             link_box.append("a").text("Get raw data")
                 .attr("href", "javascript:downloadCsv('raw', " + ids[tid]+")");
@@ -296,14 +296,13 @@
                 plot_places[ppi].removeChild(plot_places[ppi].childNodes[index]);
             }
         }
-        // get data and make new plots inside update
+        // Get normalized data and make new plots inside update
         d3.json("json/" + ids.join(), update); //todo change url
     }
 
     function get_ids() {
         if (window.location.hash) {
             var ids = window.location.hash.slice(1).split(',').slice(0, 5);
-            //todo check for integer and range
             return ids;
         } else {
             return [];
