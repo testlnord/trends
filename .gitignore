@@ -5,6 +5,7 @@
 
 # private configs
 proxies.json
+*local.config.json
 
 # data files
 *.db
