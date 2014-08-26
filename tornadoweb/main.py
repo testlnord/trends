@@ -5,6 +5,7 @@ import sys
 import tornado.ioloop
 import tornado.web
 from handlers import MainHandler, AjaxHandler, TechsHandler, CsvHandler
+from feedback_handlers import ReceiveFeedbackHandler, ShowFeedbacksHandler
 from daemon3x import daemon
 
 
@@ -18,6 +19,9 @@ class TrendsWebServer(daemon):
             (r"/tech", TechsHandler),
             (r"/json/([^/]+)", AjaxHandler),
             (r"/csv/([^/]+)", CsvHandler),
+            (r"/feedback/send/([^/]+)", ReceiveFeedbackHandler),
+            (r"/feedback5", ShowFeedbacksHandler)
+
         ])
         logger.info("Application created. Starting to listen port...")
         application.listen(config["port"])

@@ -1,8 +1,11 @@
-"""tornado handlers"""
+"""tornado handlers
+Handlers for all tech data
+"""
 import logging
 from tornado import template
 import psycopg2
 import tornado.web
+# noinspection PyUnresolvedReferences
 from config import config
 import json
 from itertools import zip_longest
@@ -112,17 +115,21 @@ class CsvHandler(tornado.web.RequestHandler):
             self.logger.warning("Bad csv request: %s", slug)
             self.write_error(406)
             return
-        self.set_header("Content-Type", "text/csv")
-        self.set_header("Content-Disposition", "attachment")
         if args[0] == 'norm':
             try:
-                self.write(self.to_csv(self.norm_data(args[1:])))
+                response = self.to_csv(self.norm_data(args[1:]))
+                self.set_header("Content-Type", "text/csv")
+                self.set_header("Content-Disposition", "attachment")
+                self.write(response)
             except ValueError:
                 self.logger.warning("Can't parse request: %s", slug)
                 self.write_error(406)
         elif args[0] == 'raw':
             try:
-                self.write(self.to_csv(self.raw_data(args[1:])))
+                response = self.to_csv(self.raw_data(args[1:]))
+                self.set_header("Content-Type", "text/csv")
+                self.set_header("Content-Disposition", "attachment")
+                self.write(response)
             except (ValueError, KeyError):
                 self.logger.warning("Can't parse request: %s", slug)
                 self.write_error(406)

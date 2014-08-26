@@ -4,6 +4,35 @@
     <meta charset="UTF-8">
     <title></title>
     <style>
+        .fb-form{
+            position: fixed;
+            display: block;
+            right: 15px;
+            width: 14%;
+            font-family: verdana, sans-serif;
+            font-size: 12pt;
+            border: 1px solid #000000;
+        }
+        .fb-desc{
+            text-align: right;
+        }
+        .fb-input{
+            padding-left: 5px;
+
+        }
+        .fb-form label{
+            display: block;
+            margin-right: 100%;
+        }
+        .fb-form textarea{
+            height: 50px;
+        }
+        .fb-form input{
+            display: block;
+        }
+        .fb-error{
+            color:red;
+        }
         a{
             display: inline;
             font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
@@ -107,6 +136,30 @@
 </head>
 <body onload="page_load()">
 <script>
+    var sendFeedback = function sendFeedback(){
+        if (! document.getElementById("fb-author").value){
+            d3.select("#feedback").append("p").text("author field is required").attr("class", "fb-error");
+            return;
+        }
+        if (!document.getElementById("fb-message").value){
+            d3.select("#feedback").append("p").text("Message field is required").attr("class", "fb-error");
+            return;
+        }
+        d3.selectAll(".fb-error").remove();
+
+        var message = {ids: get_ids(),
+            text: document.getElementById("fb-message").value,
+            author: document.getElementById("fb-author").value};
+        d3.json("/feedback/send/"+JSON.stringify(message), function(err, resp){
+            if (err){
+                console.log(err)
+                d3.select("#feedback").append("p").text("Feedback failed").attr("class", "fb-error");
+            } else {
+                d3.select("#feedback").append("p").text("Feedback successfully feedbacked.").attr("class", "fb-info");
+            }
+        });
+
+    };
     var downloadURL = function downloadURL(url) {
         var hiddenIFrameID = 'hiddenDownloader',
             iframe = document.getElementById(hiddenIFrameID);
@@ -360,6 +413,17 @@
         }
     }
 </script>
+<div id="feedback" class = "fb-form">
+    <p class = "fb-desc">
+      Any comments?
+    </p>
+    <label for="fb-author">Author</label>
+    <input type="text" id="fb-author" class="fb-input">
+    <label for="fb-message">Message</label>
+    <textarea id="fb-message" class="fb-input"></textarea>
+
+    <input type="button" id="fb-submit" value="Send" onclick="sendFeedback()">
+</div>
 
 <div id="plots" style="text-align: center; padding: 0 20%">
     <div id="selectors">
