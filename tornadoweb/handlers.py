@@ -130,7 +130,7 @@ class CsvHandler(tornado.web.RequestHandler):
             return
 
     def raw_data(self, args):
-        if len(args[0]) == 1 and args[0].isnumeric():
+        if len(args) == 1 and args[0].isnumeric():
             query = "SELECT source AS name, time, value FROM rawdata WHERE tech_id = " + args[0]
         else:
             query = "SELECT info::JSON->>'name' AS name, time, value FROM rawdata " \
@@ -143,7 +143,7 @@ class CsvHandler(tornado.web.RequestHandler):
         for name, t, v in cur.fetchall():
             if name not in res:
                 res[name] = []
-            res[name].append((t, v))
+            res[name].append((t.strftime("%Y %m %d"), v))
         return res
 
     @staticmethod
@@ -157,7 +157,7 @@ class CsvHandler(tornado.web.RequestHandler):
         return '\n'.join(response)
 
     def norm_data(self, args):
-        if len(args[0]) == 1 and args[0].isnumeric():
+        if len(args) == 1 and args[0].isnumeric():
             tids = [int(args[0])]
             per_source_report = False
         else:
