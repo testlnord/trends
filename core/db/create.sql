@@ -28,3 +28,14 @@ CREATE TABLE IF NOT EXISTS reports_2(
   value real
 );
 
+CREATE TABLE IF NOT EXISTS feedback(
+  id SERIAL PRIMARY KEY,
+  message text,
+  time timestamp,
+  author varchar(30)
+);
+
+CREATE TABLE IF NOT EXISTS feedback_techs(
+  fb_id integer references feedback(id),
+  tech_id integer references techs(id)
+);
