@@ -14,7 +14,7 @@
         .link-box{
             display: block;
             text-align: left;
-            padding: 0px;
+            padding: 0;
             margin: 0 0 0 50px;
         }
         .invis_selector {
@@ -131,6 +131,13 @@
 
     var svg;
     function update(error, data) {
+        if (error){
+            d3.select("#main").append("p").text("Error, sorry :(");
+            return;
+        }
+        width =  parseInt(window.getComputedStyle(document.getElementById("plots")).width)
+
+
         var ids = get_ids();
 
         var main_data = {};
@@ -175,7 +182,7 @@
                 .attr("href", "javascript:downloadCsv('norm', '"+srcs[sid]+"',"+ids+")");
                 link_box.append("a").text("Get raw data")
                 .attr("href", "javascript:downloadCsv('raw', '"+srcs[sid]+"',"+ids+")");
-                svg_source.width = width / 2;
+                svg_source.width = width / 2 - margin.right;
                 svg_source.height = height / 2;
                 plot(svg_source, source_data);
             }
@@ -201,7 +208,7 @@
                 .attr("href", "javascript:downloadCsv('norm', " + ids[tid]+")");
             link_box.append("a").text("Get raw data")
                 .attr("href", "javascript:downloadCsv('raw', " + ids[tid]+")");
-            svg_tech.width = width / 2;
+            svg_tech.width = width / 2 - margin.left;
             svg_tech.height = height / 2;
             plot(svg_tech, tech_data);
         }
@@ -297,7 +304,7 @@
             }
         }
         // Get normalized data and make new plots inside update
-        d3.json("json/" + ids.join(), update); //todo change url
+        d3.json("json/" + ids.join(), update);
     }
 
     function get_ids() {
@@ -354,7 +361,7 @@
     }
 </script>
 
-<div id="plots" style="width: 1000px; text-align: center; margin-left: 40px;">
+<div id="plots" style="text-align: center; padding: 0 20%">
     <div id="selectors">
         {% for sel_id in range(5) %}
         <select id="ts_{{ sel_id }}" onchange="change_selection({{sel_id}})" name="tech_selector">
