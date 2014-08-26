@@ -2,7 +2,7 @@
 import datetime
 from numpy import median
 import pandas
-
+from statsmodels.nonparametric.smoothers_lowess import lowess
 
 
 def freq_month(series):
@@ -10,9 +10,10 @@ def freq_month(series):
     for d, v in series:
         month = datetime.date(d.year, d.month, 1)
         if month not in result:
-            result[month] = 0
-        result[month] += v
-    return result.items()
+            result[month] = [0, 0]
+        result[month][0] += v
+        result[month][1] += 1
+    return ((d, pv[0]/pv[1]) for d, pv in result.items())
 
 
 def sort_ts(series):
@@ -91,37 +92,8 @@ def normalize_series(series):
     min_val = min(data, key=(lambda v: v[1]))[1]
     max_val = max(data, key=(lambda v: v[1]))[1]
     if max_val == min_val:
-        return [(x, 0.5) for x, _ in data]
+        return [(x, 0) for x, _ in data]
     return [(x, float(y - min_val) / (max_val - min_val)) for x, y in data]
-
-
-def merge(series_list):
-    # merges several ts into one series
-    # todo write impl merge
-    return series_list
-
-
-def to_per_month_ts(series):
-    """ Makes ts with per month frequency
-
-    If frequency is higher then sums values
-    :param series: time series with frequency higher or equal 1 month
-    :return: monthly ts
-    """
-    # todo write impl per month
-    return series
-
-
-def prepare_data(raw_series_list):
-    """ Prepares data for user
-    :param raw_series_list: data from db
-    :return: data for user
-    """
-    # todo write prepare data
-
-
-if __name__ == "__main__":
-    pass
 
 
 def divergence(series):

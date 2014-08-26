@@ -35,9 +35,8 @@ def normalize_google():
         if not data:
             logger.debug("No data in google for tech %s", tech_info['name'])
             continue
-        data = data[:-1]
         data = statmodule.freq_month(data)
-        data = statmodule.normalize_series(data)
+        #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'google' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
                              (('google', tech_id, d, v) for d, v in data))
@@ -56,11 +55,11 @@ def normalize_wiki():
         if not data:
             logger.debug("No data in wiki for tech %s", tech_info['name'])
             continue
-        data = data[:-1]
+        data = statmodule.outliers_filter(data)
         data = statmodule.freq_month(data)
         data = statmodule.sort_ts(data)
-        data = statmodule.median_filter(data)
-        data = statmodule.normalize_series(data)
+
+        #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'wiki' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
                              (('wiki', tech_id, d, v) for d, v in data))
@@ -80,9 +79,8 @@ def normalize_itj():
             logger.debug("No data in itj for tech %s", tech_info['name'])
             continue
 
-        data = data[:-1]
         data = statmodule.freq_month(data)
-        data = statmodule.normalize_series(data)
+        #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'itj' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
                              (('itj', tech_id, d, v) for d, v in data))
@@ -92,6 +90,9 @@ def normalize_itj():
 
 def normalize_sot():
     connection = psycopg2.connect(database=config['db_name'], user=config['db_user'], password=config['db_pass'])
+    total_cur = connection.cursor()
+    total_cur.execute("select time, value from rawdata where source = 'sot' and tech_id=103")  # total id
+    total_data = {d: v for d, v in statmodule.freq_month(total_cur.fetchall())}
     techs_cur = connection.cursor()
     techs_cur.execute("select id, info::json from techs")
     for tech_id, tech_info in techs_cur:
@@ -103,9 +104,10 @@ def normalize_sot():
             logger.debug("No data in sot for tech %s", tech_info['name'])
             continue
 
-        data = data[:-1]
+        #data = data[:-1]
         data = statmodule.freq_month(data)
-        data = statmodule.normalize_series(data)
+        data = [(d, v / total_data[d]) for d, v in data]
+        #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'sot' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
                              (('sot', tech_id, d, v) for d, v in data))
@@ -126,10 +128,11 @@ def normalize_sousers():
             logger.debug("No data in sousers for tech %s", tech_info['name'])
             continue
 
-        data = data[:-1]
+        #data = data[:-1]
         data = statmodule.freq_month(data)
+        data = statmodule.sort_ts(data)
         data = statmodule.divergence(data)
-        data = statmodule.normalize_series(data)
+        #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'sousers' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
                              (('sousers', tech_id, d, v) for d, v in data))
