@@ -3,6 +3,26 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Trends</title>
+    <style>
+        .main{
+            position: fixed;
+            left: 50%;
+            margin-top: 20%;
+            margin-left: -100px;
+            background-color: #fafafa;
+            box-shadow: 5px 5px 2px  #d3d3de;
+            width: 200px;
+            font-size: 10pt;
+            font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            border-radius: 3px;
+
+        }
+        .main span{
+            display: inline;
+            font-size: 12pt;
+            line-height: 2;
+        }
+    </style>
     <script>
         submit = function(){
             document.getElementById("tech_form").submit();
@@ -10,12 +30,12 @@
     </script>
 </head>
 <body>
-<div>
-    <span> Select technology</span>
+<div class="main">
+    <span> Select technology:</span>
 
     <form id="tech_form" method="get">
         <!--suppress XmlInvalidId -->
-        <label for="tech_selector">Technology</label>
+        <label for="tech_selector"></label>
         <select id="tech_selector" onchange="submit()" name="tech_selector">
             {% for tech_id, tech_name in [(tid, info['name']) for tid, info in techs if 'visible' not in info or
             info['visible'] == 1] %}
