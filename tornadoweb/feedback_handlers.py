@@ -99,7 +99,7 @@ class ShowFeedbacksHandler(tornado.web.RequestHandler):
 
         # pagination
         page = int(self.get_argument("pg", 1, True))
-        max_on_page = int(self.get_argument("mp", 2, True))
+        max_on_page = int(self.get_argument("mp", 10, True))
         req_params['pg'] = page
         req_params['mp'] = max_on_page
 
