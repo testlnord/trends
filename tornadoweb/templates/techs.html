@@ -148,8 +148,8 @@
         d3.selectAll(".fb-error").remove();
 
         var message = {ids: get_ids(),
-            text: document.getElementById("fb-message").value,
-            author: document.getElementById("fb-author").value};
+            text: encodeURIComponent(document.getElementById("fb-message").value),
+            author: encodeURIComponent(document.getElementById("fb-author").value)};
         d3.json("/feedback/send/"+JSON.stringify(message), function(err, resp){
             if (err){
                 console.log(err)

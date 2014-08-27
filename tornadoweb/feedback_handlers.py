@@ -5,7 +5,7 @@ import logging
 import datetime
 import math
 from tornado import template
-from urllib.parse import urlencode
+from urllib.parse import urlencode, unquote
 import psycopg2
 import tornado.web
 # noinspection PyUnresolvedReferences
@@ -27,6 +27,8 @@ class ReceiveFeedbackHandler(tornado.web.RequestHandler):
             if 'text' not in message or 'author' not in message or 'ids' not in message:
                 raise ValueError()
             tech_ids = (int(x) for x in message['ids'])
+            message['author'] = unquote(message['author'])
+            message['text'] = unquote(message['text'])
         except ValueError:
             self.logger.debug("Bad message received: %s", slug)
             self.write_error(406)
