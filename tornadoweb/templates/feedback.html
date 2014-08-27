@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body{
+            font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .all{
+            margin-left: 20%;
+        }
+        div{
+            display: block;
+            text-align: left;
+            padding: 10px;
+            margin: 10px 0 0 20px ;
+        }
+        .filters label, .filters select{
+            display: inline;
+        }
+        .filters select{
+
+        }
+        .messages{
+            width: 50%
+        }
+        .message-box{
+            border-top: 1px solid #304020;
+        }
+        .message-box span{
+            text-decoration: underline;
+            font-size: 16px;
+        }
+        .message-box p{
+            border-left: 1px solid #304020;
+            padding-left: 5px;
+        }
+        .pagination a,.pagination p{
+            display: inline;
+            margin: 10px 0;
+        }
+    </style>
+    <script>
+        var submit_page = function submit_page(){
+            var url = "/feedback5?";
+            var form = document.getElementById("refresh-form");
+
+            var selector = document.getElementById("tech_selector");
+            var tech_id = selector.options[selector.selectedIndex].value;
+            if (tech_id){
+                var hv = document.createElement("p");
+                hv.innerHTML = '<input type="hidden" name="ts" value="'+tech_id+'">';
+                form.appendChild(hv);
+                hv = undefined
+            }
+            var date_t = $("#date_to").val();
+            console.log(date_t);
+            if (date_t){
+                hv = document.createElement("p");
+                hv.innerHTML = '<input type="hidden" name="dt" value="'+date_t.replace(/\s/g, '')+'">';
+                form.appendChild(hv);
+                hv = undefined
+            }
+            var date_f = $("#date_from").val();
+            if (date_f){
+                hv = document.createElement("p");
+                hv.innerHTML = '<input type="hidden" name="df" value="'+date_f.replace(/\s/g, '')+'">';
+                form.appendChild(hv);
+                hv = undefined
+            }
+
+            form.submit()
+        }
+    </script>
+</head>
+<body>
+
+<div class="all">
+<div class="filters">
+    <label for="tech_selector">Technology</label>
+        <select id="tech_selector" name="tech_selector" onchange="submit_page()">
+            <option value=""></option>
+            {% for tech_id, tech_name  in techs %}
+            <option value="{{ tech_id }}"
+                {{"selected" if "ts" in req_params and tech_id in req_params["ts"] else ""}}
+            >{{ tech_name }}</option>
+            {% end %}
+        </select>
+
+    <label for="date_from"> Date from</label>
+    <input id="date_from" type="text" value="{{ req_params["df"] if "df" in req_params else "" }}">
+    <label for="date_to"> to</label>
+    <input id="date_to" type="text" value="{{ req_params["dt"] if "dt" in req_params else "" }}">
+</div>
+<div class="messages">
+    {% for _id, message, author, time, tech_ids in messages %}
+    <div class="message-box">
+        <span> {{author}}</span>
+        <p>{{ message}} </p>
+        <a href="/tech#{{ ','.join(str(x) for x in tech_ids) }}">Relevant page</a>
+    </div>
+    {% end %}
+</div>
+
+<div class="pagination"><p>Pages:</p>
+    {% for p_num in range(1,pages+1) %}
+    <a {{'href = {}pg={}'.format(my_url, p_num) if p_num != page else ''}}>
+    {{p_num}}
+    </a>
+    {% end %}
+</div>
+
+</div>
+<form id="refresh-form" visibility="False" style="display: none">
+</form>
+</body>
+<link rel="stylesheet" type="text/css" href="/images/jquery.datetimepicker.css">
+<script src="/images/jquery.js"></script>
+<script src="/images/jquery.datetimepicker.js"></script>
+<script>
+    jQuery('#date_from').datetimepicker({onSelectDate: submit_page, format:'Y m d',
+        timepicker:false
+            {% if 'df' in req_params %}
+                ,value:'{{ req_params['df'].strftime("%Y %m %d") }}'
+            {% end %}
+    });
+    jQuery('#date_to').datetimepicker({onchange: submit_page,format: 'Y m d',
+        timepicker:false
+            {% if 'dt' in req_params %}
+                ,value:'{{ req_params['dt'].strftime("%Y %m %d") }}'
+            {% end %}
+    });
+</script>
+</html>
