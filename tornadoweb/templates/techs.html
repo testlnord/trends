@@ -164,6 +164,28 @@
         });
 
     };
+    var getName = function getName(source){
+        switch (source){
+            case "google": return "Google trends";
+            case "itj": return "Itjobswatch.co.uk";
+            case "wiki": return "Wikipedia";
+            case "sot": return "StackOverflow Questions";
+            case "sousers": return "StackOverflow Users";
+            case "average": return "Average";
+            default : return source;
+        }
+    };
+    var getShortName = function getName(source){
+        switch (source){
+            case "google": return "Google";
+            case "itj": return "Itjobs";
+            case "wiki": return "Wikipedia";
+            case "sot": return "SO Questions";
+            case "sousers": return "SO Users";
+            case "average": return "Average";
+            default : return source;
+        }
+    };
     var downloadURL = function downloadURL(url) {
         var hiddenIFrameID = 'hiddenDownloader',
             iframe = document.getElementById(hiddenIFrameID);
@@ -228,7 +250,7 @@
                 }
             }
             if (Object.keys(source_data).length) {
-                d3.select("#sources").append("p").text(srcs[sid]);
+                d3.select("#sources").append("p").text(getName(srcs[sid]));
                 var svg_source = d3.select("#sources").append("svg")
                         .attr("width", (width + margin.left + margin.right) / 2)
                         .attr("height", (height + margin.top + margin.bottom) / 2)
@@ -348,7 +370,7 @@
                 .attr("dx", "1.35em")
                 .attr("dy", ".25em")
                 .text(function (d) {
-                    return d.name;
+                    return getShortName(d.name);
                 });
     }
 
