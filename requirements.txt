@@ -1,0 +1,14 @@
+Pillow >= 2.0.0
+psycopg2
+numpy
+tornado
+git+https://github.com/testlnord/google-trends-csv-downloader.git
+git+https://github.com/testlnord/google-api-python-client.git
+patsy
+pandas
+lxml
+jsmin
+cython >= 0.20.0
+statsmodel == 0.5.0
+aadict >= 0.2.1
+matplotlib
