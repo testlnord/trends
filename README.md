@@ -65,10 +65,16 @@ Start webserver from `tornadoweb` directory by running (`sudo` is optional.):
 sudo ./main.py start
 ```
 
+You can add your own page templates. Just put them into any dir and add `"template_dir"` parameter to your config file.
+
+For different static files location you can create `"staticfiles_dir"` parameter.
+
 #### Logging
 
 Updater and webserver store logs in `trends.log` and `websrv.log` files by default. If you want change all logging settings
 in configuration files. I recommend read [this](https://docs.python.org/2/library/logging.config.html) at first.
 
 
+### For developers
 
+If you want to change code always look into module docstrings first. Sometimes there is something useful.
