@@ -76,16 +76,16 @@ class ShowFeedbacksHandler(tornado.web.RequestHandler):
         date_from = self.get_argument("df", None, True)
         if date_from is not None:
             date_from = datetime.datetime.strptime(date_from, "%Y%m%d")
-            where.append("time > " + date_from.strftime("DATE '%Y %d %m'"))
+            where.append("time >= " + date_from.strftime("DATE '%Y %m %d'"))
             req_params["df"] = date_from
             url_params["df"] = date_from.strftime("%Y%m%d")
 
         date_to = self.get_argument("dt", None, True)
         if date_to is not None:
             date_to = datetime.datetime.strptime(date_to, "%Y%m%d")
-            where.append("time < " + date_to.strftime("DATE '%Y %d %m'"))
+            where.append("time <= " + date_to.strftime("DATE '%Y %m %d'"))
             req_params["dt"] = date_to
-            url_params["dt"] = date_from.strftime("%Y%m%d")
+            url_params["dt"] = date_to.strftime("%Y%m%d")
 
         if joins:
             query += ''.join(joins)

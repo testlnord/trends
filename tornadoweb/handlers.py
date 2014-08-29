@@ -19,6 +19,8 @@ class MainHandler(tornado.web.RequestHandler):
                                               password=config['db_pass'])
 
     def get(self):
+        self.redirect("/tech#1")
+        return
         tech_id = self.get_argument("tech_selector", '')
         try:
             tech_id = int(tech_id)

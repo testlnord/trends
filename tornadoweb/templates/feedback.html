@@ -128,7 +128,7 @@
                 ,value:'{{ req_params['df'].strftime("%Y %m %d") }}'
             {% end %}
     });
-    jQuery('#date_to').datetimepicker({onchange: submit_page,format: 'Y m d',
+    jQuery('#date_to').datetimepicker({onSelectDate: submit_page,format: 'Y m d',
         timepicker:false
             {% if 'dt' in req_params %}
                 ,value:'{{ req_params['dt'].strftime("%Y %m %d") }}'
