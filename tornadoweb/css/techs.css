@@ -1,0 +1,129 @@
+        .fb-form{
+            position: fixed;
+            display: block;
+            right: 15px;
+            width: 14%;
+            font-family: verdana, sans-serif;
+            font-size: 12pt;
+            border: 1px solid #e3e3e3;
+            border-radius: 2px;
+            box-shadow: 4px 3px 2px #e0e0e0;
+            padding: 4px;
+
+        }
+        .fb-desc{
+            text-align: right;
+        }
+        .fb-input{
+            padding-left: 5px;
+            width: 90%;
+        }
+        .fb-form label{
+            display: block;
+            margin-right: 100%;
+        }
+        .fb-form textarea{
+            height: 60px;
+        }
+        .fb-form input{
+            display: block;
+        }
+        .fb-error{
+            color:red;
+        }
+        a{
+            display: inline;
+            font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+            font-size: 10pt;
+            color: blue;
+            margin-right: 20px;
+        }
+        .link-box{
+            display: block;
+            text-align: left;
+            padding: 0;
+            margin: 0 0 0 50px;
+        }
+        .invis_selector {
+            display: none;
+        }
+
+        .tech_selector {
+            display: inline;
+
+        }
+
+        svg {
+            font: 10px sans-serif;
+            display: block;
+        }
+
+        .line {
+            fill: none;
+            clip-path: url(#clip);
+        }
+
+        .t0{
+            stroke:#7fc97f;
+            color: #7fc97f;
+        }
+        .t1{
+            stroke:#beaed4;
+            color:#beaed4;
+        }
+        .t2{
+            stroke:#fdc086;
+            color:#fdc086;
+        }
+        .t3{
+            stroke:#ffff99;
+            color:#ffff99;
+        }
+        .t4{
+            stroke:#386cb0;
+            color:#386cb0;
+        }
+
+
+        .google {
+            stroke: #e41a1c;
+            color: #e41a1c;
+        }
+
+        .wiki {
+            stroke: #984ea3;
+            color: #984ea3;
+        }
+
+        .sot {
+            stroke: #377eb8;
+            color: #377eb8;
+        }
+
+        .sousers {
+            stroke: #ff7f00;
+            color: #ff7f00;
+        }
+
+        .itj {
+            stroke: #4daf4a;
+            color: #4daf4a;
+        }
+
+        .average {
+            stroke: black;
+            color: black;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .brush .extent {
+            stroke: #fff;
+            fill-opasource: .125;
+            shape-rendering: crispEdges;
+        }
