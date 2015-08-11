@@ -20,4 +20,14 @@ if not "template_dir" in config:
 
 if not "staticfiles_dir" in config:
     config["staticfiles_dir"] = os.path.join(config["current_dir"], "images")
+
+if not "staticfiles_css_dir" in config:
+    config["staticfiles_css_dir"] = os.path.join(config["current_dir"], "css")
+
+if not "staticfiles_js_dir" in config:
+    config["staticfiles_js_dir"] = os.path.join(config["current_dir"], "js")
+
+
+
+
 logging.config.dictConfig(config['logging'])

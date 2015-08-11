@@ -15,6 +15,8 @@ class TrendsWebServer(daemon):
         logger.info("Logging initialized. Creating application...")
         application = tornado.web.Application([
             (r'/images/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_dir']}),
+            (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_css_dir']}),
+            (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_js_dir']}),
             (r"/", MainHandler),
             (r"/tech", TechsHandler),
             (r"/json/([^/]+)", AjaxHandler),
