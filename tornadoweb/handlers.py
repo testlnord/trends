@@ -92,7 +92,7 @@ def get_norm_data(connection, tids):
             if k == 'tech_name':
                 continue
             res[k] = [
-                {'date': d, 'value': (v - minmax_dict[k]['min']) / (minmax_dict[k]['max'] - minmax_dict[k]['min'])}
+                {'date': d, 'value': (v/minmax_dict[k]['max'])} #(v - minmax_dict[k]['min']) / (minmax_dict[k]['max'] - minmax_dict[k]['min'])}
                 for d, v in res[k].items()]
             if k == 'google' and len(res) > 2:
                 continue

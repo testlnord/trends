@@ -221,8 +221,9 @@
 
         var main_data = {};
         for (var tid = 0; tid < ids.length; tid++) {
-            main_data[data[ids[tid]].tech_name] = {data: data[ids[tid]].average.sort(function (a, b) {
-                return new Date(a.date) - new Date(b.date)
+            main_data[data[ids[tid]].tech_name] = {data: data[ids[tid]].average.sort(function (b, a) {
+                return (b.date > a.date) ? 1 : (b.date < a.date) ? -1 : 0;
+                //return new Date(a.date) - new Date(b.date)
             }), style: "t" + tid};
         }
         var main_div = d3.select("#main");
@@ -244,8 +245,9 @@
             var source_data = {};
             for (var tid = 0; tid < ids.length; tid++) {
                 if (data[ids[tid]][srcs[sid]]) {
-                    source_data[data[ids[tid]].tech_name] = {data: data[ids[tid]][srcs[sid]].sort(function (a, b) {
-                        return new Date(a.date) - new Date(b.date)
+                    source_data[data[ids[tid]].tech_name] = {data: data[ids[tid]][srcs[sid]].sort(function (b, a) {
+                        return (b.date > a.date) ? 1 : (b.date < a.date) ? -1 : 0;
+                        //return new Date(a.date) - new Date(b.date)
                     }), style: "t" + tid};
                 }
             }
@@ -272,8 +274,9 @@
                 return name !== "tech_name"
             });
             for (var sid = 0; sid < srcs.length; sid++) {
-                tech_data[srcs[sid]] = {data: data[ids[tid]][srcs[sid]].sort(function (a, b) {
-                    return new Date(a.date) - new Date(b.date)
+                tech_data[srcs[sid]] = {data: data[ids[tid]][srcs[sid]].sort(function (b, a) {
+                    return (b.date > a.date) ? 1 : (b.date < a.date) ? -1 : 0;
+                    //return new Date(a.date) - new Date(b.date)
                 }), style: srcs[sid]};
             }
             d3.select("#techs").append("p").text(data[ids[tid]].tech_name);
@@ -311,10 +314,10 @@
                 .domain(d3.extent(techs[0].data_points, function (d) {return d.date;}));
         var y = d3.scale.linear()
                 .range([height, 0])
-                .domain([
-                    d3.min(techs, function (c) {return d3.min(c.data_points, function (v) {return v.value;});}),
-                    d3.max(techs, function (c) {return d3.max(c.data_points, function (v) {return v.value;});})
-                ]);
+                .domain([0, 1]);
+                    //d3.min(techs, function (c) {return d3.min(c.data_points, function (v) {return v.value;});}),
+                    //d3.max(techs, function (c) {return d3.max(c.data_points, function (v) {return v.value;});})
+                //]);
         var xAxis = d3.svg.axis()
                 .scale(x)
                 .orient("bottom");
@@ -439,6 +442,7 @@
         }
     }
 </script>
+<p>Dear Safari users. Please, use other browser.</p>
 <div id="feedback" class = "fb-form">
     <p class = "fb-desc">
       Any comments?
