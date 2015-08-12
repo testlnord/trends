@@ -67,7 +67,8 @@ sudo ./main.py start
 
 You can add your own page templates. Just put them into any dir and add `"template_dir"` parameter to your config file.
 
-For different static files location you can create `"staticfiles_dir"` parameter.
+For different static files location you can create `"staticfiles_dir"`, `"staticfiles_js_dir"`
+and `"staticfiles_css_dir"`  parameters.
 
 #### Logging
 
