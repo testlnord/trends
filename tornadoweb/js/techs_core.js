@@ -300,5 +300,3 @@ function remove_selector() {
     }
 }
 
-// initialize everything
-$(page_load());
