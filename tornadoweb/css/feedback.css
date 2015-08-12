@@ -1,0 +1,38 @@
+body{
+    font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1;
+}
+.all{
+    margin-left: 20%;
+}
+div{
+    display: block;
+    text-align: left;
+    padding: 10px;
+    margin: 10px 0 0 20px ;
+}
+.filters label, .filters select{
+    display: inline;
+}
+.filters select{
+
+}
+.messages{
+    width: 50%
+}
+.message-box{
+    border-top: 1px solid #304020;
+}
+.message-box span{
+    text-decoration: underline;
+    font-size: 16px;
+}
+.message-box p{
+    border-left: 1px solid #304020;
+    padding-left: 5px;
+}
+.pagination a,.pagination p{
+    display: inline;
+    margin: 10px 0;
+}
