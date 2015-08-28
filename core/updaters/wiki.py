@@ -15,6 +15,14 @@ class WikiUpdater(DataUpdater):
         super().__init__(self.setting_path, __name__)
         self.logger.info("Wiki updater initialized.")
 
+    def add_new_tech(self, tech_id, pages):
+        self.settings['techs'][str(tech_id)] = {
+            "last_date": datetime.date(2000,1 ,1).strftime(config['date_format']),
+            "pages":pages
+        }
+        self.commit_settings()
+
+
     def update_data(self):
         threshold_date = get_threshold_date(self.settings['refresh_time']).strftime(config['date_format'])
         self.logger.info("Updating data older than %s", threshold_date)

@@ -24,4 +24,4 @@ logging.config.dictConfig(config['logging'])
 
 config = aadict.aadict.d2ar(config)
 
-#todo make settings checking
+# todo make settings checking

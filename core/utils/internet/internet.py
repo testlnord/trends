@@ -4,6 +4,7 @@ import urllib.request as ur
 import urllib.parse
 import urllib.error
 import time
+import re
 from ...config import config
 from http.client import BadStatusLine
 
@@ -55,6 +56,23 @@ def get_from_url(url, min_delay=1, max_delay=3, binary=False, force_wait=False, 
         return data
     else:
         return data.decode()
+
+
+def is_valid_url(url: str) -> bool:
+    """ URL validity checker
+    Based on django URL-checking expression got from http://stackoverflow.com/questions/7160737/
+    :param url: URL to check
+    :return: True for valid URL, False otherwise
+    """
+    return bool(is_valid_url.url_re.match(url))
+
+is_valid_url.url_re = re.compile(
+    r'^(?:http|ftp)s?://'  # http:// or https://
+    r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  #domain...
+    r'localhost|'  #localhost...
+    r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+    r'(?::\d+)?'  # optional port
+    r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
 if __name__ == "__main__":

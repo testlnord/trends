@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-from config import config
+from tornadoweb.config import config
 import logging
 import sys
 import tornado.ioloop
 import tornado.web
-from handlers import MainHandler, AjaxHandler, TechsHandler, CsvHandler
-from feedback_handlers import ReceiveFeedbackHandler, ShowFeedbacksHandler
-from daemon3x import daemon
+from tornadoweb.handlers import MainHandler, AjaxHandler, TechsHandler, CsvHandler
+from tornadoweb.info_handlers import TechInfoHandler, TechSearchHandler
+from tornadoweb.tech_add_handlers import AddFormHandler, AddFormAjaxHandler
+from tornadoweb.feedback_handlers import ReceiveFeedbackHandler, ShowFeedbacksHandler
+from tornadoweb.daemon3x import daemon
 
 
 class TrendsWebServer(daemon):
@@ -22,7 +24,11 @@ class TrendsWebServer(daemon):
             (r"/json/([^/]+)", AjaxHandler),
             (r"/csv/([^/]+)", CsvHandler),
             (r"/feedback/send/([^/]+)", ReceiveFeedbackHandler),
-            (r"/feedback5", ShowFeedbacksHandler)
+            (r"/feedback5", ShowFeedbacksHandler),
+            (r"/tech_info$", TechSearchHandler),
+            (r"/tech_info([^/]+)", TechInfoHandler),
+            (r"/tech_add/json/", AddFormAjaxHandler),
+            (r"/tech_add", AddFormHandler)
 
         ])
         logger.info("Application created. Starting to listen port...")

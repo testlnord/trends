@@ -2,7 +2,8 @@
 import json
 import logging
 import psycopg2
-from ..config import config
+from core.config import config
+
 
 class DataUpdater:
     def __init__(self, setting_path, logger_name):
@@ -15,6 +16,9 @@ class DataUpdater:
         except:
             self.logger.error("Couldn't connect to database")
             raise
+
+    def add_new_tech(self, tech_id, info):
+        raise NotImplemented
 
     def update_data(self):
         raise NotImplemented

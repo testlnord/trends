@@ -14,6 +14,13 @@ class SotUpdater(DataUpdater):
         super().__init__(self.setting_path, __name__)
         self.crawler = sot_crawler.SotCrawler(self.settings["apikey"])
 
+    def add_new_tech(self, tech_id, tag):
+        self.settings['techs'][str(tech_id)] = {
+            "last_date": datetime.date(2000, 1, 1).strftime(config['date_format']),
+            "tag": [tag]
+        }
+        self.commit_settings()
+
     def update_data(self):
         threshold_date = get_threshold_date(self.settings['refresh_time']).strftime(config['date_format'])
         dirty = False

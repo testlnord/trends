@@ -1,4 +1,5 @@
 """ Itjobs specific updater"""
+import datetime
 
 from .parent import DataUpdater
 from ..utils.stuff import get_threshold_date
@@ -13,6 +14,13 @@ class ItjUpdater(DataUpdater):
         super().__init__(self.setting_path, __name__)
 
         self.crawler = ItjCrawler()
+
+    def add_new_tech(self, tech_id, link):
+        self.settings['techs'][str(tech_id)] = {
+            "last_date": datetime.date(2000, 1, 1).strftime(config['date_format']),
+            "link": [link]
+        }
+        self.commit_settings()
 
     def update_data(self):
         threshold_date = get_threshold_date(self.settings['refresh_time']).strftime(config['date_format'])
