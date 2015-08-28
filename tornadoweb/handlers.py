@@ -5,8 +5,8 @@ import logging
 from tornado import template
 import psycopg2
 import tornado.web
-# noinspection PyUnresolvedReferences
-from config import config
+
+from tornadoweb.config import config
 import json
 from itertools import zip_longest
 

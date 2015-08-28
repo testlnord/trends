@@ -8,8 +8,8 @@ from tornado import template
 from urllib.parse import urlencode, unquote
 import psycopg2
 import tornado.web
-# noinspection PyUnresolvedReferences
-from config import config
+
+from tornadoweb.config import config
 import json
 
 
