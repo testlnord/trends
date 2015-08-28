@@ -5,8 +5,9 @@ div.alpha{
     left: 10%;
     display: block;
     margin: 20px;
+    padding: 4px;
     font-size: 14px;
-    border-width: 0 2px 2px 0;
+    border-width: 2px;
     border-style: solid;
     border-color: red
 }
