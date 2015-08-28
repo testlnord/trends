@@ -1,9 +1,14 @@
-body{
-    background-attachment: fixed;
-    background-image: url("http://www.reflexskis.co.nz/wp-content/uploads/2013/06/demo-1.png");
-    background-position: top left;
-    background-repeat: no-repeat;
-    background-size: 100px;
+div.alpha{
+   width: 100px;
+    position: fixed;
+    top: 0;
+    left: 10%;
+    display: block;
+    margin: 20px;
+    font-size: 14px;
+    border-width: 0 2px 2px 0;
+    border-style: solid;
+    border-color: red
 }
 
 .fb-form{
