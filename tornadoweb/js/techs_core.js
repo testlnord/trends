@@ -47,6 +47,7 @@ var svg;
 function update(error, data) {
     if (error){
         d3.select("#main").append("p").text("Error, sorry :(");
+        d3.select("#main").append("p").text("May be data is not downloaded yet. You sure that something must be here? Please inform us using feedback form on the right.")
         return;
     }
     width =  parseInt(window.getComputedStyle(document.getElementById("plots")).width)
