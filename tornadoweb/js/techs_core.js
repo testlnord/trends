@@ -76,7 +76,7 @@ function update(error, data) {
     svg.height = height;
     plot(svg, main_data);
 
-    var srcs = ["google", "itj", "sot", "sousers", "wiki"];
+    var srcs = ["itj", "sot", "sousers", "wiki", "google"];
     for (var sid = 0; sid < srcs.length; sid++){
         var source_data = {};
         for (var tid = 0; tid < ids.length; tid++) {
