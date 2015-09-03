@@ -113,3 +113,11 @@ class GoogleUpdater(DataUpdater):
                 v = int(row[1])
                 result.append((d.date(), v))
         return result
+
+    def getWordsForTech(self, tech_id: int):
+        try:
+            tech_data = self.settings['techs'][str(tech_id)]
+            return tech_data["name"]
+        except KeyError as e:
+            print(e)
+            return "---"

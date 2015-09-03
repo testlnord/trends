@@ -50,3 +50,11 @@ class ItjUpdater(DataUpdater):
                 except:
                     self.logger.warning("Failed to update tech %s with pic %s", tech_id, pic_name, exc_info=True)
         return dirty
+
+    def getWordsForTech(self, tech_id: int):
+        try:
+            tech_data = self.settings['techs'][str(tech_id)]
+            return tech_data["link"]
+        except KeyError as e:
+            print(e)
+            return "---"

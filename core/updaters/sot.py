@@ -52,3 +52,11 @@ class SotUpdater(DataUpdater):
                     self.commit_settings()
 
         return dirty
+
+    def getWordsForTech(self, tech_id: int):
+        try:
+            tech_data = self.settings['techs'][str(tech_id)]
+            return tech_data["tag"]
+        except KeyError as e:
+            print(e)
+            return "---"

@@ -102,3 +102,11 @@ class WikiUpdater(DataUpdater):
             result.append((date, value))
         return sorted(result, key=lambda x: x[0])
 
+    def getWordsForTech(self, tech_id: int):
+        try:
+            tech_data = self.settings['techs'][str(tech_id)]
+            return tech_data["pages"]
+        except KeyError as e:
+            print(e)
+            return "---"
+
