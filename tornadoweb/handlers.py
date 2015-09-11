@@ -45,9 +45,12 @@ class TechsHandler(tornado.web.RequestHandler):
         page_template = self.template_loader.load('techs.html')
         cur = self.db_connection.cursor()
         cur.execute("SELECT id, info::JSON FROM techs")
-        techs = cur.fetchall();
-        techs = sorted(techs, key=lambda x: x['name'])
-        self.write(page_template.generate(techs=techs))
+        technologies = cur.fetchall()
+        try:
+            technologies = sorted(technologies, key=lambda x: x[1]['name'].lower())
+            self.write(page_template.generate(techs=technologies))
+        except Exception as e:
+            self.write(str(e))
 
 
 def get_norm_data(connection, tids):
