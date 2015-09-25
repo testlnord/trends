@@ -10,7 +10,7 @@ def get_threshold_date(time, from_date=None) -> datetime.datetime:
     """
     assert time in ['month', 'week', 'day'], "Wrong time value"
     if from_date is None:
-        from_date = datetime.datetime.now().date()
+        from_date = datetime.datetime.now()
     if time == 'month':
         month = from_date.month - 1
         if month == 0:
