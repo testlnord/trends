@@ -54,7 +54,7 @@ class ShowFeedbacksHandler(tornado.web.RequestHandler):
 
     def get(self):
         cur = self.db_connection.cursor()
-        cur.execute("SELECT id, info::JSON->>'name' FROM techs WHERE (info::JSON->>'visible') IS NULL")
+        cur.execute("SELECT id, name FROM techs WHERE (info::JSON->>'visible') IS NULL")
         techs = cur.fetchall()
 
         query = "SELECT id, message, author, time, array_agg(ft.tech_id) AS tech_ids FROM feedback " \

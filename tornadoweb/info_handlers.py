@@ -23,7 +23,7 @@ class TechSearchHandler(tornado.web.RequestHandler):
     def get(self):
         page_template = self.template_loader.load('tech_search.html')
         cur = self.db_connection.cursor()
-        cur.execute("SELECT id, info::JSON FROM techs")
+        cur.execute("SELECT id, name, info::JSON FROM techs")
         all_techs = cur.fetchall()
         cur.execute("SELECT name from sources")
         all_sources = cur.fetchall()
@@ -43,7 +43,7 @@ class TechInfoHandler(tornado.web.RequestHandler):
     def get(self):
         page_template = self.template_loader.load('techs_info.html')
         cur = self.db_connection.cursor()
-        cur.execute("SELECT id, info::JSON FROM techs")
+        cur.execute("SELECT id, name, info::JSON FROM techs")
         all_techs = cur.fetchall()
         cur.execute("SELECT name from sources")
         all_sources = cur.fetchall()

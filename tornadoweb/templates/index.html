@@ -37,7 +37,7 @@
         <!--suppress XmlInvalidId -->
         <label for="tech_selector"></label>
         <select id="tech_selector" onchange="submit()" name="tech_selector">
-            {% for tech_id, tech_name in [(tid, info['name']) for tid, info in techs if 'visible' not in info or
+            {% for tech_id, tech_name in [(tid, name) for tid, name, info in techs if 'visible' not in info or
             info['visible'] == 1] %}
             <option value="{{ (tech_id) }}">{{ (tech_name) }}</option>
             {% end %}

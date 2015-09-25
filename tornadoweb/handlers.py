@@ -2,6 +2,8 @@
 Handlers for all tech data
 """
 import logging
+import sys
+import traceback
 from tornado import template
 import psycopg2
 import tornado.web
@@ -44,20 +46,23 @@ class TechsHandler(tornado.web.RequestHandler):
     def get(self):
         page_template = self.template_loader.load('techs.html')
         cur = self.db_connection.cursor()
-        cur.execute("SELECT id, info::JSON FROM techs")
+        cur.execute("SELECT id, name, info::JSON FROM techs")
         technologies = cur.fetchall()
         try:
-            technologies = sorted(technologies, key=lambda x: x[1]['name'].lower())
+            technologies = sorted(technologies, key=lambda x: x[1].lower())
             self.write(page_template.generate(techs=technologies))
         except Exception as e:
+            t, e, tb = sys.exc_info()
             self.write(str(e))
+            self.write("\n<br>\n")
+            self.write(traceback.format_exc().replace('\n','\n<br>\n'))
 
 
 def get_norm_data(connection, tids):
     cur = connection.cursor()
     a = ','.join((str(x) for x in tids))
-    cur.execute("SELECT id, info::JSON FROM techs WHERE id IN (" + a + ')')
-    result = {i: {'tech_name': info['name']} for i, info in cur.fetchall()}
+    cur.execute("SELECT id, name, info::JSON FROM techs WHERE id IN (" + a + ')')
+    result = {i: {'tech_name': name} for i, name, info in cur.fetchall()}
     for tid in tids:
         res = {}
         cur.execute("select source, to_char(time, 'YYYY MM DD'), value from reports_1 where tech_id = %s", (tid,))
@@ -99,7 +104,7 @@ def get_norm_data(connection, tids):
             res[k] = [
                 {'date': d, 'value': (v/minmax_dict[k]['max'])} #(v - minmax_dict[k]['min']) / (minmax_dict[k]['max'] - minmax_dict[k]['min'])}
                 for d, v in res[k].items()]
-            if k == 'google' and len(res) > 2:
+            if k == 'google' and len(res) > 1:
                 continue
             if not average:
                 average = {d['date']: [d['value']] for d in res[k]}
@@ -149,7 +154,7 @@ class CsvHandler(tornado.web.RequestHandler):
         if len(args) == 1 and args[0].isnumeric():
             query = "SELECT source AS name, time, value FROM rawdata WHERE tech_id = " + args[0]
         else:
-            query = "SELECT info::JSON->>'name' AS name, time, value FROM rawdata " \
+            query = "SELECT name, time, value FROM rawdata " \
                     "inner JOIN techs ON tech_id = id " \
                     "WHERE  tech_id IN (" + ','.join(args[1:]) + ") AND source = '" + args[0] + "'"
         self.logger.debug("Selecting query: %s", query)
@@ -196,7 +201,6 @@ class AjaxHandler(tornado.web.RequestHandler):
         super().__init__(*args, **kwargs)
         self.db_connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
                                               password=config['db_pass'])
-
 
     def get(self, slug):
         try:
