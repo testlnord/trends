@@ -44,10 +44,10 @@ def main():
     tech_name = get_name_by_id(tech_id)
 
     print("Keywords for technology: {} (id={})".format(tech_name, tech_id))
-    print("Google: ", GoogleUpdater().getWordsForTech(tech_id))
-    print("Wiki: ", WikiUpdater().getWordsForTech(tech_id))
-    print("SO: ", SotUpdater().getWordsForTech(tech_id))
-    print("Itj: ", ItjUpdater().getWordsForTech(tech_id))
+    print("Google: ", GoogleUpdater().get_words_for_tech(tech_id))
+    print("Wiki: ", WikiUpdater().get_words_for_tech(tech_id))
+    print("SO: ", SotUpdater().get_words_for_tech(tech_id))
+    print("Itj: ", ItjUpdater().get_words_for_tech(tech_id))
 
 
 if __name__ == "__main__":
