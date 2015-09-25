@@ -12,48 +12,38 @@ class SotUpdater(DataUpdater):
 
     def __init__(self):
         super().__init__(self.setting_path, __name__)
-        self.crawler = sot_crawler.SotCrawler(self.settings["apikey"])
+        self.crawler = sot_crawler.SotCrawler(self.source_config["apikey"])
 
     def add_new_tech(self, tech_id, tag):
-        start_date = self.settings['earliest_date'] if 'earliest_date' in self.settings \
-            else datetime.date(2000, 1, 1).strftime(config['date_format'])
+        start_date = self.source_config['earliest_date'] if 'earliest_date' in self.source_config \
+            else datetime.date(2001, 1, 1).strftime(config['date_format'])
         self.settings['techs'][str(tech_id)] = {
-            "last_date": start_date,
             "tag": [tag]
         }
+        self.last_dates[str(tech_id)] = start_date
         self.commit_settings()
 
-    def update_data(self):
-        threshold_date = get_threshold_date(self.settings['refresh_time']).strftime(config['date_format'])
-        dirty = False
-        for tech_id, tech in self.settings['techs'].items():
-            if tech['last_date'] < threshold_date:
-                last_date = datetime.datetime.strptime(tech['last_date'], config['date_format']) - \
-                    datetime.timedelta(days=3)
-                tag = tech['tag'][0]
-                self.logger.debug("Getting data for tag: %s", tag)
-                data = self.crawler.get_data(tag, last_date)
+    def get_data(self, tech_id):
+        last_date =  datetime.datetime.strptime(self.last_dates[tech_id], config['date_format']) - \
+                        datetime.timedelta(days=3)
+        tag = self.settings[tech_id]['tag'][0]
+        self.logger.debug("Getting data for tag: %s", tag)
+        data = self.crawler.get_data(tag, last_date)
+        return data
 
-                if data:
-                    max_date = max(data, key=lambda x: x[0])[0]
-                    min_date = min(data, key=lambda x: x[0])[0]
+    def update_db_data(self, data, tech_id):
+        max_date = max(data, key=lambda x: x[0])[0]
+        min_date = min(data, key=lambda x: x[0])[0]
 
-                    self.logger.debug("Updating database")
-                    cur = self.connection.cursor()
-                    cur.execute("delete from rawdata where source='sot' and tech_id = %s and time >= %s",
-                                (tech_id, min_date))
-                    cur.executemany("insert into rawdata(source, tech_id, time, value) values (%s, %s, %s, %s)",
-                                    (('sot', tech_id, d, v) for d, v in data))
-                    self.connection.commit()
-                    dirty = True
+        self.logger.debug("Updating database")
+        cur = self.connection.cursor()
+        cur.execute("delete from rawdata where source='sot' and tech_id = %s and time >= %s",
+                (tech_id, min_date))
+        cur.executemany("insert into rawdata(source, tech_id, time, value) values (%s, %s, %s, %s)",
+                    (('sot', tech_id, d, v) for d, v in data))
+        self.connection.commit()
 
-                    self.logger.debug("Updating settings")
-                    self.settings['techs'][tech_id]['last_date'] = max_date.strftime(config['date_format'])
-                    self.commit_settings()
-
-        return dirty
-
-    def getWordsForTech(self, tech_id: int):
+    def get_words_for_tech(self, tech_id: int):
         try:
             tech_data = self.settings['techs'][str(tech_id)]
             return tech_data["tag"]

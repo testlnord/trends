@@ -9,7 +9,7 @@ from ..config import config, project_root
 
 
 class WikiUpdater(DataUpdater):
-    setting_path = project_root+"/src_conf/wiki.json"
+    setting_path = project_root + "/src_conf/wiki.json"
 
     def __init__(self):
         super().__init__(self.setting_path, __name__)
@@ -19,45 +19,33 @@ class WikiUpdater(DataUpdater):
         start_date = self.settings['earliest_date'] if 'earliest_date' in self.settings \
             else datetime.date(2000, 1, 1).strftime(config['date_format'])
         self.settings['techs'][str(tech_id)] = {
-            "last_date": start_date,
             "pages": pages
         }
+        self.last_dates[str(tech_id)] = start_date
         self.commit_settings()
 
+    def get_data(self, tech_id):
+        last_date = datetime.datetime.strptime(self.last_dates[tech_id], config['date_format'])
+        page_datas = []
+        for page in self.settings[tech_id]['pages']:
+            self.logger.debug("Getting data for page %s", page)
+            page_datas.append(self.get_page_data(page, last_date))
 
-    def update_data(self):
-        threshold_date = get_threshold_date(self.settings['refresh_time']).strftime(config['date_format'])
-        self.logger.info("Updating data older than %s", threshold_date)
+        self.logger.debug("Merging data.")
+        tech_data = self.merge_data(page_datas)
+        return tech_data
 
-        dirty = False
-        for tech_id, tech in self.settings['techs'].items():
-            if tech['last_date'] < threshold_date:
-                last_date = datetime.datetime.strptime(tech['last_date'], config['date_format'])
-                page_datas = []
-                for page in tech['pages']:
-                    self.logger.debug("Getting data for page %s", page)
-                    page_datas.append(self.get_page_data(page, last_date))
+    def update_db_data(self, data, tech_id):
+        min_date = min(data, key=lambda x: x[0])[0]
+        max_date = max(data, key=lambda x: x[0])[0]
 
-                self.logger.debug("Merging data.")
-                tech_data = self.merge_data(page_datas)
-
-
-                min_date = min(tech_data, key=lambda x: x[0])[0]
-                max_date = max(tech_data, key=lambda x: x[0])[0]
-
-                self.logger.debug("Updating values in database")
-                cur = self.connection.cursor()
-                cur.execute("delete from rawdata where source = 'wiki' and tech_id = %s and time >= %s", (tech_id, min_date))
-                cur.executemany("insert into rawdata(source, tech_id, time, value) values(%s, %s, %s, %s)",
-                                (('wiki', tech_id, d, v) for d, v in tech_data))
-                self.connection.commit()
-                dirty = True
-
-                self.logger.debug("Updating values in settings")
-                self.settings['techs'][tech_id]['last_date'] = max_date.strftime(config['date_format'])
-                self.commit_settings()
-
-        return dirty
+        self.logger.debug("Updating values in database")
+        cur = self.connection.cursor()
+        cur.execute("delete from rawdata where source = 'wiki' and tech_id = %s and time >= %s",
+                    (tech_id, min_date))
+        cur.executemany("insert into rawdata(source, tech_id, time, value) values(%s, %s, %s, %s)",
+                        (('wiki', tech_id, d, v) for d, v in data))
+        self.connection.commit()
 
     def get_page_data(self, page_name, from_date):
         page_name = page_name.replace(" ", "_")
@@ -102,11 +90,10 @@ class WikiUpdater(DataUpdater):
             result.append((date, value))
         return sorted(result, key=lambda x: x[0])
 
-    def getWordsForTech(self, tech_id: int):
+    def get_words_for_tech(self, tech_id: int):
         try:
             tech_data = self.settings['techs'][str(tech_id)]
             return tech_data["pages"]
         except KeyError as e:
             print(e)
             return "---"
-
