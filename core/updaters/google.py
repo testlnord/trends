@@ -13,10 +13,10 @@ class OutOfProxies(Exception):
 
 
 class GoogleUpdater(DataUpdater):
-    setting_path = project_root + "/src_conf/google.json"
+
 
     def __init__(self):
-        super().__init__(self.setting_path, __name__)
+        super().__init__('google', __name__)
 
         self.proxy_iter = iter(self.source_config["proxies"])
         self.make_google_connection()

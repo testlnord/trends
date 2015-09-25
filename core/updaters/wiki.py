@@ -9,10 +9,8 @@ from ..config import config, project_root
 
 
 class WikiUpdater(DataUpdater):
-    setting_path = project_root + "/src_conf/wiki.json"
-
     def __init__(self):
-        super().__init__(self.setting_path, __name__)
+        super().__init__('wiki', __name__)
         self.logger.info("Wiki updater initialized.")
 
     def add_new_tech(self, tech_id, pages):
@@ -25,7 +23,7 @@ class WikiUpdater(DataUpdater):
         self.commit_settings()
 
     def get_data(self, tech_id):
-        last_date = datetime.datetime.strptime(self.last_dates[tech_id], config['date_format'])
+        last_date = self.last_dates[tech_id]
         page_datas = []
         for page in self.settings[tech_id]['pages']:
             self.logger.debug("Getting data for page %s", page)

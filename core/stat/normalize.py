@@ -106,7 +106,7 @@ def normalize_sot():
 
         #data = data[:-1]
         data = statmodule.freq_month(data)
-        data = [(d, v / total_data[d]) for d, v in data]
+        data = [(d, v / total_data[d] if d in total_data else 0) for d, v in data]
         #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'sot' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",

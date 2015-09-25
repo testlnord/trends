@@ -16,7 +16,7 @@ class DataUpdater:
             raise
 
         self.last_dates = {}
-        self.settings = {'techs': {}}
+        self.settings = {}
         self.source_config = {}
 
         self.source_name = source_name
@@ -44,12 +44,13 @@ class DataUpdater:
     def commit_settings(self):
         cur = self.connection.cursor()
         for tech_id in self.last_dates:
-            cur.execute("update source_settings (settings, last_update_date) set (%s, %s) "
+            cur.execute("update source_settings set (settings, last_update_date) = (%s, %s) "
                         "where source = %s AND tech_id = %s",
                         (json.dumps(self.settings[tech_id]), self.last_dates[tech_id],
                          self.source_name, tech_id))
 
-        cur.execute("update sources (config) set (%s) where name = %s", (self.source_config, self.source_name))
+        cur.execute("update sources set config = %s where name = %s", (json.dumps(self.source_config),
+                                                                       self.source_name))
         self.connection.commit()
 
 
@@ -62,8 +63,8 @@ class DataUpdater:
 
         time_threshold = get_threshold_date(self.source_config['refresh_time'])
         dirty = False
-        for tech_id in self.settings.items():
-            if self.last_dates[tech_id] < time_threshold.strftime(config['date_format']):
+        for tech_id in self.settings:
+            if self.last_dates[tech_id] < time_threshold.date():
                 self.logger.info("Updating tech: %s", tech_id)
                 data = self.get_data(tech_id)
 

@@ -22,7 +22,11 @@ class SotCrawler:
     def get_data(self, tag, date_from, date_to=None) -> list:
         if date_to is None:
             date_to = datetime.datetime.today()
-        date_from -= datetime.timedelta(days=-date_from.weekday())  # getting monday date
+        try:
+            date_from.hour
+        except:
+            date_from = datetime.datetime.fromordinal(date_from.toordinal())
+        #date_from -= datetime.timedelta(days=-date_from.weekday())  # getting monday date
 
         tag = internet.quote(tag.replace(" ", "-"))
         result = []

@@ -8,10 +8,9 @@ from ..crawlers import sot_crawler
 
 
 class SotUpdater(DataUpdater):
-    setting_path = project_root+"/src_conf/sot.json"
 
     def __init__(self):
-        super().__init__(self.setting_path, __name__)
+        super().__init__('sot', __name__)
         self.crawler = sot_crawler.SotCrawler(self.source_config["apikey"])
 
     def add_new_tech(self, tech_id, tag):
@@ -24,8 +23,7 @@ class SotUpdater(DataUpdater):
         self.commit_settings()
 
     def get_data(self, tech_id):
-        last_date =  datetime.datetime.strptime(self.last_dates[tech_id], config['date_format']) - \
-                        datetime.timedelta(days=3)
+        last_date = self.last_dates[tech_id] - datetime.timedelta(days=3)
         tag = self.settings[tech_id]['tag'][0]
         self.logger.debug("Getting data for tag: %s", tag)
         data = self.crawler.get_data(tag, last_date)
