@@ -15,7 +15,7 @@ class ItjUpdater(DataUpdater):
         self.crawler = ItjCrawler()
 
     def add_new_tech(self, tech_id, link):
-        self.settings['techs'][str(tech_id)] = {
+        self.settings[str(tech_id)] = {
             "link": [link]
         }
         self.last_dates[str(tech_id)] = datetime.date(2000, 1, 1).strftime(config['date_format'])
@@ -39,7 +39,7 @@ class ItjUpdater(DataUpdater):
 
     def get_words_for_tech(self, tech_id: int):
         try:
-            tech_data = self.settings['techs'][str(tech_id)]
+            tech_data = self.settings[str(tech_id)]
             return tech_data["link"]
         except KeyError as e:
             print(e)

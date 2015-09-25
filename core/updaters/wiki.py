@@ -18,7 +18,7 @@ class WikiUpdater(DataUpdater):
     def add_new_tech(self, tech_id, pages):
         start_date = self.settings['earliest_date'] if 'earliest_date' in self.settings \
             else datetime.date(2000, 1, 1).strftime(config['date_format'])
-        self.settings['techs'][str(tech_id)] = {
+        self.settings[str(tech_id)] = {
             "pages": pages
         }
         self.last_dates[str(tech_id)] = start_date
@@ -92,7 +92,7 @@ class WikiUpdater(DataUpdater):
 
     def get_words_for_tech(self, tech_id: int):
         try:
-            tech_data = self.settings['techs'][str(tech_id)]
+            tech_data = self.settings[str(tech_id)]
             return tech_data["pages"]
         except KeyError as e:
             print(e)

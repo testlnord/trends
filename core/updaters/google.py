@@ -24,7 +24,7 @@ class GoogleUpdater(DataUpdater):
         self.logger.info("Google updater initialized.")
 
     def add_new_tech(self, tech_id, name):
-        self.settings['techs'][str(tech_id)] = {
+        self.settings[str(tech_id)] = {
             "name": [name]
         }
         self.last_dates[str(tech_id)] = datetime.date(2000, 1, 1).strftime(config['date_format'])
@@ -94,7 +94,7 @@ class GoogleUpdater(DataUpdater):
 
     def get_words_for_tech(self, tech_id: int):
         try:
-            tech_data = self.settings['techs'][str(tech_id)]
+            tech_data = self.settings[str(tech_id)]
             return tech_data["name"]
         except KeyError as e:
             print(e)

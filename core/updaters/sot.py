@@ -17,7 +17,7 @@ class SotUpdater(DataUpdater):
     def add_new_tech(self, tech_id, tag):
         start_date = self.source_config['earliest_date'] if 'earliest_date' in self.source_config \
             else datetime.date(2001, 1, 1).strftime(config['date_format'])
-        self.settings['techs'][str(tech_id)] = {
+        self.settings[str(tech_id)] = {
             "tag": [tag]
         }
         self.last_dates[str(tech_id)] = start_date
@@ -45,7 +45,7 @@ class SotUpdater(DataUpdater):
 
     def get_words_for_tech(self, tech_id: int):
         try:
-            tech_data = self.settings['techs'][str(tech_id)]
+            tech_data = self.settings[str(tech_id)]
             return tech_data["tag"]
         except KeyError as e:
             print(e)

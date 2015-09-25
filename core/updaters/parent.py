@@ -35,7 +35,7 @@ class DataUpdater:
                     (self.source_name,))
 
         for row in cur.fetchall():
-            self.settings['techs'][row[0]] = row[1]
+            self.settings[row[0]] = row[1]
             self.last_dates[row[0]] = row[2]
 
         cur.execute("select config from sources where name = %s", (self.source_name,))
@@ -46,7 +46,7 @@ class DataUpdater:
         for tech_id in self.last_dates:
             cur.execute("update source_settings (settings, last_update_date) set (%s, %s) "
                         "where source = %s AND tech_id = %s",
-                        (json.dumps(self.settings["techs"][tech_id]), self.last_dates[tech_id],
+                        (json.dumps(self.settings[tech_id]), self.last_dates[tech_id],
                          self.source_name, tech_id))
 
         cur.execute("update sources (config) set (%s) where name = %s", (self.source_config, self.source_name))
@@ -62,7 +62,7 @@ class DataUpdater:
 
         time_threshold = get_threshold_date(self.source_config['refresh_time'])
         dirty = False
-        for tech_id in self.settings['techs'].items():
+        for tech_id in self.settings.items():
             if self.last_dates[tech_id] < time_threshold.strftime(config['date_format']):
                 self.logger.info("Updating tech: %s", tech_id)
                 data = self.get_data(tech_id)
