@@ -6,7 +6,7 @@ from core.updaters.parent import DataUpdater
 from core.utils.stuff import get_threshold_date
 from core.config import config, project_root
 from core.crawlers.itj_crawler import ItjCrawler
-
+import traceback
 
 class ItjUpdater(DataUpdater):
 
@@ -30,7 +30,8 @@ class ItjUpdater(DataUpdater):
             data = self.crawler.get_data(pic_name)
             return data
         except Exception as e:
-            self.logger.error("Can't get data for image: %s\n%s\n%s", pic_name, str(e), sys.exc_info()[2])
+            self.logger.error("Can't get data for image: %s\n%s\n%s", pic_name,
+                              traceback.format_exc(), '\n'.join(traceback.format_tb(sys.exc_info()[2])))
             return None
 
     def update_db_data(self, data, tech_id):
