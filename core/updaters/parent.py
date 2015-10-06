@@ -48,7 +48,13 @@ class DataUpdater:
                         "where source = %s AND tech_id = %s",
                         (json.dumps(self.settings[tech_id]), self.last_dates[tech_id],
                          self.source_name, tech_id))
-
+            if cur.rowcount == 0:
+                cur.execute("insert into source_settings (tech_id, source, settings, last_update_date) "
+                            "values (%s, %s, %s, %s)",
+                            (tech_id,
+                             self.source_name,
+                             json.dumps(self.settings[tech_id]),
+                             self.last_dates[tech_id]))
         cur.execute("update sources set config = %s where name = %s", (json.dumps(self.source_config),
                                                                        self.source_name))
         self.connection.commit()

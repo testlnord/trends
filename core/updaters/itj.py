@@ -2,15 +2,16 @@
 import datetime
 import sys
 
-from .parent import DataUpdater
-from ..utils.stuff import get_threshold_date
-from ..config import config, project_root
-from ..crawlers.itj_crawler import ItjCrawler
+from core.updaters.parent import DataUpdater
+from core.utils.stuff import get_threshold_date
+from core.config import config, project_root
+from core.crawlers.itj_crawler import ItjCrawler
 
 
 class ItjUpdater(DataUpdater):
 
     def __init__(self):
+        print("!!!!!!")
         super().__init__('itj', __name__)
         self.crawler = ItjCrawler()
 
@@ -48,3 +49,5 @@ class ItjUpdater(DataUpdater):
         except KeyError as e:
             print(e)
             return "---"
+
+
