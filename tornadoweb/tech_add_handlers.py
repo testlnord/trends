@@ -15,7 +15,7 @@ from core.updaters.google import GoogleUpdater
 from core.updaters.wiki import WikiUpdater
 from core.updaters.itj import ItjUpdater
 from core.updaters.sot import SotUpdater
-
+from core.updaters.gitstars import GitStarsUpdater
 
 class AddFormHandler(tornado.web.RequestHandler):
     def data_received(self, chunk):
@@ -39,16 +39,20 @@ class AddFormHandler(tornado.web.RequestHandler):
         google_name = self.get_argument("google_name", "")
         sot_tag = self.get_argument("sot_tag", "")
         itj_page = self.get_argument("itj_name", "")
+        github_repo = self.get_argument("github_repo", '')
+
         self.write("tn: " + tech_name + "<br/>\n")
         self.write("wn: " + wiki_pages + "<br/>\n")
         self.write("gn: " + google_name + "<br/>\n")
         self.write("sn: " + sot_tag + "<br/>\n")
         self.write("in: " + itj_page + "<br/>\n")
+        self.write("gs: " + github_repo + "<br/>\n")
 
         if not tech_name or (not wiki_pages and
                                  not google_name and
                                  not sot_tag and
-                                 not itj_page):
+                                 not itj_page and
+                                 not github_repo):
             self.write("failed. Nothing to insert")
             return
 
@@ -69,7 +73,12 @@ class AddFormHandler(tornado.web.RequestHandler):
         if itj_page:
             ItjUpdater().add_new_tech(fb_id, google_name)
             self.write("Itj upd \n<br/>")
+        if github_repo:
+            GitStarsUpdater().add_new_tech(fb_id, github_repo)
+            self.write("Gitstars upd\n<br/>")
+
         self.write("Inserted successfully")
+        self.write('<a href="/tech_add">Add one more tech</a>')
         self.write("</div></body></html>")
 
 
