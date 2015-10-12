@@ -114,4 +114,27 @@ def normalize_sot():
         connection.commit()
     pass
 
+def normalize_gitstars():
+    connection = psycopg2.connect(database=config['db_name'], user=config['db_user'], password=config['db_pass'])
+    techs_cur = connection.cursor()
+    techs_cur.execute("select id, name from techs")
+    for tech_id, tech_name in techs_cur:
+        data_cur = connection.cursor()
+        data_cur.execute("select time, value from rawdata where source ='gitstars' and tech_id=%s", (tech_id,))
+
+        data = data_cur.fetchall()
+        if not data:
+            logger.debug("No data in getstars for tech %s", tech_name)
+            continue
+
+        data = statmodule.freq_month(data)
+        #data = statmodule.normalize_series(data)
+        data_cur.execute("delete from reports_1 where source = 'gitstars' and tech_id = %s", (tech_id, ))
+        data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
+                             (('gitstars', tech_id, d, v) for d, v in data))
+        connection.commit()
+    pass
+
+
+
 

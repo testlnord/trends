@@ -23,7 +23,7 @@
     <input type="button" id="fb-submit" value="Send" onclick="sendFeedback()">
 </div>
 
-<div id="plots" style="text-align: center; padding: 0 20%">
+<div id="plots">
     <div id="selectors">
         {% for sel_id in range(5) %}
         <select id="ts_{{ sel_id }}" onchange="change_selection({{sel_id}})" name="tech_selector">
@@ -36,9 +36,9 @@
         <input type="image" src="images/close.gif"
                name="close" width="16" height="16" onclick="remove_selector()">
     </div>
-    <div id="main" class="plot-place" style="width:100%;"></div>
-    <div id="techs" class="plot-place" style="float: left;width: 50%"></div>
-    <div id="sources" class="plot-place" style="float: right; width:50%"></div>
+    <div id="main" class="plot-place" ></div>
+    <div id="techs" class="plot-place" class="left-column"></div>
+    <div id="sources" class="plot-place" class="right-column"></div>
 </div>
 
 

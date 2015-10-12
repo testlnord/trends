@@ -8,7 +8,7 @@ from core.updaters.google import GoogleUpdater
 from core.updaters.wiki import WikiUpdater
 from core.updaters.itj import ItjUpdater
 from core.updaters.sot import SotUpdater
-from core.updaters.sousers import SoUsersUpdater
+from core.updaters.gitstars import GitStarsUpdater
 import core.stat.normalize as normalize
 
 
@@ -17,7 +17,8 @@ sources = [('google', GoogleUpdater, normalize.normalize_google),
            ('wiki', WikiUpdater, normalize.normalize_wiki),
            #('sousers', SoUsersUpdater, normalize.normalize_sousers),
            ('sot', SotUpdater, normalize.normalize_sot),
-           ('itj', ItjUpdater, normalize.normalize_itj)]
+           ('itj', ItjUpdater, normalize.normalize_itj),
+           ('gitstars', GitStarsUpdater, normalize.normalize_gitstars)]
 
 
 def update_data_part(name, updater_class, norm_function):

@@ -1,8 +1,4 @@
 div.alpha{
-   width: 100px;
-    position: fixed;
-    top: 0;
-    left: 10%;
     display: block;
     margin: 20px;
     padding: 4px;
@@ -12,6 +8,27 @@ div.alpha{
     border-color: red
 }
 
+div#plots{
+    margin: auto;
+    min-width: 800px;
+    width: 80%;
+    text-align:center;
+
+}
+
+div.left-column{
+    float: left;
+    width: 50%;
+}
+
+div.right-column{
+    float: right;
+    width: 50%;
+}
+
+#feedback{
+    display: none;
+}
 .fb-form{
     position: fixed;
     display: block;
@@ -70,6 +87,7 @@ a{
 svg {
     font: 10px sans-serif;
     display: block;
+    margin: auto;
 }
 
 .line {

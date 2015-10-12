@@ -53,7 +53,7 @@ class AddFormHandler(tornado.web.RequestHandler):
             return
 
         cur = self.db_connection.cursor()
-        cur.execute("insert into techs(name, info) values(%s, {}) returning id", (tech_name,))
+        cur.execute("insert into techs(name, info) values(%s, '{}') returning id", (tech_name,))
         self.db_connection.commit()
         fb_id = cur.fetchone()[0]
         if wiki_pages:
