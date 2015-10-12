@@ -5,6 +5,7 @@ var getName = function getName(source){
         case "itj": return "Itjobswatch.co.uk";
         case "wiki": return "Wikipedia";
         case "sot": return "StackOverflow Questions";
+        case "gitstars": return "GitHub Stars";
         case "sousers": return "StackOverflow Users";
         case "average": return "Average";
         default : return source;
@@ -17,6 +18,7 @@ var getShortName = function getName(source){
         case "wiki": return "Wikipedia";
         case "sot": return "SO Questions";
         case "sousers": return "SO Users";
+        case "gitstars": return "Git Stars";
         case "average": return "Average";
         default : return source;
     }
@@ -76,7 +78,7 @@ function update(error, data) {
     svg.height = height;
     plot(svg, main_data);
 
-    var srcs = ["itj", "sot", "sousers", "wiki", "google"];
+    var srcs = ["itj", "sot", "sousers", "wiki", "gitstars", "google"];
     for (var sid = 0; sid < srcs.length; sid++){
         var source_data = {};
         for (var tid = 0; tid < ids.length; tid++) {
