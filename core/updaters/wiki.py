@@ -90,8 +90,8 @@ class WikiUpdater(DataUpdater):
 
     def get_words_for_tech(self, tech_id: int):
         try:
-            tech_data = self.settings[str(tech_id)]
+            tech_data = self.settings[tech_id]
             return tech_data["pages"]
         except KeyError as e:
             print(e)
-            return "---"
+            return ""

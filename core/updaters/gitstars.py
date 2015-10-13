@@ -38,11 +38,11 @@ class GitStarsUpdater(DataUpdater):
 
     def get_words_for_tech(self, tech_id: int):
         try:
-            tech_data = self.settings[str(tech_id)]
+            tech_data = self.settings[tech_id]
             return tech_data["repo"]
         except KeyError as e:
             print(e)
-            return "---"
+            return ""
 
     def _group_by_days(self, dt_list: list) -> list:
         if not dt_list:
