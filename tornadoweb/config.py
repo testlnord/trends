@@ -6,8 +6,11 @@ import json
 import logging.config
 
 current_path = os.path.dirname(__file__)
+
 local_config_path = os.path.join(current_path, 'local.config.json')
 config_path = os.path.join(current_path, 'config.json')
+
+
 
 config = json.loads(jsmin.jsmin(open(config_path).read()))
 if os.path.exists(local_config_path):
@@ -28,6 +31,5 @@ if not "staticfiles_js_dir" in config:
     config["staticfiles_js_dir"] = os.path.join(config["current_dir"], "js")
 
 
-
-
-logging.config.dictConfig(config['logging'])
+def init_logging():
+    logging.config.dictConfig(config['logging'])

@@ -2,6 +2,7 @@
 
 simply calls source-specific updaters and then generate reports if data was changed
 """
+from core.config import init_logging
 import logging
 
 from core.updaters.google import GoogleUpdater
@@ -53,5 +54,6 @@ def update_data():
 
 
 if __name__ == "__main__":
+    init_logging()
     update_data()
 

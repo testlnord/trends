@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from tornadoweb.config import config
 import logging
 import sys
 import tornado.ioloop
@@ -7,8 +6,10 @@ import tornado.web
 from tornadoweb.handlers import MainHandler, AjaxHandler, TechsHandler, CsvHandler
 from tornadoweb.info_handlers import TechInfoHandler, TechSearchHandler
 from tornadoweb.tech_add_handlers import AddFormHandler, AddFormAjaxHandler
+from tornadoweb.tech_edit_handlers import EditFormHandler
 from tornadoweb.feedback_handlers import ReceiveFeedbackHandler, ShowFeedbacksHandler
 from tornadoweb.daemon3x import daemon
+from tornadoweb.config import config, init_logging
 
 
 class TrendsWebServer(daemon):
@@ -28,6 +29,7 @@ class TrendsWebServer(daemon):
             (r"/tech_info$", TechSearchHandler),
             (r"/tech_info([^/]+)", TechInfoHandler),
             (r"/tech_add/json/", AddFormAjaxHandler),
+            (r"/tech_edit/(\d+)", EditFormHandler),
             (r"/tech_add", AddFormHandler)
 
         ])
@@ -43,6 +45,7 @@ class TrendsWebServer(daemon):
             self.stop()
 
 if __name__ == "__main__":
+    init_logging()
     my_daemon = TrendsWebServer('/tmp/trendsws.pid')
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:

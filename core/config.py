@@ -20,8 +20,10 @@ config = json.loads(jsmin(open(config_path).read()))
 if path.exists(local_config_path):
     config.update(json.loads(jsmin(open(local_config_path).read())))
 
-logging.config.dictConfig(config['logging'])
-
 config = aadict.aadict.d2ar(config)
+
+def init_logging():
+    logging.config.dictConfig(config['logging'])
+
 
 # todo make settings checking
