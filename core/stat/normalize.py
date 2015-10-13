@@ -127,7 +127,7 @@ def normalize_gitstars():
             logger.debug("No data in getstars for tech %s", tech_name)
             continue
 
-        data = statmodule.freq_month(data)
+        data = statmodule.freq_month(data, month_average=False)
         #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'gitstars' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",

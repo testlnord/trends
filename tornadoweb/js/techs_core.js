@@ -52,7 +52,7 @@ function update(error, data) {
         d3.select("#main").append("p").text("May be data is not downloaded yet. You sure that something must be here? Please inform us using feedback form on the right.")
         return;
     }
-    width =  parseInt(window.getComputedStyle(document.getElementById("plots")).width)
+    width =  parseInt(window.getComputedStyle(document.getElementById("plots")).width);
 
 
     var ids = get_ids();

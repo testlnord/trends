@@ -16,6 +16,8 @@ from itertools import zip_longest
 class MainHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("init main handler")
         self.template_loader = template.Loader(config["template_dir"])
         self.db_connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
                                               password=config['db_pass'])

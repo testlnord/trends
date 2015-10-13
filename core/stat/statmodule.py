@@ -5,7 +5,7 @@ import pandas
 from statsmodels.nonparametric.smoothers_lowess import lowess
 
 
-def freq_month(series):
+def freq_month(series, month_average=True):
     result = {}
     for d, v in series:
         month = datetime.date(d.year, d.month, 1)
@@ -13,7 +13,10 @@ def freq_month(series):
             result[month] = [0, 0]
         result[month][0] += v
         result[month][1] += 1
-    return ((d, pv[0]/pv[1]) for d, pv in result.items())
+    if month_average:
+        return ((d, pv[0]/pv[1]) for d, pv in result.items())
+    else:
+        return ((d, pv[0]) for d, pv in result.items())
 
 
 def sort_ts(series):
