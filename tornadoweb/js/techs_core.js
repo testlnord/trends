@@ -149,7 +149,8 @@ function plot(svg, data, width, height) {
     });
     var x = d3.time.scale()
             .range([0, width])
-            .domain(d3.extent(techs[0].data_points, function (d) {return d.date;}));
+            .domain([d3.min(techs, function(tech){return d3.min(tech.data_points, function(d){return d.date;});}),
+                     d3.max(techs, function(tech){return d3.max(tech.data_points, function(d){return d.date;});})]);
     var y = d3.scale.linear()
             .range([height, 0])
             .domain([0, 1]);
@@ -229,8 +230,7 @@ function redraw(ids) {
 
 function get_ids() {
     if (window.location.hash) {
-        var ids = window.location.hash.slice(1).split(',').slice(0, 5);
-        return ids;
+        return window.location.hash.slice(1).split(',').slice(0, 5);
     } else {
         return [];
     }
