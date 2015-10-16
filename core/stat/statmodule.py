@@ -3,20 +3,35 @@ import datetime
 from numpy import median
 import pandas
 from statsmodels.nonparametric.smoothers_lowess import lowess
+from calendar import monthrange
 
-
-def freq_month(series, month_average=True):
+def freq_month(series):
     result = {}
     for d, v in series:
         month = datetime.date(d.year, d.month, 1)
         if month not in result:
-            result[month] = [0, 0]
+            result[month] = [0, monthrange(month.year, month.month)]
         result[month][0] += v
-        result[month][1] += 1
-    if month_average:
-        return ((d, pv[0]/pv[1]) for d, pv in result.items())
-    else:
-        return ((d, pv[0]) for d, pv in result.items())
+    # fixing hanging ends
+    # last month can have less measurements than overs
+    max_day = max(series, key=lambda x: x[0])[0].date()
+    cur_day = datetime.date.today()
+    """:type : datetime.date"""
+    max_month = datetime.date(max_day.year, max_day.month, 1)
+    cur_month = datetime.date(cur_day.year, cur_day.month, 1)
+    if cur_month == max_month:
+        result[max_month][1] -= max_day.day - 1
+
+    # adding missing months
+    cur_m = min(result)
+    """:type : datetime.date"""
+    max_m = max(result)
+    while cur_m < max_m:
+        if cur_m not in result:
+            result[cur_m] = (0,1)
+        cur_m = datetime.date(cur_m.year + (1 if cur_m.month == 12 else 0 ), (cur_m.month +1) if cur_m.month < 12 else 1, 1)
+
+    return ((d, pv[0]/pv[1]) for d, pv in result.items())
 
 
 def sort_ts(series):
