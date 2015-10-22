@@ -80,6 +80,7 @@ function update(error, data) {
 
     var srcs = ["itj", "sot", "sousers", "wiki", "gitstars", "google"];
     for (var sid = 0; sid < srcs.length; sid++){
+        if (srcs[sid] == 'google' && ids.length > 1) continue;
         var source_data = {};
         for (var tid = 0; tid < ids.length; tid++) {
             if (data[ids[tid]][srcs[sid]]) {
@@ -112,6 +113,7 @@ function update(error, data) {
             return name !== "tech_name"
         });
         for (var sid = 0; sid < srcs.length; sid++) {
+            if (srcs[sid] == 'google') continue;
             tech_data[srcs[sid]] = {data: data[ids[tid]][srcs[sid]].sort(function (b, a) {
                 return (b.date > a.date) ? 1 : (b.date < a.date) ? -1 : 0;
                 //return new Date(a.date) - new Date(b.date)
