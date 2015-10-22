@@ -1,6 +1,7 @@
 """Parent updater for all other updaters """
 import json
 import logging
+import datetime
 import psycopg2
 from core.config import config
 from core.utils.stuff import get_threshold_date
@@ -81,8 +82,7 @@ class DataUpdater:
                     dirty = True
                     # We should update date for every tech.
                     self.logger.debug("Updating last_date property")
-                    max_date = max(data, key=lambda x: x[0])[0]
-                    self.last_dates[tech_id] = max_date.strftime(config['date_format'])
+                    self.last_dates[tech_id] = datetime.date.today().strftime(config['date_format'])
                     self.commit_settings()
 
         return dirty
