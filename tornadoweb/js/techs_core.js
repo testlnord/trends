@@ -234,7 +234,8 @@ function get_ids() {
     if (window.location.hash) {
         return window.location.hash.slice(1).split(',').slice(0, 5);
     } else {
-        return [];
+        window.location.hash = '1';
+        return ['1'];
     }
 }
 
