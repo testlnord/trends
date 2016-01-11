@@ -2,6 +2,8 @@
 import json
 import datetime
 import re
+import urllib.error
+
 from .parent import DataUpdater
 from ..utils.stuff import get_threshold_date
 from ..utils.internet import internet
@@ -56,7 +58,11 @@ class WikiUpdater(DataUpdater):
             self.logger.debug("Getting data for date: %s", month.strftime("%Y-%m"))
 
             url = "http://stats.grok.se/json/en/" + month.strftime("%Y%m") + "/" + internet.quote(page_name)
-            data = internet.get_from_url(url)
+            try:
+                data = internet.get_from_url(url)
+            except (urllib.error.URLError, urllib.error.HTTPError):
+                self.logger.warning("URL error on url: %s", url)
+                raise
 
             for day, value in json.loads(data)['daily_views'].items():
                 date_parsed = date_pattern.match(day)

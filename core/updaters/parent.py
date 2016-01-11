@@ -73,7 +73,13 @@ class DataUpdater:
         for tech_id in self.settings:
             if self.last_dates[tech_id] < time_threshold.date():
                 self.logger.info("Updating tech: %s", tech_id)
-                data = self.get_data(tech_id)
+                try:
+                    data = self.get_data(tech_id)
+                except:
+                    import traceback
+                    self.logger.warning("Can't get data.")
+                    self.logger.warning(traceback.format_exc())
+                    continue
 
                 if not data:
                     self.logger.warning("No data for query %s", tech_id)

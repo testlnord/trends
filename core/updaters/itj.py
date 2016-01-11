@@ -11,7 +11,6 @@ import traceback
 class ItjUpdater(DataUpdater):
 
     def __init__(self):
-        print("!!!!!!")
         super().__init__('itj', __name__)
         self.crawler = ItjCrawler()
 
