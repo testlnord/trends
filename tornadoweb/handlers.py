@@ -45,7 +45,9 @@ class TechsHandler(tornado.web.RequestHandler):
         self.db_connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
                                               password=config['db_pass'])
 
-    def get(self):
+    def get(self, *slug):
+        if slug and len(slug) == 1:
+            self.redirect('/tech#'+slug[0])
         page_template = self.template_loader.load('techs.html')
         cur = self.db_connection.cursor()
         cur.execute("SELECT id, name, info::JSON FROM techs")

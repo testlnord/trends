@@ -22,6 +22,7 @@ class TrendsWebServer(daemon):
             (r'/js/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_js_dir']}),
             (r"/", MainHandler),
             (r"/tech", TechsHandler),
+            (r"/tech/(\d+)", TechsHandler),
             (r"/json/([^/]+)", AjaxHandler),
             (r"/csv/([^/]+)", CsvHandler),
             (r"/feedback/send/([^/]+)", ReceiveFeedbackHandler),
