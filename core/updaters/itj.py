@@ -49,6 +49,11 @@ class ItjUpdater(DataUpdater):
             return tech_data["link"]
         except KeyError as e:
             print(e)
-            return ""
+            return None
 
+    @staticmethod
+    def _words_to_link(links):
+        if links is None:
+            return None
 
+        return ["http://www.itjobswatch.co.uk/jobs/uk/{}.do".format(link.replace('+', "%20")) for link in links]

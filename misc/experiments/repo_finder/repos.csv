@@ -1,0 +1,157 @@
+id, name, repo, link
+149, IntelliJ IDEA, JetBrains/intellij-community, https://github.com/JetBrains/intellij-community
+166, Babel (js compiler),babel/babel, https://github.com/RReverser/babel-plugin-asm-js
+141, Aurelia,aurelia/framework,https://github.com/aurelia/framework
+143, bower, bower/bower, https://github.com/bower/bower
+145, Gulp (js build system),gulpjs/gulp, https://github.com/zimmen/gulp-twig
+147, Webpack, webpack/webpack, https://github.com/webpack/webpack
+5, angularjs,angular/angular.js, https://github.com/colorfest/angularjs
+10, backbone.js,jashkenas/backbone, https://github.com/ccoenraets/backbone-cellar
+14, cakephp, cakephp/cakephp, https://github.com/cakephp/cakephp
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+16, codeigniter, bcit-ci/CodeIgniter, https://github.com/bcit-ci/CodeIgniter
+17, cordova,apache/cordova-android, https://github.com/brianleroux/Cordova
+,,,
+,,,
+20, django, django/django, https://github.com/django/django
+21, eclipse, eclipse/eclipse, https://github.com/eclipse/eclipse
+22, entity framework, aspnet/EntityFramework, https://github.com/aspnet/EntityFramework
+,,,
+,,,
+,,,
+,,,
+27, gcc, gcc-mirror/gcc, https://github.com/gcc-mirror/gcc
+28, git, git/git, https://github.com/git/git
+,,,
+,,,
+,,,
+32, grails, grails/grails, https://github.com/grails/grails
+33, gwt, gwtproject/gwt, https://github.com/gwtproject/gwt
+34, haskell,ghc/ghc,
+35, hibernate, hibernate/hibernate-orm, https://github.com/hibernate/hibernate-orm
+36, html, w3c/html, https://github.com/w3c/html
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+46, jquery, jquery/jquery, https://github.com/jquery/jquery
+,,,
+,,,
+,,,
+,,,
+51, linux, torvalds/linux, https://github.com/torvalds/linux
+,,,
+,,,
+54, maven, apache/maven, https://github.com/apache/maven
+55, mongodb,mongodb/mongo,
+,,,
+,,,
+58, nhibernate, nhibernate/nhibernate-core, https://github.com/nhibernate/nhibernate-core
+59, node.js,nodejs/node,
+,,,
+61, opencv, Itseez/opencv, https://github.com/Itseez/opencv
+62, opengl, McNopper/OpenGL, https://github.com/McNopper/OpenGL
+,,,
+64, perl,, https://github.com/chef-cookbooks/perl
+65, php,php/php-src, https://github.com/travis-ci-examples/php
+,,,
+,,,
+,,,
+,,,
+70, r,wch/r-source, https://github.com/dmpe/R
+71, ruby, ruby/ruby, https://github.com/ruby/ruby
+72, ruby on rails, rails/rails, https://github.com/rails/rails
+73, scala, scala/scala, https://github.com/scala/scala
+,,,
+,,,
+76, spring, MengTo/Spring, https://github.com/MengTo/Spring
+,,,
+,,,
+,,,
+,,,
+,,,
+82, symfony, symfony/symfony, https://github.com/symfony/symfony
+83, tomcat, apache/tomcat, https://github.com/apache/tomcat
+,,,
+85, twitter bootstrap,twbs/bootstrap,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+97, wordpress, WordPress/WordPress, https://github.com/WordPress/WordPress
+,,,
+,,,
+,,,
+,,,
+102, zend framework,zendframework/zf2/,
+,,,
+105, Go language, golang/go, https://github.com/golang/go
+106, rust, rust-lang/rust, https://github.com/rust-lang/rust
+107, SciPy, scipy/scipy, https://github.com/scipy/scipy
+109, Groovy, chanwit/groovy, https://github.com/chanwit/groovy
+,,,
+111, CLang, llvm-mirror/clang, https://github.com/llvm-mirror/clang
+112, LLDB, llvm-mirror/lldb, https://github.com/llvm-mirror/lldb
+,,,
+,,,
+,,,
+116, CocoaPods, CocoaPods/CocoaPods, https://github.com/CocoaPods/CocoaPods
+126, NumPy, numpy/numpy, https://github.com/numpy/numpy
+127, ANT, apache/ant, https://github.com/apache/ant
+,,,
+129, Log4J, apache/log4j, https://github.com/apache/log4j
+130, SLF4J, qos-ch/slf4j, https://github.com/qos-ch/slf4j
+131, JUnit, junit-team/junit, https://github.com/junit-team/junit
+132, Google Guava, google/guava, https://github.com/google/guava
+133, Mockito, mockito/mockito, https://github.com/mockito/mockito
+134, easymock, easymock/easymock, https://github.com/easymock/easymock
+135, logback, qos-ch/logback, https://github.com/qos-ch/logback
+136, joda-time, JodaOrg/joda-time, https://github.com/JodaOrg/joda-time
+137, Julia language, JuliaLang/julia, https://github.com/JuliaLang/julia
+,,,
+140, SciKit Learn, scikit-learn/scikit-learn, https://github.com/scikit-learn/scikit-learn
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+117, LESS,less/less.js, https://github.com/alliswell/Less
+118, SASS, sass/sass, https://github.com/sass/sass
+,,,
+120, JSX, jsx/JSX, https://github.com/jsx/JSX
+121, CoffeeScript, jashkenas/coffeescript, https://github.com/jashkenas/coffeescript
+122, TypeScript, Microsoft/TypeScript, https://github.com/Microsoft/TypeScript
+123, Dart,dart-lang/sdk,
+,,,
+125, Ember.js, emberjs/ember.js, https://github.com/emberjs/ember.js
+142, npm, npm/npm, https://github.com/npm/npm
+144, jspm, jspm/jspm-cli, https://github.com/jspm/jspm-cli
+146, Grunt, gruntjs/grunt, https://github.com/gruntjs/grunt
+,,,
+108, Kotlin, JetBrains/kotlin, https://github.com/JetBrains/kotlin

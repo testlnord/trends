@@ -95,7 +95,13 @@ class GoogleUpdater(DataUpdater):
     def get_words_for_tech(self, tech_id: int):
         try:
             tech_data = self.settings[tech_id]
-            return tech_data["name"]
+            return tech_data["name"][0]
         except KeyError as e:
             print(e)
-            return ""
+            return None
+
+    @staticmethod
+    def _words_to_link(word):
+        if word is None:
+            return None
+        return ["https://www.google.com/trends/explore#cmpt=q&q={}&cat=0-5-31".format(word)]

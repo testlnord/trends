@@ -10,7 +10,7 @@ from tornadoweb.tech_edit_handlers import EditFormHandler
 from tornadoweb.feedback_handlers import ReceiveFeedbackHandler, ShowFeedbacksHandler
 from tornadoweb.daemon3x import daemon
 from tornadoweb.config import config, init_logging
-
+import tornadoweb.api_v1 as api1
 
 class TrendsWebServer(daemon):
     def run(self):
@@ -27,11 +27,14 @@ class TrendsWebServer(daemon):
             (r"/feedback/send/([^/]+)", ReceiveFeedbackHandler),
             (r"/feedback5", ShowFeedbacksHandler),
             (r"/tech_info$", TechSearchHandler),
-            (r"/tech_info([^/]+)", TechInfoHandler),
+            (r"/tech_info/(\d+)", TechInfoHandler),
             (r"/tech_add/json/", AddFormAjaxHandler),
             (r"/tech_edit/(\d+)", EditFormHandler),
-            (r"/tech_add", AddFormHandler)
-
+            (r"/tech_add", AddFormHandler),
+            (r"/api/v1/techs/?", api1.TechListHandler),
+            (r"/api/v1/techs/([0-9]*)/sources/?", api1.TechSourcesHandler),
+            (r"/api/v1/sources/?", api1.SourcesListHandler),
+            (r"/api/v1/techs/([0-9]*)/sources/([a-z]*)/?", api1.TechTrendHandler),
         ])
         logger.info("Application created. Starting to listen port...")
         application.listen(config["port"])

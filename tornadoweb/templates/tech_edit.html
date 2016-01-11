@@ -43,7 +43,7 @@
     <div class="form-group" id="wiki_all_block">
       <label class="col-md-4 control-label" for="wiki_all">Wikipedia redirections</label>
       <div class="col-md-4">
-        <textarea class="form-control" id="wiki_all" name="wiki_all">{{ ", ".join(wiki_all) }}</textarea>
+        <textarea class="form-control" id="wiki_all" name="wiki_all">{{ ", ".join(wiki_all if wiki_all else ['']) }}</textarea>
       </div>
     </div>
 
@@ -51,7 +51,7 @@
     <div class="form-group">
       <label class="col-md-4 control-label" for="sot_tag">StackOverflow Tag</label>
       <div class="col-md-6">
-      <input id="sot_tag" name="sot_tag" placeholder="" class="form-control input-md" type="text" value="{{ ", ".join(sot_tag) }}">
+      <input id="sot_tag" name="sot_tag" placeholder="" class="form-control input-md" type="text" value="{{ ", ".join(sot_tag if sot_tag else ['']) }}">
       <span class="help-block"><a href="http://stackoverflow.com/tags/">StackOverflow</a></span>
       </div>
     </div>
@@ -60,7 +60,7 @@
     <div class="form-group">
       <label class="col-md-4 control-label" for="google_name">Google name</label>
       <div class="col-md-6">
-      <input id="google_name" name="google_name" placeholder="" class="form-control input-md" type="text" value="{{ ", ".join(google_name) }}">
+      <input id="google_name" name="google_name" placeholder="" class="form-control input-md" type="text" value="{{ google_name  if google_name else '' }}">
       <span class="help-block"><a href="http://www.google.com">Google</a></span>
       </div>
     </div>
@@ -69,7 +69,7 @@
     <div class="form-group">
       <label class="col-md-4 control-label" for="itj_name">ITJ name</label>
       <div class="col-md-6">
-      <input id="itj_name" name="itj_name" placeholder="" class="form-control input-md" type="text" value="{{ ", ".join(itj_name) }}">
+      <input id="itj_name" name="itj_name" placeholder="" class="form-control input-md" type="text" value="{{ ", ".join(itj_name  if itj_name else ['']) }}">
       <span class="help-block"><a href="http://www.itjobswatch.co.uk/">ITJobsWatch</a></span>
       </div>
     </div>
@@ -78,7 +78,7 @@
     <div class="form-group">
       <label class="col-md-4 control-label" for="itj_name">Github repo</label>
       <div class="col-md-6">
-      <input id="github_repo" name="github_repo" placeholder="" class="form-control input-md" type="text" value="{{  ", ".join(github_repo) }}">
+      <input id="github_repo" name="github_repo" placeholder="" class="form-control input-md" type="text" value="{{  ", ".join(github_repo if github_repo else ['']) }}">
       <span class="help-block"><a href="https://github.com/search">GitHub</a></span>
       </div>
     </div>

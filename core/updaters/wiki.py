@@ -94,4 +94,10 @@ class WikiUpdater(DataUpdater):
             return tech_data["pages"]
         except KeyError as e:
             print(e)
-            return ""
+            return None
+
+    @staticmethod
+    def _words_to_link(links):
+        if links is None:
+            return None
+        return ["https://en.wikipedia.org/wiki/"+link for link in links]

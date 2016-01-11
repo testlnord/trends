@@ -36,6 +36,10 @@ class EditFormHandler(tornado.web.RequestHandler):
         else:
             super().write_error(status_code, **kwargs)
 
+    @staticmethod
+    def stringify(*params):
+        return " ".join(str(p) for p in params)
+
     def get(self, tech_id=None):
         try:
             tech_id, tech_name = self._check_tech_id(tech_id)
@@ -53,6 +57,7 @@ class EditFormHandler(tornado.web.RequestHandler):
                 page_template.generate(tech_id=tech_id, tech_name=tech_name, wiki_all=wiki_pages, sot_tag=sot_tag,
                                        google_name=google_name, github_repo=github_repo, itj_name=itj_page))
         except:
+            self.write(self.stringify(tech_id, tech_name, wiki_pages, sot_tag, google_name, github_repo, itj_page))
             self.write(traceback.format_exc())
             #raise
 

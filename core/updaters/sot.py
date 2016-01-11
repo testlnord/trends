@@ -47,4 +47,10 @@ class SotUpdater(DataUpdater):
             return tech_data["tag"]
         except KeyError as e:
             print(e)
-            return ""
+            return None
+
+    @staticmethod
+    def _words_to_link(tags):
+        if tags is None:
+            return None
+        return ["http://stackoverflow.com/tags/{}/info".format(tag) for tag in tags]

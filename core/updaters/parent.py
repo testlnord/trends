@@ -92,3 +92,13 @@ class DataUpdater:
 
     def update_db_data(self, data, tech_id):
         raise NotImplemented
+
+    def get_words_for_tech(self, tech_id: int):
+        raise NotImplemented
+
+    def get_links(self, tech_id: int):
+        return self._words_to_link(self.get_words_for_tech(tech_id))
+
+    @staticmethod
+    def _words_to_link(param):
+        raise NotImplemented

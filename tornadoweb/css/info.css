@@ -1,0 +1,14 @@
+body{
+    width: 40%;
+    min-width: 600px;
+    margin: auto;
+}
+
+.link-list{
+    padding-left: 20px;
+}
+
+.link-list a{
+    display: block;
+    clear:both;
+}

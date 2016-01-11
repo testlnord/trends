@@ -124,33 +124,37 @@ class CsvHandler(tornado.web.RequestHandler):
                                               password=config['db_pass'])
 
     def get(self, slug):
-        args = slug[:-4].split(',')
-        if len(args) < 2:
-            self.logger.warning("Bad csv request: %s", slug)
-            self.write_error(406)
-            return
-        if args[0] == 'norm':
-            try:
-                response = self.to_csv(self.norm_data(args[1:]))
-                self.set_header("Content-Type", "text/csv")
-                self.set_header("Content-Disposition", "attachment")
-                self.write(response)
-            except ValueError:
-                self.logger.warning("Can't parse request: %s", slug)
+        try:
+            args = slug[:-4].split(',')
+            if len(args) < 2:
+                self.logger.warning("Bad csv request: %s", slug)
                 self.write_error(406)
-        elif args[0] == 'raw':
-            try:
-                response = self.to_csv(self.raw_data(args[1:]))
-                self.set_header("Content-Type", "text/csv")
-                self.set_header("Content-Disposition", "attachment")
-                self.write(response)
-            except (ValueError, KeyError):
-                self.logger.warning("Can't parse request: %s", slug)
+                return
+            if args[0] == 'norm':
+                try:
+                    response = self.to_csv(self.norm_data(args[1:]))
+                    self.set_header("Content-Type", "text/csv")
+                    self.set_header("Content-Disposition", "attachment")
+                    self.write(response)
+                except ValueError:
+                    self.logger.warning("Can't parse request: %s", slug)
+                    self.write_error(406)
+            elif args[0] == 'raw':
+                try:
+                    response = self.to_csv(self.raw_data(args[1:]))
+                    self.set_header("Content-Type", "text/csv")
+                    self.set_header("Content-Disposition", "attachment")
+                    self.write(response)
+                except (ValueError, KeyError):
+                    self.logger.warning("Can't parse request: %s", slug)
+                    self.write_error(406)
+            else:
+                self.logger.warning("Bad css request type (must be raw or norm): %s", slug)
                 self.write_error(406)
-        else:
-            self.logger.warning("Bad css request type (must be raw or norm): %s", slug)
-            self.write_error(406)
-            return
+                return
+        except:
+            self.write("Smt happens\n<br>\n")
+            self.write(traceback.format_exc())
 
     def raw_data(self, args):
         if len(args) == 1 and args[0].isnumeric():
@@ -206,11 +210,15 @@ class AjaxHandler(tornado.web.RequestHandler):
 
     def get(self, slug):
         try:
-            tids = [int(x) for x in slug.split(',')]
-        except ValueError:
-            self.write_error(406)
-            return
-        result = get_norm_data(self.db_connection, tids)
-        self.set_header("Content-Type", "application/json")
-        self.write(json.dumps(result))
+            try:
+                tids = [int(x) for x in slug.split(',')]
+            except ValueError:
+                self.write_error(406)
+                return
+            result = get_norm_data(self.db_connection, tids)
+            self.set_header("Content-Type", "application/json")
+            self.write(json.dumps(result))
+        except:
+            self.write("Smth happens\n")
+            self.write(traceback.format_exc())
 

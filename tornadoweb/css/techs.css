@@ -16,6 +16,27 @@ div#plots{
 
 }
 
+div#plots p{
+    font-size: 1.5em;
+}
+
+div#plots p a{
+    content: "*";
+    margin: 2px;
+    display: inline;
+    vertical-align: super;
+    text-transform: none;
+}
+
+div#plots p a:before{
+    content: "["
+}
+
+div#plots p a:after{
+    content: ']';
+}
+
+
 div.left-column{
     float: left;
     width: 50%;

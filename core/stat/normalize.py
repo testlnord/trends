@@ -2,8 +2,8 @@
 import logging
 
 import psycopg2
-from ..config import config
-from . import statmodule
+from core.config import config
+from core.stat import statmodule
 
 logger = logging.getLogger(__name__)
 
@@ -15,9 +15,14 @@ def normalize():
     for tech_id, tech_info in techs_cur:
         data_cur = connection.cursor()
         data_cur.execute("delete from reports_2 where tech_id = %s", (tech_id,))
-        data_cur.execute("insert into reports_2(tech_id, time, value)  "
-                         "select tech_id, time, avg(value) as vavg from reports_1 "
-                         "where tech_id = %s group by tech_id, time", (tech_id,))
+        data_cur.execute("with max_vals  as (select max(value::real) as mv, source from reports_1 where tech_id = %s GROUP BY source ) "
+                         "insert into reports_2(tech_id, time, value)"
+                         "select r.tech_id, r.time, avg(r.value/m.mv) from reports_1 as r INNER JOIN max_vals as m on r.source = m.source "
+                         "where tech_id = %s GROUP BY r.tech_id, r.time;", (tech_id, tech_id))
+
+        # data_cur.execute("insert into reports_2(tech_id, time, value)  "
+        #                  "select tech_id, time, avg(value) as vavg from reports_1 "
+        #                  "where tech_id = %s group by tech_id, time", (tech_id,))
         connection.commit()
 
     pass
@@ -59,6 +64,7 @@ def normalize_wiki():
         data = statmodule.freq_month(data)
         data = statmodule.sort_ts(data)
 
+
         #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'wiki' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
@@ -80,6 +86,7 @@ def normalize_itj():
             continue
 
         data = statmodule.freq_month(data)
+        data = statmodule.continue_to_now(data)
         #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'itj' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
@@ -128,6 +135,7 @@ def normalize_gitstars():
             continue
 
         data = statmodule.freq_month(data)
+        data = statmodule.continue_to_now(data)
         #data = statmodule.normalize_series(data)
         data_cur.execute("delete from reports_1 where source = 'gitstars' and tech_id = %s", (tech_id, ))
         data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
@@ -135,6 +143,5 @@ def normalize_gitstars():
         connection.commit()
     pass
 
-
-
-
+if __name__ == '__main__':
+    pass

@@ -119,7 +119,7 @@ function update(error, data) {
                 //return new Date(a.date) - new Date(b.date)
             }), style: srcs[sid]};
         }
-        d3.select("#techs").append("p").text(data[ids[tid]].tech_name);
+        d3.select("#techs").append("p").text(data[ids[tid]].tech_name).append("a").text("info").attr('href', 'tech_info/'+ids[tid]);
         var svg_tech = d3.select("#techs").append("svg")
                 .attr("width", (width + margin.left + margin.right) / 2)
                 .attr("height", (height + margin.top + margin.bottom) / 2)

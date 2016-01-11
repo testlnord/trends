@@ -21,10 +21,25 @@ class GitStarsUpdater(DataUpdater):
         self.last_dates[str(tech_id)] = start_date
         self.commit_settings()
 
+    @staticmethod
+    def is_valid_repository_name(reponame):
+        import re
+        f_match = re.fullmatch("[A-Za-z0-9_.-]*/[A-Za-z0-9_.-]*", reponame)
+        return f_match is not None
+
     def get_data(self, tech_id):
         repo = self.settings[tech_id]['repo'][0]
+        if not self.is_valid_repository_name(repo):
+            self.logger.warning("Invalid repo name: %s", repo)
+            return []
         self.logger.debug("Getting data for repo: %s", repo)
-        data = self.crawler.get_data(repo)
+        try:
+            data = self.crawler.get_data(repo)
+        except Exception:
+            import traceback
+            self.logger.warning("Can't get data for repo: %s", repo)
+            self.logger.warning(traceback.format_exc())
+            return []
         return [(d, 1) for d in data]
 
     def update_db_data(self, data, tech_id):
@@ -41,8 +56,13 @@ class GitStarsUpdater(DataUpdater):
             tech_data = self.settings[tech_id]
             return tech_data["repo"]
         except KeyError as e:
-            print(e)
-            return ""
+            return None
+
+    @staticmethod
+    def _words_to_link(repos_name):
+        if repos_name is None:
+            return None
+        return ["https://github.com/" + repo_name for repo_name in repos_name]
 
     def _group_by_days(self, dt_list: list) -> list:
         if not dt_list:

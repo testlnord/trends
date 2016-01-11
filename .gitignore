@@ -63,3 +63,7 @@ test.py
 # images
 *.png
 !parsers/digit_glyphs/*.png
+
+# lock files
+.lock*
+.~lock*

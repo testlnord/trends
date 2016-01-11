@@ -5,12 +5,17 @@ import pandas
 from statsmodels.nonparametric.smoothers_lowess import lowess
 from calendar import monthrange
 
+
+def next_month(month):
+    return datetime.date(month.year + (1 if month.month == 12 else 0 ), (month.month +1) if month.month < 12 else 1, 1)
+
+
 def freq_month(series):
     result = {}
     for d, v in series:
         month = datetime.date(d.year, d.month, 1)
         if month not in result:
-            result[month] = [0, monthrange(month.year, month.month)]
+            result[month] = [0, monthrange(month.year, month.month)[1]]
         result[month][0] += v
     # fixing hanging ends
     # last month can have less measurements than overs
@@ -22,6 +27,7 @@ def freq_month(series):
     if cur_month == max_month:
         result[max_month][1] -= max_day.day - 1
 
+
     # adding missing months
     cur_m = min(result)
     """:type : datetime.date"""
@@ -29,9 +35,21 @@ def freq_month(series):
     while cur_m < max_m:
         if cur_m not in result:
             result[cur_m] = (0,1)
-        cur_m = datetime.date(cur_m.year + (1 if cur_m.month == 12 else 0 ), (cur_m.month +1) if cur_m.month < 12 else 1, 1)
+        cur_m = next_month(cur_m)
 
     return ((d, pv[0]/pv[1]) for d, pv in result.items())
+
+
+def continue_to_now(series):
+    series = list(series)
+    max_date = max(series, key=lambda x:x[0])[0]
+    cur_month = datetime.date.today()
+    cur_month = datetime.date(cur_month.year, cur_month.month, 1)
+    max_date = next_month(max_date)
+    while max_date < cur_month:
+        series.append((max_date, 0))
+        max_date = next_month(max_date)
+    return series
 
 
 def sort_ts(series):

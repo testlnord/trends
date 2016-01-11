@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }} info</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/info.css">
+</head>
+<body>
+<h1>{{ name }}</h1>
+{% if description %}
+<div class="desc">{{ description }}</div>
+{% end %}
+
+<div class="sources">
+<h2>Sources:</h2>
+    {% for source in sources %}
+        <strong> {{ source['name'] }} </strong>
+        <p class="link-list">
+        {% for link in source['links'] %}
+            <a href="{{ link }}"> {{ link }} </a>
+        {% end %}
+        </p>
+    {% end %}
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+a <- read.csv("misc/jb_wiki_1.csv", header =  F)
+names(a)<- c(time, views)
+names(a)<- c('time', 'views')
+plot(as.ts(a$views, frequency=7))
+a$time <- as.Date(a$time)
+b <- aggregate(a$views, by=list(time=a$time), FUN=sum)
+plot(as.ts(b$x))
+weekdays(tail(b$time))
+plot(as.ts(b$x[which(weekdays(b$time) == "Wednesday")]))
+library(lubridate)
+b.3 <- b[weekdays(b$time) %in% c("Monday", "Tuesday", "Wednesday"),]
+b.3.a <- aggregate(b.3$x, by = list(time = round_date(b.3$time, unit="week")), FUN=sum)
+tail(b.3.a)
