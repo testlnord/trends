@@ -36,11 +36,22 @@
                 "class": "logging.FileHandler",
                 "filename": "trends.log",
                 "formatter": "standard"
+            },
+            "email":{
+                "level": "WARNING",
+                "class":"core.config.BufferingSMTPHandler",
+                "mailhost": "smtp.yandex.ru",
+                "mailport": 465,
+                "fromaddr": "fromaddr@yandex.ru",
+                "mailpassword": "password",
+                "toaddrs": "toaddr@gmail.com",
+                "subject": "warnings and errors",
+                "capacity" : 10
             }
         },
         "loggers": {
             "": {
-                "handlers": ["default"],
+                "handlers": ["default", "email"],
                 "level": "DEBUG",
                 "propagate": "True"
             }
