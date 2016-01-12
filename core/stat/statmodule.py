@@ -7,16 +7,21 @@ from calendar import monthrange
 
 
 def next_month(month):
-    return datetime.date(month.year + (1 if month.month == 12 else 0 ), (month.month +1) if month.month < 12 else 1, 1)
+    return datetime.date(month.year + (1 if month.month == 12 else 0), (month.month +1) if month.month < 12 else 1, 1)
 
 
 def freq_month(series):
+    # I normalize monthly data by summing up values and dividing by count of days in month
+
     result = {}
+    # result:dict =  { month:datetime.date: [values_sum:float, days_in_month:int] }
     for d, v in series:
         month = datetime.date(d.year, d.month, 1)
-        if month not in result:
-            result[month] = [0, monthrange(month.year, month.month)[1]]
-        result[month][0] += v
+        try:
+            result[month][0] += v
+        except KeyError:
+            result[month] = [v, monthrange(month.year, month.month)[1]]
+
     # fixing hanging ends
     # last month can have less measurements than overs
     max_day = max(series, key=lambda x: x[0])[0].date()
@@ -25,10 +30,11 @@ def freq_month(series):
     max_month = datetime.date(max_day.year, max_day.month, 1)
     cur_month = datetime.date(cur_day.year, cur_day.month, 1)
     if cur_month == max_month:
-        result[max_month][1] -= max_day.day - 1
+        # for current month I only have passed number of days
+        result[max_month][1] = max_day.day - 1
 
 
-    # adding missing months
+    # adding missing months with zero values
     cur_m = min(result)
     """:type : datetime.date"""
     max_m = max(result)
