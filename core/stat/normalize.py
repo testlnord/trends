@@ -13,17 +13,20 @@ def normalize():
     techs_cur = connection.cursor()
     techs_cur.execute("select id, info::json from techs")
     for tech_id, tech_info in techs_cur:
-        data_cur = connection.cursor()
-        data_cur.execute("delete from reports_2 where tech_id = %s", (tech_id,))
-        data_cur.execute("with max_vals  as (select max(value::real) as mv, source from reports_1 where tech_id = %s GROUP BY source ) "
-                         "insert into reports_2(tech_id, time, value)"
-                         "select r.tech_id, r.time, avg(r.value/m.mv) from reports_1 as r INNER JOIN max_vals as m on r.source = m.source "
-                         "where tech_id = %s GROUP BY r.tech_id, r.time;", (tech_id, tech_id))
+        try:
+            data_cur = connection.cursor()
+            data_cur.execute("delete from reports_2 where tech_id = %s", (tech_id,))
+            data_cur.execute("with max_vals  as (select max(value::real) as mv, source from reports_1 where tech_id = %s GROUP BY source ) "
+                             "insert into reports_2(tech_id, time, value)"
+                             "select r.tech_id, r.time, avg(r.value/m.mv) from reports_1 as r INNER JOIN max_vals as m on r.source = m.source "
+                             "where tech_id = %s GROUP BY r.tech_id, r.time;", (tech_id, tech_id))
 
-        # data_cur.execute("insert into reports_2(tech_id, time, value)  "
-        #                  "select tech_id, time, avg(value) as vavg from reports_1 "
-        #                  "where tech_id = %s group by tech_id, time", (tech_id,))
-        connection.commit()
+            # data_cur.execute("insert into reports_2(tech_id, time, value)  "
+            #                  "select tech_id, time, avg(value) as vavg from reports_1 "
+            #                  "where tech_id = %s group by tech_id, time", (tech_id,))
+            connection.commit()
+        except:
+            logger.warning("Failed to notmalize tech %s", tech_id, exc_info=True)
 
     pass
 
@@ -33,19 +36,22 @@ def normalize_google():
     techs_cur = connection.cursor()
     techs_cur.execute("select id, name from techs")
     for tech_id, tech_name in techs_cur:
-        data_cur = connection.cursor()
-        data_cur.execute("select time, value from rawdata where source ='google' and tech_id=%s", (tech_id,))
+        try:
+            data_cur = connection.cursor()
+            data_cur.execute("select time, value from rawdata where source ='google' and tech_id=%s", (tech_id,))
 
-        data = data_cur.fetchall()
-        if not data:
-            logger.debug("No data in google for tech %s", tech_name)
-            continue
-        data = statmodule.freq_month(data)
-        #data = statmodule.normalize_series(data)
-        data_cur.execute("delete from reports_1 where source = 'google' and tech_id = %s", (tech_id, ))
-        data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
-                             (('google', tech_id, d, v) for d, v in data))
-        connection.commit()
+            data = data_cur.fetchall()
+            if not data:
+                logger.debug("No data in google for tech %s", tech_name)
+                continue
+            data = statmodule.freq_month(data)
+            #data = statmodule.normalize_series(data)
+            data_cur.execute("delete from reports_1 where source = 'google' and tech_id = %s", (tech_id, ))
+            data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
+                                 (('google', tech_id, d, v) for d, v in data))
+            connection.commit()
+        except:
+            logger.warning("Failed to notmalize tech %s", tech_id, exc_info=True)
 
 
 def normalize_wiki():
@@ -53,23 +59,26 @@ def normalize_wiki():
     techs_cur = connection.cursor()
     techs_cur.execute("select id, name from techs")
     for tech_id, tech_name in techs_cur:
-        data_cur = connection.cursor()
-        data_cur.execute("select time, value from rawdata where source ='wiki' and tech_id=%s", (tech_id,))
+        try:
+            data_cur = connection.cursor()
+            data_cur.execute("select time, value from rawdata where source ='wiki' and tech_id=%s", (tech_id,))
 
-        data = data_cur.fetchall()
-        if not data:
-            logger.debug("No data in wiki for tech %s", tech_name)
-            continue
-        data = statmodule.outliers_filter(data)
-        data = statmodule.freq_month(data)
-        data = statmodule.sort_ts(data)
+            data = data_cur.fetchall()
+            if not data:
+                logger.debug("No data in wiki for tech %s", tech_name)
+                continue
+            data = statmodule.outliers_filter(data)
+            data = statmodule.freq_month(data)
+            data = statmodule.sort_ts(data)
 
 
-        #data = statmodule.normalize_series(data)
-        data_cur.execute("delete from reports_1 where source = 'wiki' and tech_id = %s", (tech_id, ))
-        data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
-                             (('wiki', tech_id, d, v) for d, v in data))
-        connection.commit()
+            #data = statmodule.normalize_series(data)
+            data_cur.execute("delete from reports_1 where source = 'wiki' and tech_id = %s", (tech_id, ))
+            data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
+                                 (('wiki', tech_id, d, v) for d, v in data))
+            connection.commit()
+        except:
+            logger.warning("Failed to notmalize tech %s", tech_id, exc_info=True)
 
 
 def normalize_itj():
@@ -77,22 +86,25 @@ def normalize_itj():
     techs_cur = connection.cursor()
     techs_cur.execute("select id, name from techs")
     for tech_id, tech_name in techs_cur:
-        data_cur = connection.cursor()
-        data_cur.execute("select time, value from rawdata where source ='itj' and tech_id=%s", (tech_id,))
+        try:
+            data_cur = connection.cursor()
+            data_cur.execute("select time, value from rawdata where source ='itj' and tech_id=%s", (tech_id,))
 
-        data = data_cur.fetchall()
-        if not data:
-            logger.debug("No data in itj for tech %s", tech_name)
-            continue
+            data = data_cur.fetchall()
+            if not data:
+                logger.debug("No data in itj for tech %s", tech_name)
+                continue
 
-        data = statmodule.freq_month(data)
-        data = statmodule.continue_to_now(data)
-        #data = statmodule.normalize_series(data)
-        data_cur.execute("delete from reports_1 where source = 'itj' and tech_id = %s", (tech_id, ))
-        data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
-                             (('itj', tech_id, d, v) for d, v in data))
-        connection.commit()
-    pass
+            data = statmodule.freq_month(data)
+            data = statmodule.continue_to_now(data)
+            #data = statmodule.normalize_series(data)
+            data_cur.execute("delete from reports_1 where source = 'itj' and tech_id = %s", (tech_id, ))
+            data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
+                                 (('itj', tech_id, d, v) for d, v in data))
+            connection.commit()
+        except:
+            logger.warning("Failed to notmalize tech %s", tech_id, exc_info=True)
+    #todo refactor, merge all common code
 
 
 def normalize_sot():
@@ -103,22 +115,25 @@ def normalize_sot():
     techs_cur = connection.cursor()
     techs_cur.execute("select id, name from techs")
     for tech_id, tech_name in techs_cur:
-        data_cur = connection.cursor()
-        data_cur.execute("select time, value from rawdata where source ='sot' and tech_id=%s", (tech_id,))
+        try:
+            data_cur = connection.cursor()
+            data_cur.execute("select time, value from rawdata where source ='sot' and tech_id=%s", (tech_id,))
 
-        data = data_cur.fetchall()
-        if not data:
-            logger.debug("No data in sot for tech %s", tech_name)
-            continue
+            data = data_cur.fetchall()
+            if not data:
+                logger.debug("No data in sot for tech %s", tech_name)
+                continue
 
-        #data = data[:-1]
-        data = statmodule.freq_month(data)
-        data = [(d, v / total_data[d] if d in total_data else 0) for d, v in data]
-        #data = statmodule.normalize_series(data)
-        data_cur.execute("delete from reports_1 where source = 'sot' and tech_id = %s", (tech_id, ))
-        data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
-                             (('sot', tech_id, d, v) for d, v in data))
-        connection.commit()
+            #data = data[:-1]
+            data = statmodule.freq_month(data)
+            data = [(d, v / total_data[d] if d in total_data else 0) for d, v in data]
+            #data = statmodule.normalize_series(data)
+            data_cur.execute("delete from reports_1 where source = 'sot' and tech_id = %s", (tech_id, ))
+            data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
+                                 (('sot', tech_id, d, v) for d, v in data))
+            connection.commit()
+        except:
+            logger.warning("Failed to notmalize tech %s", tech_id, exc_info=True)
     pass
 
 def normalize_gitstars():
@@ -126,21 +141,24 @@ def normalize_gitstars():
     techs_cur = connection.cursor()
     techs_cur.execute("select id, name from techs")
     for tech_id, tech_name in techs_cur:
-        data_cur = connection.cursor()
-        data_cur.execute("select time, value from rawdata where source ='gitstars' and tech_id=%s", (tech_id,))
+        try:
+            data_cur = connection.cursor()
+            data_cur.execute("select time, value from rawdata where source ='gitstars' and tech_id=%s", (tech_id,))
 
-        data = data_cur.fetchall()
-        if not data:
-            logger.debug("No data in getstars for tech %s", tech_name)
-            continue
+            data = data_cur.fetchall()
+            if not data:
+                logger.debug("No data in getstars for tech %s", tech_name)
+                continue
 
-        data = statmodule.freq_month(data)
-        data = statmodule.continue_to_now(data)
-        #data = statmodule.normalize_series(data)
-        data_cur.execute("delete from reports_1 where source = 'gitstars' and tech_id = %s", (tech_id, ))
-        data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
-                             (('gitstars', tech_id, d, v) for d, v in data))
-        connection.commit()
+            data = statmodule.freq_month(data)
+            data = statmodule.continue_to_now(data)
+            #data = statmodule.normalize_series(data)
+            data_cur.execute("delete from reports_1 where source = 'gitstars' and tech_id = %s", (tech_id, ))
+            data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
+                                 (('gitstars', tech_id, d, v) for d, v in data))
+            connection.commit()
+        except:
+            logger.warning("Failed to notmalize tech %s", tech_id, exc_info=True)
     pass
 
 if __name__ == '__main__':

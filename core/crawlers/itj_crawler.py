@@ -60,6 +60,9 @@ class ItjCrawler:
                 word += tess_digit(glyph).splitlines()[0]
 
             years.append((x1, x2, int(word)))
+        if not years:
+            self.logger.warning("No years on image")
+            raise ValueError("bad image")
         # add first year:
         l, r, year = years[0]
         years = [(l-(r-l), l, year - 1)] + years

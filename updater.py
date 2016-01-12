@@ -28,7 +28,10 @@ def update_data_part(name, updater_class, norm_function):
     upd = updater_class()
     if upd.update_data():
         logger.info("Data changed. Normalizing %s data", name)
-        norm_function()
+        try:
+            norm_function()
+        except:
+            logger.error("Normalization %s failed", name, exc_info=True)
         return True
     else:
         return False
@@ -43,17 +46,18 @@ def update_data():
         try:
             dirty |= update_data_part(name, upd_class, norm_fun)
         except:  # need most common error here
-            logger.error("Error occurred.", exc_info=True)
+            logger.error("Error occurred in processing %s source", name, exc_info=True)
 
     if dirty:
         logger.info("Data changed. Regenerate report2.")
         try:
             normalize.normalize()
         except:
-            logger.warning("Normalization failed.", exc_info=True)
+            logger.error("Normalization failed.", exc_info=True)
 
 
 if __name__ == "__main__":
     init_logging()
     update_data()
+
 
