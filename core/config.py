@@ -34,7 +34,6 @@ class BufferingSMTPHandler(logging.handlers.BufferingHandler):
         self.mailpassword = mailpassword
         self.subject = subject
         self.setFormatter(logging.Formatter("%(asctime)s %(levelname)-5s %(message)s"))
-        print("gdfsf")
 
     def flush(self):
         if len(self.buffer) > 0:
@@ -49,7 +48,6 @@ class BufferingSMTPHandler(logging.handlers.BufferingHandler):
                 msg = "From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n" % (self.fromaddr, self.toaddrs, self.subject)
                 for record in self.buffer:
                     s = self.format(record)
-                    print(s)
                     msg = msg + s + "\r\n"
                 smtp.sendmail(self.fromaddr, self.toaddrs, msg)
                 smtp.quit()
