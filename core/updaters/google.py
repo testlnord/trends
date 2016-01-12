@@ -23,11 +23,12 @@ class GoogleUpdater(DataUpdater):
 
         self.logger.info("Google updater initialized.")
 
-    def add_new_tech(self, tech_id, name):
-        self.settings[str(tech_id)] = {
+    def add_new_tech(self, tech_id:int, name:str):
+        # todo move common code to parent
+        self.settings[tech_id] = {
             "name": [name]
         }
-        self.last_dates[str(tech_id)] = datetime.date(2000, 1, 1).strftime(config['date_format'])
+        self.last_dates[tech_id] = datetime.date(2000, 1, 1).strftime(config['date_format'])
         self.commit_settings()
 
     def next_proxy(self):

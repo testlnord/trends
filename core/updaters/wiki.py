@@ -15,13 +15,13 @@ class WikiUpdater(DataUpdater):
         super().__init__('wiki', __name__)
         self.logger.info("Wiki updater initialized.")
 
-    def add_new_tech(self, tech_id, pages):
+    def add_new_tech(self, tech_id:int, pages:str):
         start_date = self.settings['earliest_date'] if 'earliest_date' in self.settings \
             else datetime.date(2000, 1, 1).strftime(config['date_format'])
-        self.settings[str(tech_id)] = {
+        self.settings[tech_id] = {
             "pages": pages
         }
-        self.last_dates[str(tech_id)] = start_date
+        self.last_dates[tech_id] = start_date
         self.commit_settings()
 
     def get_data(self, tech_id):

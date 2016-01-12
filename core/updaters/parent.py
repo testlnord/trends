@@ -43,8 +43,10 @@ class DataUpdater:
         self.source_config = cur.fetchone()[0]
 
     def commit_settings(self):
+        self.logger.debug("commiting settings")
         cur = self.connection.cursor()
         for tech_id in self.last_dates:
+            self.logger.debug("source: %s tech: %s %s date: %s settings: %s", self.source_name, tech_id, type(tech_id), self.last_dates[tech_id], self.settings[tech_id])
             cur.execute("update source_settings set (settings, last_update_date) = (%s, %s) "
                         "where source = %s AND tech_id = %s",
                         (json.dumps(self.settings[tech_id]), self.last_dates[tech_id],

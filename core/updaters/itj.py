@@ -14,12 +14,12 @@ class ItjUpdater(DataUpdater):
         super().__init__('itj', __name__)
         self.crawler = ItjCrawler()
 
-    def add_new_tech(self, tech_id, link):
+    def add_new_tech(self, tech_id:int, link:str):
         self.logger.debug("adding or updating technology %s %s", tech_id, link)
-        self.settings[str(tech_id)] = {
+        self.settings[tech_id] = {
             "link": [link]
         }
-        self.last_dates[str(tech_id)] = datetime.date(2000, 1, 1).strftime(config['date_format'])
+        self.last_dates[tech_id] = datetime.date(2000, 1, 1).strftime(config['date_format'])
         self.commit_settings()
 
 

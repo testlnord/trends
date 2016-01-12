@@ -105,6 +105,7 @@ class EditFormHandler(tornado.web.RequestHandler):
                 self.logger.error("tech_ids in addr and request differs")
                 self.send_error(409)
                 return
+            tech_id = int(tech_id)
 
             tech_name = self.get_argument("tech_name", "")
             wiki_pages = self.get_argument("wiki_all", "")
