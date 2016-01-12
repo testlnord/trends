@@ -129,8 +129,9 @@ class EditFormHandler(tornado.web.RequestHandler):
                 return
 
             cur = self.db_connection.cursor()
-            cur.execute("update techs set name = %s where id = %s", (tech_name, tech_id))
-            self.db_connection.commit()
+            if tech_name:
+                cur.execute("update techs set name = %s where id = %s", (tech_name, tech_id))
+                self.db_connection.commit()
             
             if wiki_pages:
                 wiki_pages = wiki_pages.split(",")
@@ -143,7 +144,7 @@ class EditFormHandler(tornado.web.RequestHandler):
                 GoogleUpdater().add_new_tech(tech_id, google_name)
                 self.write("google updated\n<br/>")
             if itj_page:
-                ItjUpdater().add_new_tech(tech_id, google_name)
+                ItjUpdater().add_new_tech(tech_id, itj_page)
                 self.write("Itj upd \n<br/>")
             if github_repo:
                 GitStarsUpdater().add_new_tech(tech_id, github_repo)

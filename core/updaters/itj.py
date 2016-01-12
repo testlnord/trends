@@ -15,6 +15,7 @@ class ItjUpdater(DataUpdater):
         self.crawler = ItjCrawler()
 
     def add_new_tech(self, tech_id, link):
+        self.logger.debug("adding or updating technology %s %s", tech_id, link)
         self.settings[str(tech_id)] = {
             "link": [link]
         }
