@@ -82,7 +82,7 @@ class DataUpdater:
                     continue
 
                 if not data:
-                    self.logger.warning("No data for query %s", tech_id)
+                    self.logger.info("No data for query %s", tech_id)
                 else:
                     self.update_db_data(data, tech_id)
                     dirty = True
