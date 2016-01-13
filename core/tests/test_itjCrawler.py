@@ -12,6 +12,7 @@ class TestItjCrawler(TestCase):
         self.crawler = ItjCrawler()
         self.test_image1 = Image.open(os.path.join(self.dir, "testimg1.png"))
         self.test_image2 = Image.open(os.path.join(self.dir, "testimg2.png"))
+        self.test_image3 = Image.open(os.path.join(self.dir, "testimg3.png"))
 
     def test__parse_image(self):
         self.assertEqual(len(self.crawler._parse_image(self.test_image1)), 127)
@@ -38,6 +39,9 @@ class TestItjCrawler(TestCase):
         self.assertListEqual(self.crawler.years_from_image(self.test_image2),
                              [(-2, 55, 2004), (55, 112, 2005), (112, 170, 2006), (170, 228, 2007), (228, 286, 2008), (286, 344, 2009),
                               (344, 402, 2010), (402, 460, 2011), (460, 518, 2012), (518, 576, 2013), (576, 634, 2014)])
+        self.assertListEqual(self.crawler.years_from_image(self.test_image3),
+                             [(-21, 42, 2006), (42, 105, 2007), (105, 168, 2008), (168, 231, 2009), (231, 294, 2010), (294, 358, 2011),
+                              (358, 421, 2012), (421, 484, 2013), (484, 547, 2014), (547, 610, 2015), (610, 673, 2016)])
 
     def test_y2value(self):
         self.assertEqual(self.crawler.y2value(10, [(0, 0), (20, 100.0)]), 50)
