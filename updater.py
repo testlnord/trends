@@ -19,7 +19,8 @@ sources = [('google', GoogleUpdater, normalize.normalize_google),
            #('sousers', SoUsersUpdater, normalize.normalize_sousers),
            ('sot', SotUpdater, normalize.normalize_sot),
            ('itj', ItjUpdater, normalize.normalize_itj),
-           ('gitstars', GitStarsUpdater, normalize.normalize_gitstars)]
+           ('gitstars', GitStarsUpdater, normalize.normalize_gitstars)
+           ]
 
 
 def update_data_part(name, updater_class, norm_function):
