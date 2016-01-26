@@ -33,6 +33,8 @@ def tess_percents(image):
                 (left_unrecognized_border, 0, left_unrecognized_border + glyph.size[0], text.size[1])).histogram()
             h2 = glyph.histogram()
             similarity.append((glyph_file[0], eqdist(h1, h2), glyph.size[0]))
+        if not similarity:
+            break
         symbol = min(similarity, key=lambda x: x[1])
         line += symbol[0]
         left_unrecognized_border += symbol[2]

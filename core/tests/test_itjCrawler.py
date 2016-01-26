@@ -13,6 +13,8 @@ class TestItjCrawler(TestCase):
         self.test_image1 = Image.open(os.path.join(self.dir, "testimg1.png"))
         self.test_image2 = Image.open(os.path.join(self.dir, "testimg2.png"))
         self.test_image3 = Image.open(os.path.join(self.dir, "testimg3.png"))
+        self.test_image4 = Image.open(os.path.join(self.dir, "testimg4.png"))
+
 
     def test__parse_image(self):
         self.assertEqual(len(self.crawler._parse_image(self.test_image1)), 127)
@@ -53,3 +55,7 @@ class TestItjCrawler(TestCase):
                         datetime.timedelta(days=2))
         self.assertLess(self.crawler.x2date(0, [(10, 20, 2000)]) - datetime.date(1999, 1, 1),
                         datetime.timedelta(days=2))
+
+    def test_getData(self):
+        data = self.crawler._parse_image(self.test_image4)
+        self.assertEqual(max(data, key=lambda x:x[0])[0].year, 2016)

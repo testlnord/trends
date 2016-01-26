@@ -49,7 +49,7 @@ class ItjCrawler:
                 glyph.paste(text.crop((x, 0, x + 6, 8)))
                 # have some issues with last ones, they crops and
                 # starts to have (0,0,0,0)-colored stripe
-                # little hack to eliminate it
+                #   little hack to eliminate it
                 data = numpy.array(glyph)  # "data" is a height x width x 4 numpy array
                 red, green, blue, alpha = data.T  # Temporarily unpack the bands for readability
                 # Replace zeros with white...
@@ -96,7 +96,7 @@ class ItjCrawler:
     @staticmethod
     def get_percent_coord(image):
         for y in range(image.size[1]):
-            if image.getpixel((615, y)) == (0, 0, 0, 255):
+            if image.getpixel((615, y)) == image.getpixel((614, y)) == image.getpixel((616, y)) == (0, 0, 0, 255):
                 yield y
         raise StopIteration()
 
