@@ -32,7 +32,8 @@ class DataUpdater:
 
     def open_settings(self):
         cur = self.connection.cursor()
-        cur.execute("select tech_id, settings, last_update_date from source_settings where source = %s",
+        cur.execute("select tech_id, settings, last_update_date from source_settings "
+                    "where source = %s ORDER by last_update_date ASC",
                     (self.source_name,))
 
         for row in cur.fetchall():
