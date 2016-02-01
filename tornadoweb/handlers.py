@@ -179,7 +179,7 @@ class CsvHandler(tornado.web.RequestHandler):
     def to_csv(result):
         names = list(result)
         #make header
-        response = [','.join("time, {}".format(x) for x in names)]
+        response = [','.join("time,{}".format(x) for x in names)]
         #make body
         for line in zip_longest(*[sorted(result[name], key=lambda x: x[0]) for name in names], fillvalue=("NA", "NA")):
             response.append(','.join(str(pair[0]) + ',' + str(pair[1]) for pair in line))
