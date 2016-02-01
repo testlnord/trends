@@ -59,7 +59,7 @@ class WikiUpdater(DataUpdater):
 
             url = "http://stats.grok.se/json/en/" + month.strftime("%Y%m") + "/" + internet.quote(page_name)
             try:
-                data = internet.get_from_url(url)
+                data = internet.get_from_url(url, force_wait=True)
             except (urllib.error.URLError, urllib.error.HTTPError):
                 self.logger.warning("URL error on url: %s", url)
                 raise
