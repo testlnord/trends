@@ -57,26 +57,26 @@ class IndeedCrawler:
         left_x = right_x = 0
         best_left = best_right = 0
 
-        for x in range(int(image.width / 2)):
+        for x in range(int(image.size[0] / 2)):
             v_sum_left = 0
-            for y in range(image.height):
+            for y in range(image.size[1]):
                 if image.getpixel((x, y)) == self.LEFT_BOTTOM_LINE_COLOR:
                     v_sum_left += 1
             if v_sum_left > best_left:
                 best_left = v_sum_left
                 left_x = x
-            if best_left > image.height / 2:  # optimization
+            if best_left > image.size[1] / 2:  # optimization
                 break
 
-        for x in range(image.width - 1, int(image.width / 2), -1):
+        for x in range(image.size[0] - 1, int(image.size[0] / 2), -1):
             v_sum_right = 0
-            for y in range(image.height):
+            for y in range(image.size[1]):
                 if image.getpixel((x, y)) == self.RIGHT_TOP_LINE_COLOR:
                     v_sum_right += 1
             if v_sum_right > best_right:
                 best_right = v_sum_right
                 right_x = x
-            if best_right > image.height / 2:  # optimization
+            if best_right > image.size[1] / 2:  # optimization
                 break
 
         return left_x, right_x
@@ -85,33 +85,33 @@ class IndeedCrawler:
         top_y = bottom_y = 0
         best_top = best_bottom = 0
 
-        for y in range(int(image.height / 2)):
+        for y in range(int(image.size[1] / 2)):
             h_sum_t = 0
-            for x in range(image.width):
+            for x in range(image.size[0]):
                 if image.getpixel((x, y)) == self.RIGHT_TOP_LINE_COLOR:
                     h_sum_t += 1
             if h_sum_t > best_top:
                 best_top = h_sum_t
                 top_y = y
-            if best_top > image.width / 2:  # optimization
+            if best_top > image.size[0] / 2:  # optimization
                 break
 
-        for y in range(image.height - 1, int(image.height / 2), -1):
+        for y in range(image.size[1] - 1, int(image.size[1] / 2), -1):
             h_sum_b = 0
-            for x in range(image.width):
+            for x in range(image.size[0]):
                 if image.getpixel((x, y)) == self.LEFT_BOTTOM_LINE_COLOR:
                     h_sum_b += 1
             if h_sum_b > best_bottom:
                 best_bottom = h_sum_b
                 bottom_y = y
-            if best_bottom > image.width / 2:  # optimization
+            if best_bottom > image.size[0] / 2:  # optimization
                 break
 
         return top_y, bottom_y
 
     def _extract_ticks_on_vertical_axis(self, image: Image, left_line_x: int) -> list:
         ticks = []
-        for y in range(image.height):
+        for y in range(image.size[1]):
             if image.getpixel((left_line_x - 1, y)) == image.getpixel((left_line_x - 2, y)) \
                     == self.LEFT_BOTTOM_LINE_COLOR:
                 ticks.append(y)
@@ -119,7 +119,7 @@ class IndeedCrawler:
 
     def _extract_ticks_on_horizontal_axis(self, image: Image, bottom_line_y: int) -> list:
         ticks = []
-        for x in range(image.width):
+        for x in range(image.size[0]):
             if image.getpixel((x, bottom_line_y + 1)) == image.getpixel((x, bottom_line_y + 2)) \
                     == self.LEFT_BOTTOM_LINE_COLOR:
                 ticks.append(x)
@@ -140,11 +140,11 @@ class IndeedCrawler:
             # region.save(str(tick)+'.bmp')
             word = ''
             leftmost_unread_pixel = 0
-            while leftmost_unread_pixel < text.width:
+            while leftmost_unread_pixel < text.size[0]:
                 x_left = leftmost_unread_pixel
                 x_right = leftmost_unread_pixel + self.tesser.max_width
-                if x_right > text.width:
-                    x_right = text.width
+                if x_right > text.size[0]:
+                    x_right = text.size[0]
                 glyph = Image.new('RGBA', (x_right - x_left, 8), (255, 255, 255))
                 glyph.paste(text.crop((x_left, 0, x_right, 8)))
                 letter, width = self.tesser.tess(glyph)
@@ -160,14 +160,14 @@ class IndeedCrawler:
             # this 15s is bugprone estimations
             # todo  fairly find gaps bw words
 
-            box = (tick - 15, bottom_line_y + 3, tick + 20, image.height)
+            box = (tick - 15, bottom_line_y + 3, tick + 20, image.size[1])
             region = image.crop(box)
 
             text = region.crop(ImageOps.invert(region.convert('RGB')).getbbox())
             # debug
             # region.save(str(tick)+'.bmp')
             word = ''
-            rightmost_unread_pixel = text.width
+            rightmost_unread_pixel = text.size[0]
             while rightmost_unread_pixel > 0:
                 x_left = rightmost_unread_pixel - self.tesser.max_width
                 if x_left < 0:
@@ -201,38 +201,34 @@ class IndeedCrawler:
     def _extract_values(self, image, percents, years):
         prev_year, prev_tick = years[0]
         values = []
-        for year, tick in years[1:]:
-            month_step = (tick-prev_tick)/12
-            for month in range(1,13):
-                mx = int(prev_tick + month_step*(month-1))
+        for next_year, next_tick in years[1:]:
+            month_step = (next_tick - prev_tick) / 12
+            for month in range(1, 13):
+                mx = int(prev_tick + month_step * (month - 1))
                 value_ys = []
-                for y in range(image.height):
+                for y in range(image.size[1]):
                     if image.getpixel((mx, y)) == self.VALUES_COLOR:
                         value_ys.append(y)
 
                 if value_ys:
-                    avg_y = sum(value_ys)/len(value_ys)
+                    avg_y = sum(value_ys) / len(value_ys)
                     value = self._coord_to_value(avg_y, percents)
-                    date = datetime.date(year, month, 1)
+                    date = datetime.date(prev_year, month, 1)
                     values.append((date, value))
-            prev_tick, prev_year = tick, year
+            prev_tick, prev_year = next_tick, next_year
         return values
-
 
     def _coord_to_value(self, y, percents):
         prev_perc, prev_tick = percents[0]
         if y > prev_tick:
             perc, tick = percents[1]
-            return prev_perc + ((prev_tick-y)/(tick-prev_tick))*(prev_perc - perc)
+            return prev_perc + ((prev_tick - y) / (tick - prev_tick)) * (prev_perc - perc)
 
         for perc, tick in percents[1:]:
             if prev_tick <= y < tick:
-                return prev_perc + ((prev_tick - y)/(prev_tick - tick))*(perc - prev_perc)
+                return prev_perc + ((prev_tick - y) / (prev_tick - tick)) * (perc - prev_perc)
             prev_perc, prev_tick = perc, tick
 
         # if we haven't terminated than y >= max(tick) and prev_tick = max(tick)
         perc_n1, tick_n1 = percents[-2]
-        return prev_perc + ((prev_tick - y)/(tick_n1 - prev_tick))*(prev_perc - perc_n1)
-
-
-
+        return prev_perc + ((prev_tick - y) / (tick_n1 - prev_tick)) * (prev_perc - perc_n1)
