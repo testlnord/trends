@@ -53,3 +53,39 @@ def tess_digit(image):
         values.append((file[0], rms))
     val = min(values, key=lambda x: x[1])
     return val[0]
+
+
+class MyTess:
+    def __init__(self, path_to_glyphs):
+        self.glyph_path = os.path.join(os.path.dirname(__file__), 'digit_glyphs', path_to_glyphs)
+        self.glyphs = []
+        self.max_width = 0
+        for glyph_name in os.listdir(self.glyph_path):
+            if glyph_name.endswith('.png'):
+                glyph_image = Image.open(os.path.join(self.glyph_path, glyph_name))
+                if self.max_width < glyph_image.size[0]:
+                    self.max_width = glyph_image.size[0]
+                self.glyphs.append((glyph_name[:-4], glyph_image.size[0], glyph_image.histogram()))
+                glyph_image.close()
+                # todo nice to have check that all glyphs has different histograms
+
+    def tess(self, image, left=True):
+        text_hists = {}
+        values = []
+        for name, w, hist in self.glyphs:
+            try:
+                text_hist = text_hists[w]
+            except KeyError:
+                if left:
+                    box = (0, 0, w, image.size[1])
+                else:
+                    box = (image.size[0] - w, 0, image.size[0], image.size[1])
+                region = image.crop(box)
+                text_hist = region.histogram()
+                text_hists[w] = text_hist
+            rms = eqdist(hist, text_hist)
+            values.append((rms, name, w))
+        best_match = min(values, key=lambda x: (round(x[0], 5), -x[2]))
+        if best_match[0] > 1:
+            return '', 1
+        return best_match[1], best_match[2]
