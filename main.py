@@ -4,6 +4,7 @@ import sys
 import tornado.ioloop
 import tornado.web
 from tornadoweb.handlers import MainHandler, AjaxHandler, TechsHandler, CsvHandler
+from tornadoweb.indeed_handler import IndeedHandler
 from tornadoweb.info_handlers import TechInfoHandler, TechSearchHandler
 from tornadoweb.tech_add_handlers import AddFormHandler, AddFormAjaxHandler
 from tornadoweb.tech_edit_handlers import EditFormHandler
@@ -11,6 +12,11 @@ from tornadoweb.feedback_handlers import ReceiveFeedbackHandler, ShowFeedbacksHa
 from tornadoweb.daemon3x import daemon
 from tornadoweb.config import config, init_logging
 import tornadoweb.api_v1 as api1
+
+
+
+
+
 
 class TrendsWebServer(daemon):
     def run(self):
@@ -36,6 +42,7 @@ class TrendsWebServer(daemon):
             (r"/api/v1/techs/([0-9]*)/sources/?", api1.TechSourcesHandler),
             (r"/api/v1/sources/?", api1.SourcesListHandler),
             (r"/api/v1/techs/([0-9]*)/sources/([a-z]*)/?", api1.TechTrendHandler),
+            (r"/indeed/([a-zA-Z+]+)", IndeedHandler),
         ])
         logger.info("Application created. Starting to listen port...")
         application.listen(config["port"])

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Indeed parser</title>
+</head>
+<body>
+if the plot is correct press "Download" button. Else try again.
+<img src="http://www.indeed.com/trendgraph/jobgraph.png?q=%22{{ slug }}%22">
+<form action="/indeed/{{ slug }}" method="post">
+    <input type="hidden" value="{{ slug }}">
+    <input type="submit" value="Download">
+</form>
+</body>
+</html>
