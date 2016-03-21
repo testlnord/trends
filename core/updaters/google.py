@@ -28,7 +28,7 @@ class GoogleUpdater(DataUpdater):
         self.settings[tech_id] = {
             "name": [name]
         }
-        self.last_dates[tech_id] = datetime.date(2000, 1, 1).strftime(config['date_format'])
+        self.last_dates[tech_id] = self.get_earliest_date()
         self.commit_settings()
 
     def next_proxy(self):

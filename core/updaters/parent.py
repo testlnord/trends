@@ -24,6 +24,11 @@ class DataUpdater:
         self.open_settings()
         self.logger = logging.getLogger(logger_name)
 
+    def get_earliest_date(self):
+        start_date = self.source_config['earliest_date'] if 'earliest_date' in self.source_config \
+            else datetime.date(2001, 1, 1).strftime(config['date_format'])
+        return start_date
+
     def add_new_tech(self, tech_id, info):
         raise NotImplemented
 

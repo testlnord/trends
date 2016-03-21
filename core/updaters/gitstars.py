@@ -13,8 +13,7 @@ class GitStarsUpdater(DataUpdater):
         self.crawler = gitstars_crawler.GitStarsCrawler()
 
     def add_new_tech(self, tech_id:int, repo_name:str):
-        start_date = self.source_config['earliest_date'] if 'earliest_date' in self.source_config \
-            else datetime.date(2001, 1, 1).strftime(config['date_format'])
+        start_date = self.get_earliest_date()
         self.logger.debug("adding or editing technology %s %s from %s", tech_id, repo_name, start_date)
         self.settings[tech_id] = {
             "repo": [repo_name]

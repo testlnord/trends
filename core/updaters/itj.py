@@ -19,7 +19,7 @@ class ItjUpdater(DataUpdater):
         self.settings[tech_id] = {
             "link": [link]
         }
-        self.last_dates[tech_id] = datetime.date(2000, 1, 1).strftime(config['date_format'])
+        self.last_dates[tech_id] = self.get_earliest_date()
         self.commit_settings()
 
 

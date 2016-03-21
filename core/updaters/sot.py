@@ -14,8 +14,7 @@ class SotUpdater(DataUpdater):
         self.crawler = sot_crawler.SotCrawler(self.source_config["apikey"])
 
     def add_new_tech(self, tech_id:int, tag:str):
-        start_date = self.source_config['earliest_date'] if 'earliest_date' in self.source_config \
-            else datetime.date(2001, 1, 1).strftime(config['date_format'])
+        start_date = self.get_earliest_date()
         self.settings[tech_id] = {
             "tag": [tag]
         }
