@@ -13,14 +13,8 @@ class ItjUpdater(DataUpdater):
     def __init__(self):
         super().__init__('itj', __name__)
         self.crawler = ItjCrawler()
+        self.entity_name = 'link'
 
-    def add_new_tech(self, tech_id:int, link:str):
-        self.logger.debug("adding or updating technology %s %s", tech_id, link)
-        self.settings[tech_id] = {
-            "link": [link]
-        }
-        self.last_dates[tech_id] = self.get_earliest_date()
-        self.commit_settings()
 
 
     def get_data(self, tech_id):

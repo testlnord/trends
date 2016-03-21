@@ -11,15 +11,7 @@ class GitStarsUpdater(DataUpdater):
     def __init__(self):
         super().__init__('gitstars', __name__)
         self.crawler = gitstars_crawler.GitStarsCrawler()
-
-    def add_new_tech(self, tech_id:int, repo_name:str):
-        start_date = self.get_earliest_date()
-        self.logger.debug("adding or editing technology %s %s from %s", tech_id, repo_name, start_date)
-        self.settings[tech_id] = {
-            "repo": [repo_name]
-        }
-        self.last_dates[tech_id] = start_date
-        self.commit_settings()
+        self.entity_name = 'repo'
 
     @staticmethod
     def is_valid_repository_name(reponame):

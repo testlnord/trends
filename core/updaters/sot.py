@@ -12,14 +12,8 @@ class SotUpdater(DataUpdater):
     def __init__(self):
         super().__init__('sot', __name__)
         self.crawler = sot_crawler.SotCrawler(self.source_config["apikey"])
+        self.entity_name = 'tag'
 
-    def add_new_tech(self, tech_id:int, tag:str):
-        start_date = self.get_earliest_date()
-        self.settings[tech_id] = {
-            "tag": [tag]
-        }
-        self.last_dates[tech_id] = start_date
-        self.commit_settings()
 
     def get_data(self, tech_id):
         last_date = self.last_dates[tech_id] - datetime.timedelta(days=3)

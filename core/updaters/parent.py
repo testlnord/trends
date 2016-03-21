@@ -20,6 +20,8 @@ class DataUpdater:
         self.settings = {}
         self.source_config = {}
 
+        self.entity_name = None
+
         self.source_name = source_name
         self.open_settings()
         self.logger = logging.getLogger(logger_name)
@@ -29,8 +31,26 @@ class DataUpdater:
             else datetime.date(2001, 1, 1).strftime(config['date_format'])
         return start_date
 
-    def add_new_tech(self, tech_id, info):
-        raise NotImplemented
+    def add_new_tech(self, tech_id: int, info: list):
+        if self.entity_name is None:
+            raise NotImplemented('Entity name must be initilized')
+        if info:
+            start_date = self.get_earliest_date()
+            self.settings[tech_id] = {
+                self.entity_name: info
+            }
+            self.last_dates[tech_id] = start_date
+        else:
+            try:
+                del self.settings[tech_id]
+            except KeyError:
+                pass
+
+            try:
+                del self.last_dates[tech_id]
+            except KeyError:
+                pass
+        self.commit_settings()
 
     def update_data(self):
         raise NotImplemented

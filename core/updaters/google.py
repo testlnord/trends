@@ -17,19 +17,14 @@ class GoogleUpdater(DataUpdater):
 
     def __init__(self):
         super().__init__('google', __name__)
+        self.entity_name = 'name'
 
         self.proxy_iter = iter(self.source_config["proxies"])
         self.make_google_connection()
 
         self.logger.info("Google updater initialized.")
 
-    def add_new_tech(self, tech_id:int, name:str):
-        # todo move common code to parent
-        self.settings[tech_id] = {
-            "name": [name]
-        }
-        self.last_dates[tech_id] = self.get_earliest_date()
-        self.commit_settings()
+
 
     def next_proxy(self):
         try:

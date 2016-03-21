@@ -14,22 +14,9 @@ class WikiUpdater(DataUpdater):
     def __init__(self):
         super().__init__('wiki', __name__)
         self.logger.info("Wiki updater initialized.")
+        self.entity_name = 'pages'
 
-    def add_new_tech(self, tech_id:int, pages:str):
-        if pages:
-            start_date = self.get_earliest_date()
-            self.settings[tech_id] = {
-                "pages": pages
-            }
-            self.last_dates[tech_id] = start_date
-        else:
-            if tech_id in self.settings:
-                try:
-                    del self.settings[tech_id]
-                    del self.last_dates[tech_id]
-                except KeyError:
-                    pass
-        self.commit_settings()
+
 
     def get_data(self, tech_id):
         last_date = self.last_dates[tech_id]
