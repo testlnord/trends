@@ -138,18 +138,34 @@ class EditFormHandler(tornado.web.RequestHandler):
                 wiki_pages = wiki_pages.split(",")
                 WikiUpdater().add_or_update_new_tech(tech_id, wiki_pages)
                 self.write("wiki updated\n<br/>")
+            else:
+                WikiUpdater().add_or_update_new_tech(tech_id, [])
+                self.write('wiki cleared\n<br/>')
             if sot_tag:
-                SotUpdater().add_or_update_new_tech(tech_id, sot_tag)
+                SotUpdater().add_or_update_new_tech(tech_id, [sot_tag])
                 self.write("sot updatd\n<br/>")
+            else:
+                SotUpdater().add_or_update_new_tech(tech_id, [])
+                self.write('wiki cleared\n<br/>')
             if google_name:
-                GoogleUpdater().add_or_update_new_tech(tech_id, google_name)
+                GoogleUpdater().add_or_update_new_tech(tech_id, [google_name])
                 self.write("google updated\n<br/>")
+            else:
+                GoogleUpdater().add_or_update_new_tech(tech_id, [])
+                self.write('wiki cleared\n<br/>')
+
             if itj_page:
-                ItjUpdater().add_or_update_new_tech(tech_id, itj_page)
+                ItjUpdater().add_or_update_new_tech(tech_id, [itj_page])
                 self.write("Itj upd \n<br/>")
+            else:
+                ItjUpdater().add_or_update_new_tech(tech_id, [])
+                self.write('wiki cleared\n<br/>')
             if github_repo:
-                GitStarsUpdater().add_or_update_new_tech(tech_id, github_repo)
+                GitStarsUpdater().add_or_update_new_tech(tech_id, [github_repo])
                 self.write("Gitstars upd\n<br/>")
+            else:
+                GitStarsUpdater().add_or_update_new_tech(tech_id, [])
+                self.write('wiki cleared\n<br/>')
 
             self.write("Inserted successfully")
             self.write('<a href="/tech#{}">View tech {}</a>'.format(tech_id, tech_name))

@@ -70,16 +70,16 @@ class AddFormHandler(tornado.web.RequestHandler):
                 WikiUpdater().add_or_update_new_tech(fb_id, wiki_pages)
                 self.write("wiki updated\n<br/>")
             if sot_tag:
-                SotUpdater().add_or_update_new_tech(fb_id, sot_tag)
+                SotUpdater().add_or_update_new_tech(fb_id, [sot_tag])
                 self.write("sot updatd\n<br/>")
             if google_name:
-                GoogleUpdater().add_or_update_new_tech(fb_id, google_name)
+                GoogleUpdater().add_or_update_new_tech(fb_id, [google_name])
                 self.write("google updated\n<br/>")
             if itj_page:
-                ItjUpdater().add_or_update_new_tech(fb_id, google_name)
+                ItjUpdater().add_or_update_new_tech(fb_id, [itj_page])
                 self.write("Itj upd \n<br/>")
             if github_repo:
-                GitStarsUpdater().add_or_update_new_tech(fb_id, github_repo)
+                GitStarsUpdater().add_or_update_new_tech(fb_id, [github_repo])
                 self.write("Gitstars upd\n<br/>")
 
             self.write("Inserted successfully")
