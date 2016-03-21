@@ -31,9 +31,9 @@ class DataUpdater:
             else datetime.date(2001, 1, 1).strftime(config['date_format'])
         return start_date
 
-    def add_new_tech(self, tech_id: int, info: list):
+    def add_or_update_new_tech(self, tech_id: int, info: list):
         if self.entity_name is None:
-            raise NotImplemented('Entity name must be initilized')
+            raise NotImplemented('Entity name must be initialized in __init__')
         if info:
             start_date = self.get_earliest_date()
             self.settings[tech_id] = {

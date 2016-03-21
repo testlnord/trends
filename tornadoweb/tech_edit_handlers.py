@@ -136,19 +136,19 @@ class EditFormHandler(tornado.web.RequestHandler):
             
             if wiki_pages:
                 wiki_pages = wiki_pages.split(",")
-                WikiUpdater().add_new_tech(tech_id, wiki_pages)
+                WikiUpdater().add_or_update_new_tech(tech_id, wiki_pages)
                 self.write("wiki updated\n<br/>")
             if sot_tag:
-                SotUpdater().add_new_tech(tech_id, sot_tag)
+                SotUpdater().add_or_update_new_tech(tech_id, sot_tag)
                 self.write("sot updatd\n<br/>")
             if google_name:
-                GoogleUpdater().add_new_tech(tech_id, google_name)
+                GoogleUpdater().add_or_update_new_tech(tech_id, google_name)
                 self.write("google updated\n<br/>")
             if itj_page:
-                ItjUpdater().add_new_tech(tech_id, itj_page)
+                ItjUpdater().add_or_update_new_tech(tech_id, itj_page)
                 self.write("Itj upd \n<br/>")
             if github_repo:
-                GitStarsUpdater().add_new_tech(tech_id, github_repo)
+                GitStarsUpdater().add_or_update_new_tech(tech_id, github_repo)
                 self.write("Gitstars upd\n<br/>")
 
             self.write("Inserted successfully")
