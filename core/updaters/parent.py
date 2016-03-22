@@ -52,9 +52,6 @@ class DataUpdater:
                 pass
         self.commit_settings()
 
-    def update_data(self):
-        raise NotImplemented
-
     def open_settings(self):
         cur = self.connection.cursor()
         cur.execute("select tech_id, settings, last_update_date from source_settings "
@@ -71,6 +68,10 @@ class DataUpdater:
     def commit_settings(self):
         self.logger.debug("commiting settings")
         cur = self.connection.cursor()
+
+        # store all known tech ids in case when I want to remove some of them later
+        known_techs = set(row[0] for row in
+                          cur.execute("select tech_id from source_settings where source = %s", (self.source_name,)))
         for tech_id in self.last_dates:
             cur.execute("update source_settings set (settings, last_update_date) = (%s, %s) "
                         "where source = %s AND tech_id = %s",
@@ -85,8 +86,12 @@ class DataUpdater:
                              self.last_dates[tech_id]))
         cur.execute("update sources set config = %s where name = %s", (json.dumps(self.source_config),
                                                                        self.source_name))
-        self.connection.commit()
 
+        # remove all technologies I want to remove
+        for tech_id in known_techs.difference(set(self.last_dates.keys())):
+            cur.execute('delete from source_settings where source = %s and source_settings.tech_id = %s', (self.source_name, tech_id))
+
+        self.connection.commit()
 
     def update_data(self):
         """Updates data for all technologies
