@@ -171,7 +171,7 @@ class EditFormHandler(tornado.web.RequestHandler):
             self.write('<a href="/tech#{}">View tech {}</a>'.format(tech_id, tech_name))
             self.write("</div></body></html>")
         except Exception:
-            self.logger.error("An error occured.\n%s", traceback.format_exc())
+            self.logger.error("An error occurred.\n%s", traceback.format_exc())
             raise
 
 
