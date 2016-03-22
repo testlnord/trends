@@ -168,7 +168,8 @@ class EditFormHandler(tornado.web.RequestHandler):
                 self.write('Gitstars cleared\n<br/>\n')
 
             self.write("Inserted successfully\n<br/>\n")
-            self.write('<a href="/tech#{}">View tech {}</a>'.format(tech_id, tech_name))
+            self.write('<a href="/tech#{}">View tech {} data</a> \n<br/>\n'.format(tech_id, tech_name))
+            self.write('<a href="/tech_info/{}">View tech {} info</a> \n<br/>\n'.format(tech_id, tech_name))
             self.write("</div></body></html>")
         except Exception:
             self.logger.error("An error occurred.\n%s", traceback.format_exc())
