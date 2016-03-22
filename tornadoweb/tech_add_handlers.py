@@ -68,21 +68,21 @@ class AddFormHandler(tornado.web.RequestHandler):
             if wiki_pages:
                 wiki_pages = wiki_pages.split(",")
                 WikiUpdater().add_or_update_new_tech(fb_id, wiki_pages)
-                self.write("wiki updated\n<br/>")
+                self.write("wiki added\n<br/>\n")
             if sot_tag:
                 SotUpdater().add_or_update_new_tech(fb_id, [sot_tag])
-                self.write("sot updatd\n<br/>")
+                self.write("sot added\n<br/>\n")
             if google_name:
                 GoogleUpdater().add_or_update_new_tech(fb_id, [google_name])
-                self.write("google updated\n<br/>")
+                self.write("google added\n<br/>\n")
             if itj_page:
                 ItjUpdater().add_or_update_new_tech(fb_id, [itj_page])
-                self.write("Itj upd \n<br/>")
+                self.write("Itj added \n<br/>\n")
             if github_repo:
                 GitStarsUpdater().add_or_update_new_tech(fb_id, [github_repo])
-                self.write("Gitstars upd\n<br/>")
+                self.write("Gitstars added\n<br/>\n")
 
-            self.write("Inserted successfully")
+            self.write("Inserted successfully\n<br/>\n")
             self.write('<a href="/tech_add">Add one more tech</a>')
             self.write("</div></body></html>")
         except Exception:
