@@ -114,12 +114,12 @@ class EditFormHandler(tornado.web.RequestHandler):
             itj_page = self.get_argument("itj_name", "")
             github_repo = self.get_argument("github_repo", '')
 
-            self.write("tn: " + tech_name + "<br/>\n")
-            self.write("wn: " + wiki_pages + "<br/>\n")
-            self.write("gn: " + google_name + "<br/>\n")
-            self.write("sn: " + sot_tag + "<br/>\n")
-            self.write("in: " + itj_page + "<br/>\n")
-            self.write("gs: " + github_repo + "<br/>\n")
+            self.write("tn: " + tech_name + "<br/>\n\n")
+            self.write("wn: " + wiki_pages + "<br/>\n\n")
+            self.write("gn: " + google_name + "<br/>\n\n")
+            self.write("sn: " + sot_tag + "<br/>\n\n")
+            self.write("in: " + itj_page + "<br/>\n\n")
+            self.write("gs: " + github_repo + "<br/>\n\n")
 
             if not tech_name or (not wiki_pages and
                                      not google_name and
@@ -137,37 +137,37 @@ class EditFormHandler(tornado.web.RequestHandler):
             if wiki_pages:
                 wiki_pages = wiki_pages.split(",")
                 WikiUpdater().add_or_update_new_tech(tech_id, wiki_pages)
-                self.write("wiki updated\n<br/>")
+                self.write("wiki updated\n<br/>\n")
             else:
                 WikiUpdater().add_or_update_new_tech(tech_id, [])
-                self.write('wiki cleared\n<br/>')
+                self.write('wiki cleared\n<br/>\n')
             if sot_tag:
                 SotUpdater().add_or_update_new_tech(tech_id, [sot_tag])
-                self.write("sot updatd\n<br/>")
+                self.write("sot updatd\n<br/>\n")
             else:
                 SotUpdater().add_or_update_new_tech(tech_id, [])
-                self.write('wiki cleared\n<br/>')
+                self.write('sot cleared\n<br/>\n')
             if google_name:
                 GoogleUpdater().add_or_update_new_tech(tech_id, [google_name])
-                self.write("google updated\n<br/>")
+                self.write("google updated\n<br/>\n")
             else:
                 GoogleUpdater().add_or_update_new_tech(tech_id, [])
-                self.write('wiki cleared\n<br/>')
+                self.write('google cleared\n<br/>\n')
 
             if itj_page:
                 ItjUpdater().add_or_update_new_tech(tech_id, [itj_page])
-                self.write("Itj upd \n<br/>")
+                self.write("Itj upd \n<br/>\n")
             else:
                 ItjUpdater().add_or_update_new_tech(tech_id, [])
-                self.write('wiki cleared\n<br/>')
+                self.write('Itj cleared\n<br/>\n')
             if github_repo:
                 GitStarsUpdater().add_or_update_new_tech(tech_id, [github_repo])
-                self.write("Gitstars upd\n<br/>")
+                self.write("Gitstars upd\n<br/>\n")
             else:
                 GitStarsUpdater().add_or_update_new_tech(tech_id, [])
-                self.write('wiki cleared\n<br/>')
+                self.write('Gitstars cleared\n<br/>\n')
 
-            self.write("Inserted successfully")
+            self.write("Inserted successfully\n<br/>\n")
             self.write('<a href="/tech#{}">View tech {}</a>'.format(tech_id, tech_name))
             self.write("</div></body></html>")
         except Exception:
