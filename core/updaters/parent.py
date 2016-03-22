@@ -70,8 +70,8 @@ class DataUpdater:
         cur = self.connection.cursor()
 
         # store all known tech ids in case when I want to remove some of them later
-        known_techs = set(row[0] for row in
-                          cur.execute("select tech_id from source_settings where source = %s", (self.source_name,)))
+        cur.execute("select tech_id from source_settings where source = %s", (self.source_name,))
+        known_techs = set(row[0] for row in cur.fetchall())
         for tech_id in self.last_dates:
             cur.execute("update source_settings set (settings, last_update_date) = (%s, %s) "
                         "where source = %s AND tech_id = %s",
