@@ -34,8 +34,7 @@ class MainHandler(tornado.web.RequestHandler):
             pass
         cur = self.db_connection.cursor()
         cur.execute("SELECT id, info::JSON FROM techs")
-        page_template = self.template_loader.load('index.html')
-        self.write(page_template.generate(techs=cur.fetchall()))
+        self.render('index.html', techs=cur.fetchall())
 
 
 class TechsHandler(tornado.web.RequestHandler):
@@ -48,13 +47,13 @@ class TechsHandler(tornado.web.RequestHandler):
     def get(self, *slug):
         if slug and len(slug) == 1:
             self.redirect('/tech#'+slug[0])
-        page_template = self.template_loader.load('techs.html')
+
         cur = self.db_connection.cursor()
         cur.execute("SELECT id, name, info::JSON FROM techs")
         technologies = cur.fetchall()
         try:
             technologies = sorted(technologies, key=lambda x: x[1].lower())
-            self.write(page_template.generate(techs=technologies))
+            self.render('techs.html', techs=technologies,selectors_count=5)
         except Exception as e:
             t, e, tb = sys.exc_info()
             self.write(str(e))
@@ -63,6 +62,7 @@ class TechsHandler(tornado.web.RequestHandler):
 
 
 def get_norm_data(connection, tids):
+    # todo make nice filtration and summarizing
     cur = connection.cursor()
     a = ','.join((str(x) for x in tids))
     cur.execute("SELECT id, name, info::JSON FROM techs WHERE id IN (" + a + ')')
@@ -84,7 +84,9 @@ def get_norm_data(connection, tids):
         max_min_date = max(min_dates)
         min_max_date = min(max_dates)
         for k in res:
-            res[k] = {d: v for d, v in res[k] if min_max_date >= d >= max_min_date}
+            #  I will remove filter. let's look what we will get
+            # res[k] = {d: v for d, v in res[k] if min_max_date >= d >= max_min_date}
+            res[k] = {d: v for d, v in res[k] if d >= max_min_date}
         result[tid].update(res)
     # renorm values
     # get min and max for each of source in selected techs
@@ -101,7 +103,7 @@ def get_norm_data(connection, tids):
                                   'max': max(minmax_dict[k]['max'], max(res[k].values()))}
     # normalize values with new min and max
     for res in result.values():
-        average = {}
+        average = {d:[] for k in res for d in res[k]}
         for k in res:
             if k == 'tech_name':
                 continue
@@ -114,7 +116,7 @@ def get_norm_data(connection, tids):
                 average = {d['date']: [d['value']] for d in res[k]}
             else:
                 [average[d['date']].append(d['value']) for d in res[k]]  # inline for loop
-        res['average'] = [{'date': d, 'value': (sum(v)/len(v))} for d, v in average.items()]
+        res['average'] = [{'date': d, 'value': (sum(v)/len(v))} for d, v in average.items() if len(v)]
     return result
 
 

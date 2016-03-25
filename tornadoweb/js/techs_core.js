@@ -283,3 +283,5 @@ function remove_selector() {
     }
 }
 
+
+page_load()

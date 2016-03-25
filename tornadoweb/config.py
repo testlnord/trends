@@ -20,9 +20,15 @@ config["current_dir"] = os.path.dirname(os.path.abspath(__file__))
 
 if not "template_dir" in config:
     config["template_dir"] = os.path.join(config["current_dir"], "templates")
+if not "template_path" in config:
+    config["template_path"] = os.path.join(config["current_dir"], "templates")
+
 
 if not "staticfiles_dir" in config:
     config["staticfiles_dir"] = os.path.join(config["current_dir"], "images")
+if not "static_path" in config:
+    config["static_path"] = config["current_dir"]
+
 
 if not "staticfiles_css_dir" in config:
     config["staticfiles_css_dir"] = os.path.join(config["current_dir"], "css")

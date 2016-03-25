@@ -17,11 +17,11 @@ import tornadoweb.api_v1 as api1
 
 
 
-
 class TrendsWebServer(daemon):
     def run(self):
         logger = logging.getLogger(__name__)
         logger.info("Logging initialized. Creating application...")
+
         application = tornado.web.Application([
             (r'/images/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_dir']}),
             (r'/css/(.*)', tornado.web.StaticFileHandler, {'path': config['staticfiles_css_dir']}),
@@ -43,7 +43,9 @@ class TrendsWebServer(daemon):
             (r"/api/v1/sources/?", api1.SourcesListHandler),
             (r"/api/v1/techs/([0-9]*)/sources/([a-z]*)/?", api1.TechTrendHandler),
             (r"/indeed/([a-zA-Z+]+)", IndeedHandler),
-        ])
+        ],
+            **config
+        )
         logger.info("Application created. Starting to listen port...")
         application.listen(config["port"])
         logger.info("Starting application...")

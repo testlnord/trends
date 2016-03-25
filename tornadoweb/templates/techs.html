@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/techs.css">
     <!--- script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script --->
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="js/jquery.js"></script>
 </head>
 <body>
 <div class="alpha">
@@ -25,23 +26,13 @@
 
 <div id="plots">
     <div id="selectors">
-        {% for sel_id in range(5) %}
-        {% include "tech_selector.html" %}
-        {% end %}
-        <input type="image" src="images/close.gif"
-               name="close" width="16" height="16" onclick="remove_selector()">
+        {% module Template('tech_selector.html', selectors_count=5, techs=techs) %}
     </div>
     <div id="main" class="plot-place" ></div>
     <div id="techs" class="plot-place" class="left-column"></div>
     <div id="sources" class="plot-place" class="right-column"></div>
-    <script type="text/javascript" src="//www.google.com/trends/embed.js?hl=en-US&cat=0-5-31&q=kotlin,+dart,+.net,+c%2B%2B&cmpt=q&tz=Etc/GMT-3&tz=Etc/GMT-3&content=1&cid=TIMESERIES_GRAPH_AVERAGES_CHART&export=5&w=500&h=330"></script>
-
 </div>
 
 <script type="text/javascript" src="js/techs_core.js"></script>
-<script>
-    // initialize everything
-    page_load();
-</script>
 </body>
 </html>
