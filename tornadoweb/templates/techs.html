@@ -26,12 +26,7 @@
 <div id="plots">
     <div id="selectors">
         {% for sel_id in range(5) %}
-        <select id="ts_{{ sel_id }}" onchange="change_selection({{sel_id}})" name="tech_selector">
-            {% for tech_id, tech_name in [(tid, name) for tid, name, info in techs
-                    if 'visible' not in info or info['visible'] == 1] %}
-            <option value="{{tech_id}}">{{tech_name}}</option>
-            {% end %}
-        </select>
+        {% include "tech_selector.html" %}
         {% end %}
         <input type="image" src="images/close.gif"
                name="close" width="16" height="16" onclick="remove_selector()">
