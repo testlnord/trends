@@ -56,6 +56,8 @@ class TechInfoHandler(tornado.web.RequestHandler):
                 self.write_error(404)
                 return
 
+
+
             info = {'tech_id': tech_id,
                     'description': ''}
             cur = self.db_connection.cursor()
@@ -77,7 +79,8 @@ class TechInfoHandler(tornado.web.RequestHandler):
                     info['sources'].append({'name' : upd.source_name,
                                             'links': links})
 
-
-            self.render('info.html', **info)
+            cur.execute('select id, name, info from techs order by name')
+            techs = cur.fetchall()
+            self.render('info.html', techs = techs, **info)
         except:
             self.write(traceback.format_exc())

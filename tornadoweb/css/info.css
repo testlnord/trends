@@ -12,3 +12,14 @@ body{
     display: block;
     clear:both;
 }
+
+.caption *{
+    display: inline;
+}
+
+.caption h1{
+ margin-right: 300px;
+}
+input[name="close"]{
+    display:none;
+}
