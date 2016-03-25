@@ -78,7 +78,6 @@ class TechInfoHandler(tornado.web.RequestHandler):
                                             'links': links})
 
 
-            page_template = self.template_loader.load('info.html')
-            self.write(page_template.generate(**info))
+            self.render('info.html', **info)
         except:
             self.write(traceback.format_exc())
