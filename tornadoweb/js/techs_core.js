@@ -119,7 +119,7 @@ function update(error, data) {
                 //return new Date(a.date) - new Date(b.date)
             }), style: srcs[sid]};
         }
-        d3.select("#techs").append("p").text(data[ids[tid]].tech_name).append("a").text("info").attr('href', 'tech_info/'+ids[tid]);
+        d3.select("#techs").append("p").text(data[ids[tid]].tech_name);
         var svg_tech = d3.select("#techs").append("svg")
                 .attr("width", (width + margin.left + margin.right) / 2)
                 .attr("height", (height + margin.top + margin.bottom) / 2)
@@ -244,17 +244,26 @@ function set_ids(ids) {
     selectors_update();
 }
 function selectors_update() {
-    var ids = get_ids();
-    for (var tsid = 0; tsid < 5; tsid++) {
-        selector = document.getElementById("ts_" + tsid);
+    var ids = get_ids(),
+        selector_parent =$('#selectors');
+
+    selector_parent.find('.selector_wrapper .info').remove();
+    var tsid = 0;
+    for (; tsid < 5; tsid++) {
+        var selector = $("#ts_" + tsid),
+            sel_wrapper = $('#wrap_ts_'+tsid);
+
         if (tsid < ids.length) {
-            selector.className = "tech_selector";
-            selector.value = ids[tsid];
+            selector.val(ids[tsid]);
+
+            var link =  $('<a>',{'text':'info', 'class':'info','href':'/tech_info/'+selector.val()});
+            sel_wrapper.append(link);
         } else if (tsid == ids.length) {
-            selector.className = "tech_selector";
-            selector.value = "";
+            sel_wrapper.show();
+            selector.val([]);
         } else {
-            selector.className = "invis_selector";
+            sel_wrapper.hide();
+            selector.val([]);
         }
 
     }
@@ -265,8 +274,8 @@ function page_load() {
 }
 function change_selection(sel_id) {
     var ids = get_ids();
-    var selector = document.getElementById("ts_" + sel_id);
-    var tech_id = selector.options[selector.selectedIndex].value;
+    var selector = $("#ts_" + sel_id);
+    var tech_id = selector.val();
     if (ids.length > sel_id) {
         ids[sel_id] = tech_id;
     } else {

@@ -1,13 +1,17 @@
 {{ set_resources(css_files=["js/chosen/chosen.css"],
-javascript_files=["js/chosen/chosen.jquery.js"],
-                 embedded_javascript="$('.tech_selector').chosen({allow_single_deselect: true, width: '200px'})") }}
+                 javascript_files=["js/chosen/chosen.jquery.js"],
+                 embedded_javascript="$('.tech_selector').chosen({allow_single_deselect: true, width: '200px'})",
+                 embedded_css=".selector_wrapper{display:inline}")}}
 {% for sel_id in range(selectors_count) %}
+<div id="wrap_ts_{{ sel_id }}" class="selector_wrapper">
 <select id="ts_{{ sel_id }}" onchange="change_selection({{sel_id}})" name="tech_selector" class="tech_selector">
+    <option value=""></option>
     {% for tech_id, tech_name in [(tid, name) for tid, name, info in techs
             if 'visible' not in info or info['visible'] == 1] %}
     <option value="{{tech_id}}">{{tech_name}}</option>
     {% end %}
 </select>
+</div>
 {% end %}
 <input type="image" src="images/close.gif"
        name="close" width="16" height="16" onclick="remove_selector()">
