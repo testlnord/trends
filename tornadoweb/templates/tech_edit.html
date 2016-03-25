@@ -14,11 +14,14 @@
     <script src="/js/tech_add.js"></script>
 </head>
 <body>
+
+    <a href="/tech_info/{{ tech_id }}">back to info</a>
     <form class="form-horizontal" method="post">
     <fieldset>
 
     <!-- Form Name -->
-    <legend>Edit Technology</legend>
+    <legend>Edit Technology </legend>
+
     <input id="tech_id" name="tech_id" type="hidden" value="{{tech_id}}"/>
 
     <!-- Text input-->
@@ -93,7 +96,6 @@
 
     </fieldset>
     </form>
-
 
 </body>
 </html>
