@@ -19,7 +19,7 @@ def get_threshold_date(time, from_date=None) -> datetime.datetime:
             month = 12
 
         day = from_date.day
-        day = max(calendar.monthrange(year, month)[0], day)
+        day = min(calendar.monthrange(year, month)[1], day)
         return datetime.datetime(year, month, day)
     else:
         days = 7
