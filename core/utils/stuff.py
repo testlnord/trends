@@ -1,6 +1,6 @@
 """Unrelated util stuff """
 import datetime
-
+import calendar
 
 def get_threshold_date(time, from_date=None) -> datetime.datetime:
     """ Calculates threshold date
@@ -13,10 +13,14 @@ def get_threshold_date(time, from_date=None) -> datetime.datetime:
         from_date = datetime.datetime.now()
     if time == 'month':
         month = from_date.month - 1
+        year = from_date.year
         if month == 0:
-            return datetime.datetime(from_date.year - 1, 1, from_date.day)
-        else:
-            return datetime.datetime(from_date.year, month, from_date.day)
+            year -= 1
+            month = 12
+
+        day = from_date.day
+        day = max(calendar.monthrange(year, month)[0], day)
+        return datetime.datetime(year, month, day)
     else:
         days = 7
         if time == 'day':
