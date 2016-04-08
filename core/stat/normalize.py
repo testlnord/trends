@@ -16,10 +16,13 @@ def normalize():
         try:
             data_cur = connection.cursor()
             data_cur.execute("delete from reports_2 where tech_id = %s", (tech_id,))
-            data_cur.execute("with max_vals  as (select max(value::real) as mv, source from reports_1 where tech_id = %s GROUP BY source ) "
-                             "insert into reports_2(tech_id, time, value)"
-                             "select r.tech_id, r.time, avg(r.value/m.mv) from reports_1 as r INNER JOIN max_vals as m on r.source = m.source "
-                             "where tech_id = %s GROUP BY r.tech_id, r.time;", (tech_id, tech_id))
+            data_cur.execute('select max(value::real) as mv, source from reports_1 where tech_id = %s GROUP BY source ', (tech_id,))
+            max_vals = list(data_cur.fetchall())
+            for max_val, source in max_vals:
+                if max_val > 0:
+                    data_cur.execute("insert into reports_2(tech_id, time, value)"
+                                     "select r.tech_id, r.time, avg(r.value/%s) from reports_1 as r "
+                                     "where tech_id = %s and source = %s GROUP BY r.tech_id, r.time;", (max_val, tech_id, source))
 
             # data_cur.execute("insert into reports_2(tech_id, time, value)  "
             #                  "select tech_id, time, avg(value) as vavg from reports_1 "
