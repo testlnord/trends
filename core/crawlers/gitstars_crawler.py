@@ -7,14 +7,12 @@ import re
 import requests
 from requests.auth import HTTPBasicAuth
 from core.config import config
+from core.crawlers.exceptions import OutOfApiQuotaException
 from ..utils.internet import internet
 
 
 __author__ = 'user'
 
-
-class OutOfApiQuotaException(Exception):
-    pass
 
 
 class GitStarsCrawler:

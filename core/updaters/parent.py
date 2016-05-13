@@ -4,6 +4,7 @@ import logging
 import datetime
 import psycopg2
 from core.config import config
+from core.crawlers.exceptions import OutOfApiQuotaException
 from core.utils.stuff import get_threshold_date
 
 
@@ -107,6 +108,12 @@ class DataUpdater:
                 self.logger.info("Updating tech: %s", tech_id)
                 try:
                     data = self.get_data(tech_id)
+                except OutOfApiQuotaException:
+                    import traceback
+                    self.logger.error("Can't get data.")
+                    self.logger.error(traceback.format_exc())
+                    break
+
                 except:
                     import traceback
                     self.logger.warning("Can't get data.")

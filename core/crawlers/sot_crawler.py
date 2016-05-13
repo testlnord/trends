@@ -3,14 +3,13 @@ import datetime
 import gzip
 import json
 import logging
+
+from core.crawlers.exceptions import OutOfApiQuotaException
 from ..utils.internet import internet
 
 
 __author__ = 'user'
 
-
-class OutOfApiQuotaException(Exception):
-    pass
 
 
 class SotCrawler:

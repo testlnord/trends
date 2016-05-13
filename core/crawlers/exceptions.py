@@ -1,0 +1,3 @@
+
+class OutOfApiQuotaException(Exception):
+    pass
