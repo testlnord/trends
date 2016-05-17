@@ -20,12 +20,12 @@ def tess_percents(image):
     """
     text = image.crop(ImageOps.invert(image.convert('RGB')).getbbox())
     left_unrecognized_border = 0
-    glyph_path = os.path.join(os.path.dirname(__file__), 'digit_glyphs', 'p9')
+    glyph_path = os.path.join(os.path.dirname(__file__), 'digit_glyphs', 'p10')
     line = ""
     while left_unrecognized_border < text.size[0]:
         # recognize one symbol
         similarity = []
-        for glyph_file in os.listdir(glyph_path):
+        for glyph_file in (file_name for file_name in os.listdir(glyph_path) if file_name.endswith('.png')):
             glyph = Image.open(os.path.join(glyph_path, glyph_file))
             if glyph.size[0] > text.size[0] - left_unrecognized_border:
                 continue

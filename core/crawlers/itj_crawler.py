@@ -106,7 +106,7 @@ class ItjCrawler:
 
         # looking for horizontal line
         max_black_pixels = 0
-        for y in range(image.size[1] - 1, 260, -1):
+        for y in range(310, 290, -1):
             black_pixels = 0
             for x in range(0, image.size[0]):
                 if image.getpixel((x, y)) == (0, 0, 0, 255):
@@ -115,17 +115,24 @@ class ItjCrawler:
                 max_black_pixels = black_pixels
                 line_y = y
 
-        if line_y is None:
-            self.logger.warning("Bad image. Can't find horizontal line in the bottom.")
-            raise ValueError("Bad image. Can't find horizontal line in the bottom.")
+        if max_black_pixels < 100:
+            self.logger.info("Nonstandart image. Can't find horizontal line in the bottom. Will try middles approach.")
+            # raise ValueError("Bad image. Can't find horizontal line in the bottom.")
+            yield from self.get_year_borders(image, 285, 12, middles=True)
         self.logger.debug("Founded horizontal line %s with %s black pixels", line_y, max_black_pixels)
 
+        yield from self.get_year_borders(image, line_y, 7)
+
+    def get_year_borders(self, image, line_y, ticks_shift, middles=False):
         # get year borders
         prev_x = None
         for x in range(20, 615):
-            if image.getpixel((x, line_y - 7)) == (0, 0, 0, 255):
+            if image.getpixel((x, line_y - ticks_shift)) == (0, 0, 0, 255):
                 if prev_x is not None:
-                    yield (prev_x, x, line_y)
+                    if middles:
+                        yield (int(x-(x-prev_x)/2), int(x+(x-prev_x)/2), line_y)
+                    else:
+                        yield (prev_x, x, line_y)
                 prev_x = x
         raise StopIteration()
 

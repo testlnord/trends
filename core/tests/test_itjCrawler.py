@@ -10,10 +10,9 @@ class TestItjCrawler(TestCase):
     def setUp(self):
         self.dir = os.path.dirname(__file__)
         self.crawler = ItjCrawler()
-        self.test_image1 = Image.open(os.path.join(self.dir, "testimg1.png"))
-        self.test_image2 = Image.open(os.path.join(self.dir, "testimg2.png"))
-        self.test_image3 = Image.open(os.path.join(self.dir, "testimg3.png"))
-        self.test_image4 = Image.open(os.path.join(self.dir, "testimg4.png"))
+        self.test_image1 = Image.open(os.path.join(self.dir, "itj_testimg_new1.png"))
+        self.test_image2 = Image.open(os.path.join(self.dir, "itj_testimg_new2.png"))
+        self.test_image3 = Image.open(os.path.join(self.dir, "itj_testimg_new3.png"))
 
 
     def test__parse_image(self):
@@ -22,28 +21,27 @@ class TestItjCrawler(TestCase):
 
     def test_get_percent_coord(self):
         self.assertListEqual(list(self.crawler.get_percent_coord(self.test_image1)),
-                             [9, 38, 67, 95, 124, 153, 182, 211, 239])
+                             [10, 76, 141, 206, 272])
         self.assertListEqual(list(self.crawler.get_percent_coord(self.test_image2)),
-                             [9, 47, 86, 124, 163, 201, 239])
+                             [10, 43, 76, 108, 141, 174, 206, 239, 272])
 
     def test_get_year_coord(self):
         self.assertListEqual(list(self.crawler.get_year_coord(self.test_image1)),
-                             [(76, 132, 271), (132, 187, 271), (187, 243, 271), (243, 299, 271), (299, 354, 271),
-                              (354, 410, 271), (410, 466, 271), (466, 521, 271), (521, 577, 271)])
+                             [(72, 172, 304),  (172, 273, 304),  (273, 373, 304),  (373, 474, 304),  (474, 575, 304)])
         self.assertListEqual(list(self.crawler.get_year_coord(self.test_image2)),
-                             [(55, 112, 271), (112, 170, 271), (170, 228, 271), (228, 286, 271), (286, 344, 271),
-                              (344, 402, 271), (402, 460, 271), (460, 518, 271), (518, 576, 271)])
+                             [(45, 93, 285), (93, 141, 285), (140, 187, 285), (188, 236, 285), (236, 284, 285),
+                              (284, 332, 285), (331, 378, 285), (379, 427, 285), (427, 475, 285),
+                              (475, 523, 285), (523, 571, 285), (570, 617, 285)])
 
     def test_years_from_image(self):
         self.assertListEqual(self.crawler.years_from_image(self.test_image1),
-                             [(20, 76, 2004), (76, 132, 2005), (132, 187, 2006), (187, 243, 2007), (243, 299, 2008), (299, 354, 2009),
-                              (354, 410, 2010), (410, 466, 2011), (466, 521, 2012), (521, 577, 2013), (577, 633, 2014)])
+                             [(-28, 72, 2010),  (72, 172, 2011),  (172, 273, 2012),  (273, 373, 2013),  (373, 474, 2014),  (474, 575, 2015) , (575, 676, 2016)])
         self.assertListEqual(self.crawler.years_from_image(self.test_image2),
-                             [(-2, 55, 2004), (55, 112, 2005), (112, 170, 2006), (170, 228, 2007), (228, 286, 2008), (286, 344, 2009),
-                              (344, 402, 2010), (402, 460, 2011), (460, 518, 2012), (518, 576, 2013), (576, 634, 2014)])
+                             [(-3, 45, 2004), (45, 93, 2005), (93, 141, 2006), (140, 187, 2007), (188, 236, 2008),
+                              (236, 284, 2009), (284, 332, 2010), (331, 378, 2011), (379, 427, 2012),
+                              (427, 475, 2013), (475, 523, 2014), (523, 571, 2015), (570, 617, 2016), (617, 664, 2017)])
         self.assertListEqual(self.crawler.years_from_image(self.test_image3),
-                             [(-21, 42, 2006), (42, 105, 2007), (105, 168, 2008), (168, 231, 2009), (231, 294, 2010), (294, 358, 2011),
-                              (358, 421, 2012), (421, 484, 2013), (484, 547, 2014), (547, 610, 2015), (610, 673, 2016)])
+                             [(-54, 98, 2012), (98, 250, 2013), (250, 403, 2014), (403, 555, 2015), (555, 707, 2016)])
 
     def test_y2value(self):
         self.assertEqual(self.crawler.y2value(10, [(0, 0), (20, 100.0)]), 50)
@@ -57,5 +55,5 @@ class TestItjCrawler(TestCase):
                         datetime.timedelta(days=2))
 
     def test_getData(self):
-        data = self.crawler._parse_image(self.test_image4)
+        data = self.crawler._parse_image(self.test_image3)
         self.assertEqual(max(data, key=lambda x:x[0])[0].year, 2016)
