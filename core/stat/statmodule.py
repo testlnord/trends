@@ -45,7 +45,10 @@ def freq_month(series):
 
     return ((d, pv[0]/pv[1]) for d, pv in result.items())
 
-
+# todo doesn't work now
+# todo should make propper predictions
+# @deprecated
+# add deprecated warnings
 def continue_to_now(series):
     series = list(series)
     max_date = max(series, key=lambda x:x[0])[0]

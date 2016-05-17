@@ -49,6 +49,8 @@ def normalize_google():
                 continue
             data = statmodule.freq_month(data)
             #data = statmodule.normalize_series(data)
+            # todo make transaction to all delete-insert pairs
+            # todo or replace them by insert-update query
             data_cur.execute("delete from reports_1 where source = 'google' and tech_id = %s", (tech_id, ))
             data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
                                  (('google', tech_id, d, v) for d, v in data))
@@ -99,7 +101,7 @@ def normalize_itj():
                 continue
 
             data = statmodule.freq_month(data)
-            data = statmodule.continue_to_now(data)
+            # data = statmodule.continue_to_now(data)
             #data = statmodule.normalize_series(data)
             data_cur.execute("delete from reports_1 where source = 'itj' and tech_id = %s", (tech_id, ))
             data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
@@ -154,7 +156,7 @@ def normalize_gitstars():
                 continue
 
             data = statmodule.freq_month(data)
-            data = statmodule.continue_to_now(data)
+            #data = statmodule.continue_to_now(data)
             #data = statmodule.normalize_series(data)
             data_cur.execute("delete from reports_1 where source = 'gitstars' and tech_id = %s", (tech_id, ))
             data_cur.executemany("insert into reports_1(source, tech_id, time, value) values(%s, %s, %s, %s)",
