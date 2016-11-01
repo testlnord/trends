@@ -61,62 +61,67 @@ class TechsHandler(tornado.web.RequestHandler):
             self.write(traceback.format_exc().replace('\n','\n<br>\n'))
 
 
-def get_norm_data(connection, tids):
+def get_norm_data(connection, technology_ids, logger):
     # todo make nice filtration and summarizing
+
     cur = connection.cursor()
-    a = ','.join((str(x) for x in tids))
+    a = ','.join((str(x) for x in technology_ids))
     cur.execute("SELECT id, name, info::JSON FROM techs WHERE id IN (" + a + ')')
     result = {i: {'tech_name': name} for i, name, info in cur.fetchall()}
-    for tid in tids:
-        res = {}
-        cur.execute("select source, to_char(time, 'YYYY MM DD'), value from reports_1 where tech_id = %s", (tid,))
+    for tech_id in technology_ids:
+        technology_series = {}
+        cur.execute("select source, to_char(time, 'YYYY MM DD'), value from reports_1 where tech_id = %s", (tech_id,))
 
-        for rec in cur.fetchall():
-            if rec[0] not in res:
-                res[rec[0]] = []
-            res[rec[0]].append((rec[1], rec[2]))
+        for source, date, value in cur.fetchall():
+            technology_series[source] = technology_series.get(source, []) + [(date, value)]
 
         min_dates = []
         max_dates = []
-        for k in res:
-            min_dates.append(min(res[k], key=lambda x: x[0])[0])
-            max_dates.append(max(res[k], key=lambda x: x[0])[0])
+        for source_name in technology_series:
+            min_dates.append(min(technology_series[source_name], key=lambda x: x[0])[0])
+            max_dates.append(max(technology_series[source_name], key=lambda x: x[0])[0])
         max_min_date = max(min_dates)
         min_max_date = min(max_dates)
-        for k in res:
+        for source_name in technology_series:
             #  I will remove filter. let's look what we will get
             # res[k] = {d: v for d, v in res[k] if min_max_date >= d >= max_min_date}
-            res[k] = {d: v for d, v in res[k] if d >= max_min_date}
-        result[tid].update(res)
+            technology_series[source_name] = {d: v for d, v in technology_series[source_name] if d >= max_min_date}
+        result[tech_id].update(technology_series)
+
+        logger.debug(tech_id)
+        logger.debug(str(technology_series['itj']))
+        logger.debug('----------------------------')
+
     # renorm values
     # get min and max for each of source in selected techs
     minmax_dict = {}
-    for res in result.values():
-        for k in res:
-            if k == 'tech_name':
+    for technology_series in result.values():
+        for source_name in technology_series:
+            if source_name == 'tech_name':
                 continue
-            if k not in minmax_dict:
-                minmax_dict[k] = {'min': min(res[k].values()), 'max': max(res[k].values())}
+            if source_name not in minmax_dict:
+                minmax_dict[source_name] = {'min': min(technology_series[source_name].values()), 'max': max(technology_series[source_name].values())}
 
             else:
-                minmax_dict[k] = {'min': min(minmax_dict[k]['min'], min(res[k].values())),
-                                  'max': max(minmax_dict[k]['max'], max(res[k].values()))}
+                minmax_dict[source_name] = {'min': min(minmax_dict[source_name]['min'], min(technology_series[source_name].values())),
+                                  'max': max(minmax_dict[source_name]['max'], max(technology_series[source_name].values()))}
     # normalize values with new min and max
-    for res in result.values():
-        average = {d:[] for k in res for d in res[k]}
-        for k in res:
-            if k == 'tech_name':
+    for technology_series in result.values():
+        average = {d:[] for k in technology_series for d in technology_series[k]}
+        for source_name in technology_series:
+            if source_name == 'tech_name':
                 continue
-            res[k] = [
-                {'date': d, 'value': (v/minmax_dict[k]['max'])} #(v - minmax_dict[k]['min']) / (minmax_dict[k]['max'] - minmax_dict[k]['min'])}
-                for d, v in res[k].items()]
-            if k == 'google' and len(res) > 1:
+            technology_series[source_name] = [
+                {'date': d, 'value': (v/minmax_dict[source_name]['max'])} #(v - minmax_dict[k]['min']) / (minmax_dict[k]['max'] - minmax_dict[k]['min'])}
+                for d, v in technology_series[source_name].items()]
+            if source_name == 'google' and len(technology_series) > 1:
                 continue
             if not average:
-                average = {d['date']: [d['value']] for d in res[k]}
+                average = {d['date']: [d['value']] for d in technology_series[source_name]}
             else:
-                [average[d['date']].append(d['value']) for d in res[k]]  # inline for loop
-        res['average'] = [{'date': d, 'value': (sum(v)/len(v))} for d, v in average.items() if len(v)]
+                [average[d['date']].append(d['value']) for d in technology_series[source_name]]  # inline for loop
+        technology_series['average'] = [{'date': date, 'value': (sum(values_list)/len(values_list))}
+                                        for date, values_list in average.items() if len(values_list)]
     return result
 
 
@@ -194,8 +199,7 @@ class CsvHandler(tornado.web.RequestHandler):
         else:
             tids = [int(arg) for arg in args[1:]]
             per_source_report = True
-        result = get_norm_data(self.db_connection, tids)
-        self.logger.debug(result)
+        result = get_norm_data(self.db_connection, tids,self.logger)
         if per_source_report:
             result = {result[k]['tech_name']: result[k][args[0]] for k in result}
         else:
@@ -211,6 +215,7 @@ class AjaxHandler(tornado.web.RequestHandler):
         super().__init__(*args, **kwargs)
         self.db_connection = psycopg2.connect(database=config['db_name'], user=config['db_user'],
                                               password=config['db_pass'])
+        self.logger = logging.getLogger(__name__)
 
     def get(self, slug):
         try:
@@ -219,7 +224,7 @@ class AjaxHandler(tornado.web.RequestHandler):
             except ValueError:
                 self.write_error(406)
                 return
-            result = get_norm_data(self.db_connection, tids)
+            result = get_norm_data(self.db_connection, tids, self.logger)
             self.set_header("Content-Type", "application/json")
             self.write(json.dumps(result))
         except:

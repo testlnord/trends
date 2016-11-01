@@ -2,6 +2,7 @@
     // Server settings
     "port" : 8888,
     // DB settings
+    "db_hostname": "localhost",
     "db_name" : "new.db",
     "db_user" : "user",
     "db_pass" : "",

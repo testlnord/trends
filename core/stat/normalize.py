@@ -47,6 +47,8 @@ def normalize_google():
             if not data:
                 logger.debug("No data in google for tech %s", tech_name)
                 continue
+            data = statmodule.unique_dates(data)
+            data = statmodule.week_to_days(data)
             data = statmodule.freq_month(data)
             #data = statmodule.normalize_series(data)
             # todo make transaction to all delete-insert pairs
@@ -72,6 +74,7 @@ def normalize_wiki():
             if not data:
                 logger.debug("No data in wiki for tech %s", tech_name)
                 continue
+            data = statmodule.unique_dates(data)
             data = statmodule.outliers_filter(data)
             data = statmodule.freq_month(data)
             data = statmodule.sort_ts(data)
@@ -99,7 +102,7 @@ def normalize_itj():
             if not data:
                 logger.debug("No data in itj for tech %s", tech_name)
                 continue
-
+            data = statmodule.unique_dates(data)
             data = statmodule.freq_month(data)
             # data = statmodule.continue_to_now(data)
             #data = statmodule.normalize_series(data)
@@ -130,6 +133,8 @@ def normalize_sot():
                 continue
 
             #data = data[:-1]
+            data = statmodule.unique_dates(data)
+            data = statmodule.week_to_days(data)
             data = statmodule.freq_month(data)
             data = [(d, v / total_data[d] if d in total_data else 0) for d, v in data]
             #data = statmodule.normalize_series(data)

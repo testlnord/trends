@@ -42,7 +42,8 @@ class WikiUpdater(DataUpdater):
         self.connection.commit()
 
     def get_page_data(self, page_name, from_date):
-        page_name = page_name.replace(" ", "_")
+        #page_name = page_name.replace(" ", "_")
+        page_name = page_name.strip()
         month = datetime.date(from_date.year, from_date.month, 1)
         today = datetime.datetime.today().date()
         result = []

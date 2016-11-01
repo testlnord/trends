@@ -168,7 +168,6 @@ function plot(svg, data, width, height) {
             .orient("left");
 
     var line = d3.svg.line()
-            .interpolate("basis")
             .x(function (d) {
                 return x(d.date);
             })
@@ -261,6 +260,11 @@ function selectors_update() {
         } else if (tsid == ids.length) {
             sel_wrapper.show();
             selector.val([]);
+            var chosel = $('#ts_'+tsid+'_chosen');
+            var chosel_f = chosel.find('input').first();
+            chosel_f.val('');
+            chosel_f.addClass("default");
+            console.log(chosel);
         } else {
             sel_wrapper.hide();
             selector.val([]);

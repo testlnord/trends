@@ -43,7 +43,21 @@ def freq_month(series):
             result[cur_m] = (0,1)
         cur_m = next_month(cur_m)
 
-    return ((d, pv[0]/pv[1]) for d, pv in result.items())
+    return ((d, pv[0]/pv[1]) for d, pv in result.items() if pv[1] > 0)
+
+def week_to_days(series):
+    series = list(sorted(series,key=lambda x:x[0]))
+    result = []
+    prev_date = series[0][0]
+    for date, value in series[1:]:
+        date_delta = date - prev_date
+        day_value = value/date_delta.days
+        for day in range(date_delta.days):
+            result.append((prev_date+datetime.timedelta(days=day), day_value))
+
+        prev_date = date
+    return result
+
 
 # todo doesn't work now
 # todo should make propper predictions
@@ -152,3 +166,7 @@ def divergence(series):
             result_series.append((d, v - prev))
             prev = v
     return result_series
+
+
+def unique_dates(series):
+    return [(date, value) for date, value in {date: value for date, value in series}.items()]
