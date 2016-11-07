@@ -92,6 +92,7 @@ def get_norm_data(connection, technology_ids, logger):
         logger.debug(str(technology_series['itj']))
         logger.debug('----------------------------')
 
+
     # renorm values
     # get min and max for each of source in selected techs
     minmax_dict = {}
@@ -224,6 +225,7 @@ class AjaxHandler(tornado.web.RequestHandler):
             except ValueError:
                 self.write_error(406)
                 return
+
             result = get_norm_data(self.db_connection, tids, self.logger)
             self.set_header("Content-Type", "application/json")
             self.write(json.dumps(result))

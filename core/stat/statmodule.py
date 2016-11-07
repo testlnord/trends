@@ -43,6 +43,7 @@ def freq_month(series):
             result[cur_m] = (0,1)
         cur_m = next_month(cur_m)
 
+
     return ((d, pv[0]/pv[1]) for d, pv in result.items() if pv[1] > 0)
 
 def week_to_days(series):
@@ -57,6 +58,22 @@ def week_to_days(series):
 
         prev_date = date
     return result
+
+
+# todo doesn't work now
+# todo should make propper predictions
+# @deprecated
+# add deprecated warnings
+def continue_to_now(series):
+    series = list(series)
+    max_date = max(series, key=lambda x:x[0])[0]
+    cur_month = datetime.date.today()
+    cur_month = datetime.date(cur_month.year, cur_month.month, 1)
+    max_date = next_month(max_date)
+    while max_date < cur_month:
+        series.append((max_date, 0))
+        max_date = next_month(max_date)
+    return series
 
 
 # todo doesn't work now

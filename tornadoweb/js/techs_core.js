@@ -265,6 +265,7 @@ function selectors_update() {
             chosel_f.val('');
             chosel_f.addClass("default");
             console.log(chosel);
+
         } else {
             sel_wrapper.hide();
             selector.val([]);
