@@ -7,17 +7,20 @@ import datetime
 import io
 import numpy
 from ..utils.internet import internet
-from ..utils.ocr.mytess import tess_digit, tess_percents, eqdist
+from ..utils.ocr.mytess import tess_number, tess_percents, eqdist
 
 
 class ItjCrawler:
+    YEARS_ONLY_PLOT = 1
+    YEARS_AND_MONTHS_PLOT = 2
+
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
     def get_data(self, name) -> list:
         self.logger.info("Getting itjobs plot: %s", name)
         image = self._get_image(name)
-        result = self._parse_image(image)
+        result = self.parse_image(image)
         return result
 
     @staticmethod
@@ -27,52 +30,38 @@ class ItjCrawler:
         data = internet.get_from_url(url, binary=True)
         return Image.open(io.BytesIO(data), 'r')
 
+    def get_years_bboxes(self, year_ticks, years_axis, plot_type):
+        if plot_type == self.YEARS_ONLY_PLOT:
+            return ((x1 - 18, years_axis + 5, x1 + 18, years_axis + 19) for x1, _ in year_ticks)
+        else:
+            return ((x1+1, years_axis - 7, x2, years_axis + 7) for x1, x2 in year_ticks)
+
+
     def years_from_image(self, image):
         # getting years
-        years = []
-        for x1, x2, y in self.get_year_coord(image):
-            box = (x1 + 1, y - 7, x2, y + 7)
-            region = image.crop(box)
-            x = 0
-            while region.getpixel((x, 7)) == (0, 0, 0, 255):
-                region.putpixel((x, 7), (255, 255, 255, 255))
-                x += 1
-            x = region.size[0] - 1
-            while region.getpixel((x, 7)) == (0, 0, 0, 255):
-                region.putpixel((x, 7), (255, 255, 255, 255))
-                x -= 1
+        years_axis, plot_type = self.get_years_axis(image)
+        # depending on plot type ticks may be bellow or above years axis
+        ticks_shift = -1 if plot_type == self.YEARS_ONLY_PLOT else 3
+        years_ticks = list(self.get_year_ticks(years_axis, ticks_shift, image))
 
-            text = region.crop(ImageOps.invert(region.convert('RGB')).getbbox())
-            word = ''
-            for x in range(0, text.size[0], 6):
-                glyph = Image.new('RGBA', (6, 8), (255, 255, 255, 255))
-                glyph.paste(text.crop((x, 0, x + 6, 8)))
-                # have some issues with last ones, they crops and
-                # starts to have (0,0,0,0)-colored stripe
-                #   little hack to eliminate it
-                data = numpy.array(glyph)  # "data" is a height x width x 4 numpy array
-                red, green, blue, alpha = data.T  # Temporarily unpack the bands for readability
-                # Replace zeros with white...
-                zero_areas = (red == 0) & (blue == 0) & (green == 0) & (alpha == 0)
-                data[...][zero_areas.T] = (255, 255, 255, 255)
-                glyph = Image.fromarray(data)
-
-                word += tess_digit(glyph).splitlines()[0]
-
-            years.append((x1, x2, int(word)))
+        years_label_bboxes = self.get_years_bboxes(years_ticks, years_axis, plot_type)
+        years = [ tess_number(bbox, image) for bbox in years_label_bboxes ]
         if not years:
             self.logger.warning("No years on image")
             raise ValueError("bad image")
-        # add first year:
-        l, r, year = years[0]
-        years = [(l - (r - l), l, year - 1)] + years
-        # add current year
-        l, r, year = years[-1]
-        years.append((r, r + (r - l), year + 1))
-        self.logger.debug("Years on image %s", str(years))
-        return years
 
-    def _parse_image(self, image):
+        years_with_intervals = [(x1, x2, year) for (x1, x2), year in zip(years_ticks, years)]
+
+        # add first year:
+        l, r, year = years_with_intervals[0]
+        years_with_intervals = [(l - (r - l), l, year - 1)] + years_with_intervals
+        # add current year
+        l, r, year = years_with_intervals[-1]
+        years_with_intervals.append((r, r + (r - l), year + 1))
+        self.logger.debug("Years on image %s", str(years_with_intervals))
+        return years_with_intervals
+
+    def parse_image(self, image):
         # getting percents
         percents = []
         for y in self.get_percent_coord(image):
@@ -100,39 +89,36 @@ class ItjCrawler:
                 yield y
         raise StopIteration()
 
-    def get_year_coord(self, image):
+    def get_years_axis(self, image):
         # get line coord
         line_y = None
-
         # looking for horizontal line
         max_black_pixels = 0
-        for y in range(310, 290, -1):
+        ENOUGH_NUMBER_OF_BLACK_PIXELS = 200
+        for y in range(320, 260, -1):
             black_pixels = 0
             for x in range(0, image.size[0]):
                 if image.getpixel((x, y)) == (0, 0, 0, 255):
                     black_pixels += 1
-            if black_pixels > max_black_pixels or line_y is None:
+            if black_pixels >= ENOUGH_NUMBER_OF_BLACK_PIXELS:
                 max_black_pixels = black_pixels
                 line_y = y
-
+                break
         if max_black_pixels < 100:
             self.logger.info("Nonstandart image. Can't find horizontal line in the bottom. Will try middles approach.")
-            # raise ValueError("Bad image. Can't find horizontal line in the bottom.")
-            yield from self.get_year_borders(image, 285, 12, middles=True)
+            raise ValueError("Bad image. Can't find horizontal line in the bottom.")
         self.logger.debug("Founded horizontal line %s with %s black pixels", line_y, max_black_pixels)
+        return line_y, self.YEARS_ONLY_PLOT if max_black_pixels > 550 else self.YEARS_AND_MONTHS_PLOT
 
-        yield from self.get_year_borders(image, line_y, 7)
-
-    def get_year_borders(self, image, line_y, ticks_shift, middles=False):
+    def get_year_ticks(self, line_y, ticks_shift, image):
         # get year borders
         prev_x = None
         for x in range(20, 615):
-            if image.getpixel((x, line_y - ticks_shift)) == (0, 0, 0, 255):
+            y = line_y - ticks_shift
+            color = image.getpixel((x, y))
+            if color == (0, 0, 0, 255):
                 if prev_x is not None:
-                    if middles:
-                        yield (int(x-(x-prev_x)/2), int(x+(x-prev_x)/2), line_y)
-                    else:
-                        yield (prev_x, x, line_y)
+                    yield (prev_x, x)
                 prev_x = x
         raise StopIteration()
 
@@ -147,8 +133,8 @@ class ItjCrawler:
                 x = l + int(round(month_width * m))
                 pts = []
                 try:
-                    for y in range(image.size[1]):
-                        if eqdist(image.getpixel((x, y)), (250, 150, 5, 255)) < 20:  # MAGIC THRESHOLD orange color
+                    for y in range(272): # magic constant: lower bound of plots
+                        if eqdist(image.getpixel((x, y)), (254, 152, 1, 255)) < 20:  # MAGIC THRESHOLD orange color
                             pts.append(y)
                 except IndexError:
                     pts = []

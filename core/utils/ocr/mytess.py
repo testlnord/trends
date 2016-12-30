@@ -15,6 +15,38 @@ def eqdist(vec1, vec2):
     return numpy.linalg.norm(numpy.array(vec1) - numpy.array(vec2))
 
 
+def tess_number(bbox, image):
+    region = image.crop(bbox)
+    x = 0
+    while region.getpixel((x, 7)) == (0, 0, 0, 255):
+        region.putpixel((x, 7), (255, 255, 255, 255))
+        x += 1
+    x = region.size[0] - 1
+    while region.getpixel((x, 7)) == (0, 0, 0, 255):
+        region.putpixel((x, 7), (255, 255, 255, 255))
+        x -= 1
+
+    text = region.crop(ImageOps.invert(region.convert('RGB')).getbbox())
+    # debug image output
+    # text.save(image.filename + str(bbox) + '.png')
+    word = ''
+    for x in range(0, text.size[0], 6):
+        glyph = Image.new('RGBA', (6, 8), (255, 255, 255, 255))
+        glyph.paste(text.crop((x, 0, x + 6, 8)))
+        # have some issues with last ones, they crops and
+        # starts to have (0,0,0,0)-colored stripe
+        #   little hack to eliminate it
+        data = numpy.array(glyph)  # "data" is a height x width x 4 numpy array
+        red, green, blue, alpha = data.T  # Temporarily unpack the bands for readability
+        # Replace zeros with white...
+        zero_areas = (red == 0) & (blue == 0) & (green == 0) & (alpha == 0)
+        data[...][zero_areas.T] = (255, 255, 255, 255)
+        glyph = Image.fromarray(data)
+
+        word += tess_digit(glyph).splitlines()[0]
+    return int(word)
+
+
 def tess_percents(image):
     """image -- PIL or Pillow image
     """
